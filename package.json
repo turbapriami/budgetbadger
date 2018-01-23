@@ -1,0 +1,26 @@
+{
+  "name": "budgetbadger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/turbapriami/budgetbadger.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/turbapriami/budgetbadger/issues"
+  },
+  "homepage": "https://github.com/turbapriami/budgetbadger#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-latest": "^6.24.1",
+    "react": "^16.2.0",
+    "webpack": "^3.10.0"
+  }
+}
