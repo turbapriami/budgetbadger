@@ -1,7 +1,11 @@
 const knex = require('knex')({
   client: 'pg',
-  database: 'bbdadger'
-})
+  connection: {
+    user: 'root',
+    database: 'bbadger',
+    charset: 'utf8',
+  }
+});
 
 knex.schema.hasTable('users').then(exists => {
   if (!exists) {
@@ -13,6 +17,17 @@ knex.schema.hasTable('users').then(exists => {
   }
 })
 
+knex.schema.hasTable('transactions').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('transactions', table => {
+      table.increments('id').primary();
+      table.string('amount');
+      table.string('category');
+      table.integer('userid');
+    }).then(() => console.log('created table transactions'))
+  }
+})
+
 const db = require('bookshelf')(knex);
 
-module.exports = db;
+module.exports = { db, knex };
