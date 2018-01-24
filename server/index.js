@@ -1,10 +1,9 @@
-const config = require('./config/index.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
 const passport = require('passport');
-const port = config.PORT;
+const port = process.env.PORT || 1337;
 
 const app = express();
 
