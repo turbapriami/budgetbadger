@@ -13,7 +13,11 @@ const config = {
     loaders: [{
       exclude: /node_modules/,
       test: /\.(js|jsx)$/,
-      loader: 'babel-loader'
+      loader: 'babel-loader',
+      query:
+      {
+        presets: ['react']
+      }
     },
     {
       test: /\.scss$/,
