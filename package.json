@@ -17,10 +17,22 @@
   },
   "homepage": "https://github.com/turbapriami/budgetbadger#readme",
   "dependencies": {
+    "axios": "^0.17.1",
     "babel": "^6.23.0",
     "babel-loader": "^7.1.2",
     "babel-preset-latest": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "bookshelf": "^0.12.1",
+    "express": "^4.16.2",
+    "graphql": "^0.12.3",
+    "knex": "^0.14.2",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0",
+    "pg": "^7.4.1",
     "react": "^16.2.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "request": "^2.83.0",
     "webpack": "^3.10.0"
   }
 }
