@@ -17,10 +17,6 @@ module.exports = `
     id: Int!
     user_id: Int!
     amount: Int!
-<<<<<<< HEAD
-    category: String!
-    user: [User!]
-=======
     category_id: String!
     name: String!
     account_id: String
@@ -45,20 +41,15 @@ module.exports = `
     type: String!
     access_token: String!
     transactions: [Transaction!]
->>>>>>> database
   }
 
   type Query {
     getUser(email: String!, id: Int): [User!]
-<<<<<<< HEAD
-    getTransactions(userid: Int!): [Transaction!]
-=======
     getTransactions(user_id: Int!): [Transaction!]
     getAccounts(user_id: Int!): [Account!]
     getAccount(account_id: String!): [Account!]
     getCategories(name: String!): [Category!]
     getCategory(category_id: String!): [Category!]
->>>>>>> database
   }
 
   type Mutation {

@@ -101,10 +101,6 @@ module.exports = {
       })
       return token
     },
-<<<<<<< HEAD
-    createTransaction: (parent, args, { knex }) => knex('transactions').insert(args),
-    deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
-=======
     createTransaction: async (parent, args, { models }) => {
       const transaction = await new models.Transaction(args).save(null, {method: 'insert'});
       return transaction.attributes;
@@ -117,7 +113,6 @@ module.exports = {
      const category = await new models.Category(args).save(null, {method: 'insert'});
      return category.attributes;
     },
->>>>>>> database
   }
 }
 
