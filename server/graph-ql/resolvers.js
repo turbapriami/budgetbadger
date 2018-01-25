@@ -2,9 +2,14 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash')
 
 module.exports = {
+
   User: {
     transactions: ({ id }, args, { knex }) => 
       knex('transactions').where({
+        user_id: id
+      }),
+    accounts: ({ id }, args, { knex }) => 
+      knex('accounts').where({
         user_id: id
       })
   },
@@ -13,8 +18,27 @@ module.exports = {
     user: ({ user_id }, args, { knex }) => 
       knex('users').where({
         id: user_id
+      }),
+    account: ({ account_id }, args, { knex }) => 
+      knex('accounts').where({
+        id: account_id
       })
-    },
+  },
+
+  Account: {
+    transactions: ({ id }, args, { knex }) => 
+      knex('transactions').where({
+        account_id: id
+      })
+  },
+
+  Category: {
+    transactions: ({ id }, args, { knex }) => 
+      knex('transactions').where({
+        category_id: id
+      })
+  },
+
   Query: {
     getUser: (parent, { email }, { knex, user }) => 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
@@ -29,12 +53,35 @@ module.exports = {
 
     getTransactions: (parent, { user_id }, { knex }) => 
       knex('transactions').where({
-        userid
+        user_id
       }),
 
+    getAccounts: (parent, { user_id }, { knex }) => 
+      knex('accounts').where({
+        user_id
+      }),
+
+    getAccount: (parent, { account_id }, { knex }) =>
+      knex('accounts').where({
+        account_id
+      }),
+
+    getCategories: (parent, args, { knex }) => 
+      knex('categories').where({
+      }),
+
+    getCategory: (parent, { category_id }, { knex }) =>
+      knex('categories').where({
+        category_id
+      }),
+
+
+
     },
+
   Mutation: {
     createUser: async (parent, args, { dbUser }) => await new dbUser(args).save(),
+    deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
     loginUser: async (parent, { email, password }, { dbUser, APP_SECRET }) => {
       const newUser = await new dbUser({ email }).fetch();
       if (!newUser) {
@@ -52,6 +99,7 @@ module.exports = {
       return token
     },
     createTransaction: (parent, args, { knex }) => knex('transactions').insert(args),
-    deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
+    createAccount: (parent, args, { knex }) => knex('accounts').insert(args),
+    createCategory: (parent, args, { knex }) => knex('categories').insert(args),
   }
 }
