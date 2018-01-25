@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.use(getToken); // => uncomment to enable authentication
+// app.use(getToken); // => uncomment to enable authentication
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'

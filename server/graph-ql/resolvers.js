@@ -14,19 +14,18 @@ module.exports = {
       knex('users').where({
         id: userid
       })
-  },
-
+    },
   Query: {
-    getUser: (parent, { email }, { knex, user }) => {
+    getUser: (parent, { email }, { knex, user }) => 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
-      if (user) {
+      // if (user) {
         knex('users').where({
           email
-        })
-      } else {
-        throw new Error('Not authenticated')
-      }
-    },
+        }),
+      // } else {
+        // throw new Error('Not authenticated')
+      // }
+    // },
 
     getTransactions: (parent, { userid }, { knex }) => 
       knex('transactions').where({
@@ -53,6 +52,6 @@ module.exports = {
       return token
     },
     createTransaction: (parent, args, { knex }) => knex('transactions').insert(args),
-    deleteUser: (parent, args, { knex }) => knex('users').where(args).fetch().del(),
+    deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
   }
 }

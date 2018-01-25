@@ -11,11 +11,11 @@ module.exports = `
     userid: Int!
     amount: Int!
     category: String!
-    user: User!
+    user: [User!]
   }
 
   type Query {
-    getUser(email: String!): [User!]
+    getUser(email: String!, id: Int): [User!]
     getTransactions(userid: Int!): [Transaction!]
   }
 
