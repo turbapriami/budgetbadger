@@ -14,9 +14,11 @@
 1. [Requirements](#requirements)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
+    1. [Roadmap](#roadmap)
+    1. [GraphQL Queries](#graphql-queries)
 1. [Team](#team)
 1. [Contributing](#contributing)
+1. [Style Guide](#style-guide)
 
 ## Usage
 
@@ -116,3 +118,7 @@ Get transactions by user:
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+## Style Guide
+
+See [STYLE-GUIDE.md](STYLE-GUIDE.md) for the style guide.
