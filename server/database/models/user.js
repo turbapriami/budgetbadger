@@ -1,4 +1,4 @@
-const db = require('../index.js');
+const db = require('../index.js').db;
 const bcrypt = require('bcrypt');
 const Promise = require('bluebird');
 
@@ -21,3 +21,5 @@ const User = db.Model.extend({
            .catch(err => console.log(err));
   }
 })
+
+module.exports = User

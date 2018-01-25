@@ -1,10 +1,12 @@
 const knex = require('../database/index.js').knex;
+const dbUser = require('../database/models/user.js');
 const {
   GraphQLObjectType,
   GraphQLInt,
   GraphQLList,
   GraphQLString,
-  GraphQLSchema
+  GraphQLSchema,
+  GraphQLNonNull
 } = require('graphql');
 
 
@@ -69,6 +71,12 @@ const Transaction = new GraphQLObjectType({
         resolve(transaction) {
           return transaction.userid;
         }
+      },
+      user: {
+        type: new GraphQLList(User),
+        resolve(transaction) {
+          return knex('users').where({id: transaction.userid})
+        }
       }
     }
   }
@@ -91,9 +99,6 @@ const Query = new GraphQLObjectType({
           username: {
             type: GraphQLString
           },
-          // transactions: {
-          //   type: new GraphQLList(Transaction)
-          // }
         },
         resolve(root, args) {
           return knex('users').where(args)
@@ -126,11 +131,33 @@ const Query = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   description: 'Mutation',
+  fields: () => {
+    return {
+      newUser: {
+        type: User,
+        args: {
+          username: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          password: {
+            type: new GraphQLNonNull(GraphQLString)
+          }
+        },
+        resolve(root, args) {
+          return new dbUser({
+            username: args.username,
+            password: args.password
+          }).save()
+        }
+      }
+    }
+  }
 
 })
 
 const Schema = new GraphQLSchema({
-  query: Query
+  query: Query,
+  mutation: Mutation
 });
 
 module.exports = Schema;
