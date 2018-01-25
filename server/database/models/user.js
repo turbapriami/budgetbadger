@@ -1,4 +1,4 @@
-const db = require('../index.js').db;
+const { db } = require('../index.js');
 const bcrypt = require('bcrypt');
 const Promise = require('bluebird');
 

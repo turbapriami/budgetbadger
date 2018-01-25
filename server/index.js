@@ -8,9 +8,9 @@ const { makeExecutableSchema } = require('graphql-tools')
 const typeDefs = require('./graph-ql/Schema.js');
 const resolvers = require('./graph-ql/resolvers.js')
 const db = require('./database/index.js');
-const dbUser = require('./database/models/user.js');
 const jwt = require('jsonwebtoken');
 const APP_SECRET = process.env.APP_SECRET;
+const models = require('./database/models/index.js')
 
 const port = process.env.PORT || 1337;
 
@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.use(getToken); // => uncomment to enable authentication
+// app.use(getToken); // => uncomment to enable authentication
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
@@ -55,7 +55,7 @@ app.use('/graphql',
       user: req.user,
       knex: db.knex,
       APP_SECRET,
-      dbUser
+      models
     }
   }))
 );
