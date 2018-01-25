@@ -18,6 +18,7 @@ module.exports = {
 
   Query: {
     getUser: (parent, { email }, { knex, user }) => {
+      // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
       if (user) {
         knex('users').where({
           email
