@@ -65,6 +65,6 @@ module.exports = `
   type School {
     id: Int!
     name: String!
-    user_id: [User!]
+    users: [User!]
   }
 `
