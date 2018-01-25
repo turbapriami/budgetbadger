@@ -1,6 +1,7 @@
 const { db } = require('../index.js');
 const bcrypt = require('bcrypt');
 const Promise = require('bluebird');
+const School = require('/school.js');
 
 const User = db.Model.extend({
   tableName: 'users',
@@ -18,6 +19,9 @@ const User = db.Model.extend({
               this.set('password', hash);
            })
            .catch(err => console.log(err));
+  },
+  school: function() {
+    return this.belongsToMany(School);
   }
 })
 

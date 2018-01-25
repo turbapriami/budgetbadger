@@ -11,6 +11,10 @@ module.exports = {
     accounts: ({ id }, args, { knex }) => 
       knex('accounts').where({
         user_id: id
+      }),
+    school: ({ id }, args, { knex }) =>
+      knex('schools').where({
+        user_id: id
       })
   },
 
@@ -41,7 +45,7 @@ module.exports = {
       knex('transactions').where({
         category_id: id
       })
-    },
+  },
   Query: {
     getUser: (parent, { email }, { knex, user }) => 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
@@ -78,7 +82,10 @@ module.exports = {
         category_id
       }),
 
-
+    getSchools: (parent, { id }, { knex }) =>
+      knex('schools').where({
+        id
+      }),
 
     },
 

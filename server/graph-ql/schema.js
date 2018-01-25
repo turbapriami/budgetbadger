@@ -10,7 +10,8 @@ module.exports = `
     state: String
     phone: String
     transactions: [Transaction!]
-    accounts: [Account!]
+    accounts: [Account!],
+    school: [School!]
   }
 
   type Transaction {
@@ -59,5 +60,11 @@ module.exports = `
     createCategory(name: String!): Category
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
+  }
+
+  type School {
+    id: Int!
+    name: String!
+    user_id: [User!]
   }
 `
