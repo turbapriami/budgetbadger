@@ -7,10 +7,9 @@ const User = db.Model.extend({
   initialize: function() {
     this.on('creating', this.hashPassword);
   },
-  comparePassword: function(input, cb) {
-    bcrypt.compare(input, this.get('password'), (err, match) => {
-      cb(match);
-    })
+  comparePassword: async function(input) {
+    const match = await bcrypt.compare(input, this.get('password'));
+    return match;
   },
   hashPassword: function() {
     const hasher = Promise.promisify(bcrypt.hash);

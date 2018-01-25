@@ -1,17 +1,37 @@
 require('dotenv').config()
 const express = require('express');
-const graphqlHTTP = require('express-graphql');
+const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
 const passport = require('passport');
-const { buildSchema } = require('graphql');
-const Schema = require('./graph-ql/Schema.js');
+const { makeExecutableSchema } = require('graphql-tools')
+const typeDefs = require('./graph-ql/Schema.js');
+const resolvers = require('./graph-ql/resolvers.js')
 const db = require('./database/index.js');
+const dbUser = require('./database/models/user.js');
+const { APP_SECRET } = require('./config.js');
+const jwt = require('jsonwebtoken');
 
 const port = process.env.PORT || 1337;
 
 const app = express();
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+})
+
+const addUser = async (req) => {
+  const token = req.headers.authorization;
+  try {
+    const { user } = await jwt.verify(token, APP_SECRET);
+    req.user = user;
+  } catch (err) {
+    console.log(err);
+  }
+  req.next()
+}
 
 app.use(morgan('dev'));
 
@@ -22,13 +42,24 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../public')))
 
-// const root = { hello: () => 'Hello world!' };
+app.use(addUser); // => uncomment to enable authentication
 
-app.use('/graphql', graphqlHTTP({
-  schema: Schema,
-  pretty: true,
-  graphiql: true,
+app.use('/graphiql', graphiqlExpress({
+  endpointURL: '/graphql'
 }));
+
+app.use('/graphql', 
+  graphqlExpress(req => ({
+    schema: schema,
+    pretty: true,
+    context: {
+      user: req.user,
+      knex: db.knex,
+      APP_SECRET,
+      dbUser
+    }
+  }))
+);
 
 app.listen(port, (err) => {
   console.log('Listening on port: ' + port);
