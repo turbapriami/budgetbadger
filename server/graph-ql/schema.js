@@ -8,7 +8,7 @@ module.exports = `
 
   type Transaction {
     id: Int!
-    userid: Int!
+    user_id: Int!
     amount: Int!
     category: String!
     user: [User!]
@@ -16,11 +16,11 @@ module.exports = `
 
   type Query {
     getUser(email: String!, id: Int): [User!]
-    getTransactions(userid: Int!): [Transaction!]
+    getTransactions(user_id: Int!): [Transaction!]
   }
 
   type Mutation {
-    createTransaction(userid: Int!, amount: Int!, category: String!): Transaction
+    createTransaction(user_id: Int!, amount: Int!, category: String!): Transaction
     createUser(email: String!, password: String!): User
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!

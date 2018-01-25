@@ -5,14 +5,14 @@ module.exports = {
   User: {
     transactions: ({ id }, args, { knex }) => 
       knex('transactions').where({
-        userid: id
+        user_id: id
       })
   },
 
   Transaction: {
-    user: ({ userid }, args, { knex }) => 
+    user: ({ user_id }, args, { knex }) => 
       knex('users').where({
-        id: userid
+        id: user_id
       })
     },
   Query: {
@@ -27,7 +27,7 @@ module.exports = {
       // }
     // },
 
-    getTransactions: (parent, { userid }, { knex }) => 
+    getTransactions: (parent, { user_id }, { knex }) => 
       knex('transactions').where({
         userid
       }),
