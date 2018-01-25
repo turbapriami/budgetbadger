@@ -4,14 +4,13 @@ const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-const passport = require('passport');
 const { makeExecutableSchema } = require('graphql-tools')
 const typeDefs = require('./graph-ql/Schema.js');
 const resolvers = require('./graph-ql/resolvers.js')
 const db = require('./database/index.js');
 const dbUser = require('./database/models/user.js');
-const { APP_SECRET } = require('./config.js');
 const jwt = require('jsonwebtoken');
+const APP_SECRET = process.env.APP_SECRET;
 
 const port = process.env.PORT || 1337;
 
@@ -22,7 +21,7 @@ const schema = makeExecutableSchema({
   resolvers
 })
 
-const addUser = async (req) => {
+const getToken = async (req) => {
   const token = req.headers.authorization;
   try {
     const { user } = await jwt.verify(token, APP_SECRET);
@@ -42,7 +41,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.use(addUser); // => uncomment to enable authentication
+app.use(getToken); // => uncomment to enable authentication
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
