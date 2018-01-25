@@ -22,6 +22,10 @@ module.exports = {
     account: ({ account_id }, args, { knex }) => 
       knex('accounts').where({
         id: account_id
+      }),
+    category: ({ category_id }, args, { knex }) =>
+      knex('categories').where({
+        id: category_id
       })
   },
 
@@ -80,10 +84,10 @@ module.exports = {
     },
 
   Mutation: {
-    createUser: async (parent, args, { dbUser }) => await new dbUser(args).save(),
+    createUser: async (parent, args, { models }) => await new models.User(args).save(),
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
-    loginUser: async (parent, { email, password }, { dbUser, APP_SECRET }) => {
-      const newUser = await new dbUser({ email }).fetch();
+    loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
+      const newUser = await new models.User({ email }).fetch();
       if (!newUser) {
         throw new Error('Unable to match the prodided credentials');
       }
@@ -98,8 +102,28 @@ module.exports = {
       })
       return token
     },
-    createTransaction: (parent, args, { knex }) => knex('transactions').insert(args),
-    createAccount: (parent, args, { knex }) => knex('accounts').insert(args),
-    createCategory: (parent, args, { knex }) => knex('categories').insert(args),
+    createTransaction: async (parent, args, { models }) => {
+      const transaction = await new models.Transaction(args).save(null, {method: 'insert'});
+      return transaction.attributes;
+    },
+    createAccount: async (parent, args, { knex, models }) => {
+      const account = await new models.Account(args).save(null, {method: 'insert'});
+      return account.attributes;
+    },
+    createCategory: async (parent, args, { models }) => {
+     const category = await new models.Category(args).save(null, {method: 'insert'});
+     return category.attributes;
+    },
   }
 }
+
+
+
+
+
+
+
+
+
+
+

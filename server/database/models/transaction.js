@@ -1,4 +1,4 @@
-const db = require('../index.js');
+const { db } = require('../index.js');
 const User = require('./user.js')
 const Category = require('./category.js')
 const Account = require('./account.js')
