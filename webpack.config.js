@@ -4,10 +4,13 @@ const path = require('path')
 
 const config = {  
   context: __dirname,
-  entry: './client/index.js',
+  entry: {
+    main: './client/index.js',
+    splash: './client/splash.js'
+  },
   output: {
-    path: path.join(__dirname,'/public'),
-    filename: 'bundle.js'
+    path: path.join(__dirname,'/public/'),
+    filename: '[name]/[name]-bundle.js'
   },
   module: {
     loaders: [{
