@@ -11,6 +11,7 @@ module.exports = `
     phone: String
     transactions: [Transaction!]
     accounts: [Account!]
+    banks: [Bank!]
   }
 
   type Transaction {
@@ -39,8 +40,13 @@ module.exports = `
     user_id: Int!
     bank_name: String!
     type: String!
-    access_token: String!
     transactions: [Transaction!]
+  }
+
+  type Bank {
+    id: String!
+    access_token: String!
+    user_id: Int!
   }
 
   type Query {
@@ -59,5 +65,6 @@ module.exports = `
     createCategory(name: String!): Category
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
+    addBank(id: String!, access_token: String!, user_id: Int!): Bank
   }
 `
