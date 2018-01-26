@@ -133,7 +133,6 @@ module.exports = {
       const category = await new models.Category(args).save(null, {method: 'insert'});
       return category.attributes;
     },
-
     updateUser: async (parent, args, {models, knex}) => {
       const { email } = args;
       const user = await new models.User({email}).fetch();
