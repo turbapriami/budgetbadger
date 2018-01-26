@@ -8,12 +8,20 @@ module.exports = {
       knex('transactions').where({
         user_id: id
       }),
+      
     accounts: ({ id }, args, { knex }) => 
       knex('accounts').where({
         user_id: id
       }),
+<<<<<<< HEAD
     school: ({ id }, args, { knex }) =>
       knex('schools').where({
+=======
+
+    // use bank to update accounts/transactions info via Plaid
+    banks: ({ id }, args, { knex }) =>
+      knex('banks').where({
+>>>>>>> setup banks schema and addBank function
         user_id: id
       })
   },
@@ -23,10 +31,12 @@ module.exports = {
       knex('users').where({
         id: user_id
       }),
+
     account: ({ account_id }, args, { knex }) => 
       knex('accounts').where({
         id: account_id
       }),
+
     category: ({ category_id }, args, { knex }) =>
       knex('categories').where({
         id: category_id
@@ -45,7 +55,12 @@ module.exports = {
       knex('transactions').where({
         category_id: id
       })
+<<<<<<< HEAD
   },
+=======
+    },
+
+>>>>>>> setup banks schema and addBank function
   Query: {
     getUser: (parent, { email }, { knex, user }) => 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
@@ -86,42 +101,51 @@ module.exports = {
       knex.select().from('schools').where({
         id
       }),
-
     },
+
   Mutation: {
     createUser: async (parent, args, { models }) => await new models.User(args).save(),
+
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
+
     loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
       const newUser = await new models.User({ email }).fetch();
       if (!newUser) {
         throw new Error('Unable to match the prodided credentials');
       }
-
       const match = await newUser.comparePassword(password);
       if (!match) {
         throw new Error('Unable to match the provided credentials');
       }
-
       const token = jwt.sign({ user: _.pick(newUser.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
       })
       return token
     },
+
     createTransaction: async (parent, args, { models }) => {
       const transaction = await new models.Transaction(args).save(null, {method: 'insert'});
       return transaction.attributes;
     },
+
     createAccount: async (parent, args, { knex, models }) => {
       const account = await new models.Account(args).save(null, {method: 'insert'});
       return account.attributes;
     },
+
     createCategory: async (parent, args, { models }) => {
-     const category = await new models.Category(args).save(null, {method: 'insert'});
-     return category.attributes;
+      const category = await new models.Category(args).save(null, {method: 'insert'});
+      return category.attributes;
     },
+    
     createSchool: async (parent, args, { models }) => {
       const school = await new models.School(args).save(null, {method: 'insert'});
       return school.attributes;
+    },
+
+    addBank: async (parent, args, { models }) => {
+      const bank = await new models.Bank(args).save(null, {method: 'insert'});
+      return bank.attributes;
     }
   }
 }

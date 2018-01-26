@@ -10,8 +10,13 @@ module.exports = `
     state: String
     phone: String
     transactions: [Transaction!]
+<<<<<<< HEAD
     accounts: [Account!],
     school: [School!]
+=======
+    accounts: [Account!]
+    banks: [Bank!]
+>>>>>>> setup banks schema and addBank function
   }
 
   type Transaction {
@@ -40,7 +45,6 @@ module.exports = `
     user_id: Int!
     bank_name: String!
     type: String!
-    access_token: String!
     transactions: [Transaction!]
   }
 
@@ -48,6 +52,12 @@ module.exports = `
     id: Int!
     name: String!
     user_id: [User!]
+
+  
+  type Bank {
+    id: String!
+    access_token: String!
+    user_id: Int!
   }
 
   type Query {
@@ -78,5 +88,6 @@ module.exports = `
       phone: String,
       school: String
     ): User
+    addBank(id: String!, access_token: String!, user_id: Int!): Bank
   }
   `
