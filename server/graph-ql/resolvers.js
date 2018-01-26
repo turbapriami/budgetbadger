@@ -23,7 +23,12 @@ module.exports = {
     banks: ({ id }, args, { knex }) =>
       knex('banks').where({
         user_id: id
-      })
+      }),
+
+    bills: ({ id }, args, { knex }) => 
+    knex('bills').where({
+      user_id: id
+    })
   },
 
   Transaction: {
@@ -56,6 +61,22 @@ module.exports = {
         category_id: id
       })
   },
+
+
+  Bill: {
+    bill_category: ({ id }, args, { knex }) => 
+      knex('bills').where({
+        bill_category_id: id
+      })
+  },
+
+  BillCategory: {
+    bills: ({ id }, args, { knex }) => 
+      knex('bills').where({
+        bill_category_id: id
+      })
+  },
+
 
   Query: {
     getUser: (parent, { email }, { knex, user }) => 
@@ -97,7 +118,17 @@ module.exports = {
       knex.select().from('schools').where({
         id
       }),
-  },
+      
+    getBillCategories: (parent, { user_id }, { knex }) => 
+      knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+        user_id
+      }).distinct('bill_categories.name').select(),
+    
+    getBills: (parent, { user_id }, { knex }) => 
+      knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+        user_id
+      })
+    },
 
   Mutation: {
     createUser: async (parent, args, { models }) => await new models.User(args).save(),
@@ -133,6 +164,7 @@ module.exports = {
       const category = await new models.Category(args).save(null, {method: 'insert'});
       return category.attributes;
     },
+
     updateUser: async (parent, args, {models, knex}) => {
       const { email } = args;
       const user = await new models.User({email}).fetch();
@@ -144,6 +176,7 @@ module.exports = {
       }
       return knex('users').where({ id }).update(user.attributes);
     },
+
     createSchool: async (parent, args, { models }) => {
       const school = await new models.School(args).save(null, {method: 'insert'});
       return school.attributes;
@@ -152,6 +185,30 @@ module.exports = {
     addBank: async (parent, args, { models }) => {
       const bank = await new models.Bank(args).save(null, {method: 'insert'});
       return bank.attributes;
-    }
+    },
+
+    createBill: async (parent, args, { models }) => {
+      const bill = await new models.Bill(args).save(null, {method: 'insert'});
+      return bill.attributes;
+     },
+
+    updateBill: async (parent, args, { models }) => {
+      const bill = await new models.Bill(args).save(null, {method: 'update'});
+      return bill.attributes;
+    },
+
+    deleteBill: (parent, args, { knex }) => knex('bills').where(args).del(),
+
+    createBillCategory: async (parent, args, { models }) => {
+      const billCategory = await new models.BillCategory(args).save(null, {method: 'insert'});
+      return billCategory.attributes;
+    },
+
+    updateBillCategory: async (parent, args, { models }) => {
+      const billCategory = await new models.BillCategory(args).save(null, {method: 'update'});
+      return billCategory.attributes;
+    },
+    
+    deleteBillCategory: (parent, args, { knex }) => knex('bill_categories').where(args).del(),
   }
 }

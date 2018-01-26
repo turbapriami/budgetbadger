@@ -4,6 +4,8 @@ const Transaction = require('./transaction.js');
 const Category = require('./category.js');
 const School = require('./school.js');
 const Bank = require('./banks.js');
+const Bill = require('./bill.js');
+const BillCategory = require('./billcategory.js');
 
 module.exports = {
   Account,
@@ -11,5 +13,7 @@ module.exports = {
   Transaction,
   Category,
   School,
-  Bank
+  Bank,
+  Bill,
+  BillCategory
 }
