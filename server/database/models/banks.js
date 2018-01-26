@@ -1,10 +1,10 @@
 const { db } = require('../index.js');
 
-const Account = db.Model.extend({
+const Bank = db.Model.extend({
   tableName: 'banks',
   user_id: () => {
     return this.belongsTo(Account, 'id');
   }
 })
 
-module.exports = Account;
+module.exports = Bank;
