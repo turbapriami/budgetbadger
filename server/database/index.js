@@ -29,8 +29,8 @@ knex.schema.hasTable('transactions').then(exists => {
     knex.schema.createTable('transactions', table => {
       table.increments('id').primary();
       table.integer('user_id');
-      table.integer('category_id');
-      table.integer('account_id');
+      table.string('category_id');
+      table.string('account_id');
       table.string('amount');
       table.string('name');
       table.string('street');
@@ -75,7 +75,32 @@ knex.schema.hasTable('banks').then(exists => {
       table.string('id').primary();
       table.string('access_token');
       table.integer('user_id');
-    }).then(() => console.log('created table banks'))
+    }).then(() => console.log('created table banks'));
+  }
+})
+
+knex.schema.hasTable('bills').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('bills', table => {
+      table.increments('id').primary();
+      table.integer('user_id');
+      table.integer('bill_category_id');
+      table.string('description');
+      table.float('amount');
+      table.date('due_date');
+      table.boolean('paid');
+      table.date('paid_date');
+      table.boolean('alert');
+    }).then(() => console.log('created table bills'))
+  }
+})
+
+knex.schema.hasTable('bill_categories').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('bill_categories', table => {
+      table.increments('id').primary();
+      table.string('name');
+    }).then(() => console.log('created table bill_categories'))
   }
 })
 
