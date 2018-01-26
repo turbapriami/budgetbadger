@@ -47,7 +47,6 @@ knex.schema.hasTable('accounts').then(exists => {
       table.integer('user_id');
       table.string('bank_name');
       table.string('type');
-      table.string('access_token');
     }).then(() => console.log('created table accounts'))
   }
 })
@@ -67,6 +66,16 @@ knex.schema.hasTable('schools').then(exists => {
       table.increments('id').primary();
       table.string('name');
     }).then(() => console.log('created table schools'));
+  }
+})
+
+knex.schema.hasTable('banks').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('banks', table => {
+      table.string('id').primary();
+      table.string('access_token');
+      table.integer('user_id');
+    }).then(() => console.log('created table banks'))
   }
 })
 
