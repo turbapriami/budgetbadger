@@ -1,14 +1,14 @@
 require('dotenv').config()
 const express = require('express');
 const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
+const { makeExecutableSchema } = require('graphql-tools')
+const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-const { makeExecutableSchema } = require('graphql-tools')
 const typeDefs = require('./graph-ql/Schema.js');
 const resolvers = require('./graph-ql/resolvers.js')
 const db = require('./database/index.js');
-const jwt = require('jsonwebtoken');
 const APP_SECRET = process.env.APP_SECRET;
 const models = require('./database/models/index.js')
 

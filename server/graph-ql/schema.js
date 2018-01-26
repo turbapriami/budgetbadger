@@ -59,5 +59,13 @@ module.exports = `
     createCategory(name: String!): Category
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
+    updateUser(    
+      email: String!
+      first_name: String
+      last_name: String
+      street: String
+      zip_code: String
+      state: String
+      phone: String): User
   }
 `
