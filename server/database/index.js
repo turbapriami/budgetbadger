@@ -66,6 +66,8 @@ knex.schema.hasTable('schools').then(exists => {
       table.increments('id').primary();
       table.string('name');
     }).then(() => console.log('created table schools'));
+  }
+})
 
 knex.schema.hasTable('banks').then(exists => {
   if (!exists) {

@@ -16,7 +16,10 @@ module.exports = `
 =======
     accounts: [Account!]
     banks: [Bank!]
+<<<<<<< HEAD
 >>>>>>> setup banks schema and addBank function
+=======
+>>>>>>> 3eae606715f58747fb411f30b6ac1d3e9a4f4b93
   }
 
   type Transaction {
@@ -48,12 +51,15 @@ module.exports = `
     transactions: [Transaction!]
   }
 
+<<<<<<< HEAD
   type School {
     id: Int!
     name: String!
     user_id: [User!]
 
   
+=======
+>>>>>>> 3eae606715f58747fb411f30b6ac1d3e9a4f4b93
   type Bank {
     id: String!
     access_token: String!
