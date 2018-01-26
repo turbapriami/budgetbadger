@@ -1,7 +1,6 @@
 node_modules
-public/bundle.js
-main-bundle.js
-splash-bundle.js
+public/main/main-bundle.js
+public/splash/splash-bundle.js
 package-lock.json
 
 # Logs

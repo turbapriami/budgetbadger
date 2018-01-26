@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, '../public/splash')))
+app.use(express.static(path.join(__dirname, '../public/main')))
 
 // app.use(getToken); // => uncomment to enable authentication
 
