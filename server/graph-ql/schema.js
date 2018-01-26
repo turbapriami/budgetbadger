@@ -74,16 +74,14 @@ module.exports = `
     createSchool(name: String!): School!
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
-    updateUser(
-      email: String!,
-      first_name: String,
-      last_name: String,
-      street: String,
-      zip_code: String,
-      state: String,
-      phone: String,
-      school: String
-    ): User
     addBank(id: String!, access_token: String!, user_id: Int!): Bank
+    updateUser(    
+      email: String!
+      first_name: String
+      last_name: String
+      street: String
+      zip_code: String
+      state: String
+      phone: String): User
   }
   `
