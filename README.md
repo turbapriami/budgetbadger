@@ -115,6 +115,66 @@ Get transactions by user:
 }
 ```
 
+Example for Data Prep Queries:
+```sh
+
+Adding Categories:
+  mutation {
+    createCategory(name: "food") {
+      id
+    }
+  }
+
+Adding Transactions: 
+  mutation {
+    createTransaction(user_id: 1, amount: 91, category_id: "1", name: "Zuckers", street: "60145 Chesterfied Rd", zip_code: "24060", state: "Virginia", account_id: "12345") 
+    {
+      id
+    }
+  }
+
+Adding Bill Category:
+  mutation {
+    createBillCategory(name: "Entertainment") {
+      id
+    }
+  }
+
+Deleting Bill Category:
+  mutation {
+    deleteBillCategory(id:1)
+  }
+
+Creating a Bill:
+  mutation {
+    createBill(id:1, user_id: 1, bill_category_id: 1,description: "Netflix", amount: 8.99, due_date: "12/21/2017", paid: false, alert: false) {
+      id
+    }
+  }
+
+Get a Users Bills with Bill category Description
+  query {
+    getBills(user_id: 1) {
+      id
+      user_id
+      bill_category_id
+      description
+      amount
+      due_date
+      paid
+      paid_date
+      alert
+    }
+  }
+
+Get a Users Bill Categories
+  query {
+    getBillCategories(user_id: 1) {
+      name
+    }
+  }
+```
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.

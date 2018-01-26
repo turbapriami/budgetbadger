@@ -18,6 +18,9 @@ const User = db.Model.extend({
               this.set('password', hash);
            })
            .catch(err => console.log(err));
+  },
+  bill_category_id: () => {
+    return this.belongsToMany(BillCategory, 'id');
   }
 })
 

@@ -11,7 +11,11 @@ module.exports = {
     accounts: ({ id }, args, { knex }) => 
       knex('accounts').where({
         user_id: id
-      })
+      }),
+    bills: ({ id }, args, { knex }) => 
+    knex('bills').where({
+      user_id: id
+    })
   },
 
   Transaction: {
@@ -42,6 +46,22 @@ module.exports = {
         category_id: id
       })
     },
+
+  Bill: {
+    bill_category: ({ id }, args, { knex }) => 
+    knex('bills').where({
+      bill_category_id: id
+    })
+  },
+
+  BillCategory: {
+    bills: ({ id }, args, { knex }) => 
+    knex('bills').where({
+      bill_category_id: id
+    })
+  },
+
+
   Query: {
     getUser: (parent, { email }, { knex, user }) => 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
@@ -78,8 +98,15 @@ module.exports = {
         category_id
       }),
 
-
-
+    getBillCategories: (parent, { user_id }, { knex }) => 
+      knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+        user_id
+      }).distinct('bill_categories.name').select(),
+    
+    getBills: (parent, { user_id }, { knex }) => 
+      knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+        user_id
+      })
     },
 
   Mutation: {
@@ -88,7 +115,7 @@ module.exports = {
     loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
       const newUser = await new models.User({ email }).fetch();
       if (!newUser) {
-        throw new Error('Unable to match the prodided credentials');
+        throw new Error('Unable to match the provided credentials');
       }
 
       const match = await newUser.comparePassword(password);
@@ -113,6 +140,24 @@ module.exports = {
      const category = await new models.Category(args).save(null, {method: 'insert'});
      return category.attributes;
     },
+    createBill: async (parent, args, { models }) => {
+      const bill = await new models.Bill(args).save(null, {method: 'insert'});
+      return bill.attributes;
+     },
+    updateBill: async (parent, args, { models }) => {
+      const bill = await new models.Bill(args).save(null, {method: 'update'});
+      return bill.attributes;
+    },
+    deleteBill: (parent, args, { knex }) => knex('bills').where(args).del(),
+    createBillCategory: async (parent, args, { models }) => {
+      const billCategory = await new models.BillCategory(args).save(null, {method: 'insert'});
+      return billCategory.attributes;
+    },
+    updateBillCategory: async (parent, args, { models }) => {
+      const billCategory = await new models.BillCategory(args).save(null, {method: 'update'});
+      return billCategory.attributes;
+    },
+    deleteBillCategory: (parent, args, { knex }) => knex('bill_categories').where(args).del(),
   }
 }
 

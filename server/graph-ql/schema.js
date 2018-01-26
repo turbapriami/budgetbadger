@@ -1,4 +1,6 @@
 module.exports = `
+  scalar Date
+
   type User {
     id: Int!
     email: String!
@@ -11,6 +13,7 @@ module.exports = `
     phone: String
     transactions: [Transaction!]
     accounts: [Account!]
+    bills: [Bill!]
   }
 
   type Transaction {
@@ -43,6 +46,25 @@ module.exports = `
     transactions: [Transaction!]
   }
 
+  type Bill {
+    id: Int!
+    user_id: Int!
+    bill_category_id: Int!
+    description: String!
+    amount: Float!
+    due_date: Date!
+    paid: Boolean
+    paid_date: Date
+    alert: Boolean
+    bill_category: [Category!]
+  }
+
+  type BillCategory {
+    id: Int!
+    name: String!
+    bills: [Bill!]
+  }
+
   type Query {
     getUser(email: String!, id: Int): [User!]
     getTransactions(user_id: Int!): [Transaction!]
@@ -50,6 +72,8 @@ module.exports = `
     getAccount(account_id: String!): [Account!]
     getCategories(name: String!): [Category!]
     getCategory(category_id: String!): [Category!]
+    getBills(user_id: Int!): [Bill!]
+    getBillCategories(user_id: Int!): [Category!]
   }
 
   type Mutation {
@@ -59,5 +83,11 @@ module.exports = `
     createCategory(name: String!): Category
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
+    createBill(id: Int!, user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, due_date: Date!, paid: Boolean, paid_date: Date, alert: Boolean): Bill!
+    deleteBill(id: Int!): Int!
+    updateBill(id: Int!, user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, due_date: Date!, paid: Boolean, paid_date: Date, alert: Boolean): Bill!
+    createBillCategory(name: String!): BillCategory!
+    updateBillCategory(id: Int!, name: String!): BillCategory!
+    deleteBillCategory(id: Int!): Int!
   }
 `
