@@ -83,12 +83,11 @@ module.exports = {
       }),
 
     getSchools: (parent, { id }, { knex }) =>
-      knex('schools').where({
+      knex.select().from('schools').where({
         id
       }),
 
     },
-
   Mutation: {
     createUser: async (parent, args, { models }) => await new models.User(args).save(),
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
