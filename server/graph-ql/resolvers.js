@@ -107,7 +107,7 @@ module.exports = {
     loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
       const newUser = await new models.User({ email }).fetch();
       if (!newUser) {
-        throw new Error('Unable to match the prodided credentials');
+        throw new Error('Unable to match the provided credentials');
       }
       const match = await newUser.comparePassword(password);
       if (!match) {
@@ -133,7 +133,17 @@ module.exports = {
       const category = await new models.Category(args).save(null, {method: 'insert'});
       return category.attributes;
     },
-
+    updateUser: async (parent, args, {models, knex}) => {
+      const { email } = args;
+      const user = await new models.User({email}).fetch();
+      const { id } = user;
+      for(let field in user.attributes) {
+        if (args[field]) {
+          user.attributes[field] = args[field]
+        }
+      }
+      return knex('users').where({ id }).update(user.attributes);
+    },
     createSchool: async (parent, args, { models }) => {
       const school = await new models.School(args).save(null, {method: 'insert'});
       return school.attributes;
