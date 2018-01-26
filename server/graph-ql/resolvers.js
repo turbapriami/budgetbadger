@@ -13,21 +13,15 @@ module.exports = {
       knex('accounts').where({
         user_id: id
       }),
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     school: ({ id }, args, { knex }) =>
       knex('schools').where({
-=======
-=======
->>>>>>> 3eae606715f58747fb411f30b6ac1d3e9a4f4b93
+        user_id: id
+      }),
 
     // use bank to update accounts/transactions info via Plaid
     banks: ({ id }, args, { knex }) =>
       knex('banks').where({
-<<<<<<< HEAD
->>>>>>> setup banks schema and addBank function
-=======
->>>>>>> 3eae606715f58747fb411f30b6ac1d3e9a4f4b93
         user_id: id
       })
   },
@@ -61,15 +55,8 @@ module.exports = {
       knex('transactions').where({
         category_id: id
       })
-<<<<<<< HEAD
   },
-=======
-    },
 
-<<<<<<< HEAD
->>>>>>> setup banks schema and addBank function
-=======
->>>>>>> 3eae606715f58747fb411f30b6ac1d3e9a4f4b93
   Query: {
     getUser: (parent, { email }, { knex, user }) => 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
@@ -105,11 +92,12 @@ module.exports = {
       knex('categories').where({
         category_id
       }),
-      
+
     getSchools: (parent, { id }, { knex }) =>
       knex.select().from('schools').where({
         id
       }),
+  },
 
   Mutation: {
     createUser: async (parent, args, { models }) => await new models.User(args).save(),
@@ -157,14 +145,3 @@ module.exports = {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
