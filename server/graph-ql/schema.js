@@ -18,6 +18,29 @@ module.exports = `
     bills: [Bill!]
   }
 
+  type Loan {
+    id: Int!
+    name: String!
+    amount: Int!
+    interest_rate: Int!
+    inception_date: String!
+    end_date: String!
+    recurrence: String!
+    user_id: Int!
+    user: [User!]
+    loan_payments: [Loan_Payment!]
+  }
+
+  type Loan_Payment {
+    id: Int!
+    amount: Int!
+    date: String!
+    loan_id: Int!
+    user_id: Int!
+    user: [User!]
+    loan: [Loan!]
+  }
+
   type Transaction {
     id: Int!
     user_id: Int!
@@ -88,6 +111,8 @@ module.exports = `
     getSchools(user_id: Int!): [School!]
     getBills(user_id: Int!): [Bill!]
     getBillCategories(user_id: Int!): [Category!]
+    getLoans(user_id: Int!): [Loan!]
+    getLoanPayments(loan_id: Int!): [Loan_Payment!]
   }
 
   type Mutation {
@@ -96,6 +121,8 @@ module.exports = `
     createAccount(id: String!, user_id: Int!, bank_name: String!, type: String!, access_token: String!): Account!
     createCategory(name: String!): Category
     createSchool(name: String!): School!
+    createLoan(name: String!, amount: Int!, interest_rate: Int!, inception_date: String!, end_date: String!, user_id: Int!, recurrence: String!): Loan
+    createLoanPayment(amount: Int!, date: String!, loan_id: Int!, user_id: Int!): Loan_Payment
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
     addBank(id: String!, access_token: String!, user_id: Int!): Bank

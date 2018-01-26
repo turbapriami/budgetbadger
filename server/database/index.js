@@ -24,6 +24,33 @@ knex.schema.hasTable('users').then(exists => {
   }
 })
 
+knex.schema.hasTable('loan_payments').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('loan_payments', table => {
+      table.increments('id').primary();
+      table.integer('amount');
+      table.string('date');
+      table.integer('loan_id');
+      table.integer('user_id');
+    }).then(() => console.log('created table loan_payments'))
+  }
+})
+
+knex.schema.hasTable('loans').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('loans', table => {
+      table.increments('id').primary();
+      table.string('name');
+      table.integer('amount');
+      table.integer('interest_rate');
+      table.string('recurrence');
+      table.string('inception_date');
+      table.string('end_date');
+      table.integer('user_id');
+    }).then(() => console.log('created table loans'))
+  }
+})
+
 knex.schema.hasTable('transactions').then(exists => {
   if (!exists) {
     knex.schema.createTable('transactions', table => {

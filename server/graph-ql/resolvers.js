@@ -31,6 +31,28 @@ module.exports = {
     })
   },
 
+  Loan: {
+    user: ({ user_id }, args, { knex }) => 
+      knex('users').where({
+        id: user_id
+      }),
+    loan_payments: ({ id }, args, { knex }) =>
+      knex('loan_payments').where({
+        loan_id: id
+      })
+  },
+
+  Loan_Payment: {
+    user: ({ user_id }, args, { knex }) => 
+      knex('users').where({
+        id: user_id
+      }),
+    loan: ({ loan_id }, args, { knex }) =>
+      knex('loans').where({
+        id: loan_id
+      })
+  },
+
   Transaction: {
     user: ({ user_id }, args, { knex }) => 
       knex('users').where({
@@ -126,6 +148,14 @@ module.exports = {
     getBills: (parent, { user_id }, { knex }) => 
       knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
         user_id
+      }),
+    getLoans: (parent, { user_id }, { knex }) => 
+      knex('loans').where({
+        user_id
+      }),
+    getLoanPayments: (parent, { loan_id }, { knex }) =>
+      knex('loan_payments').where({
+        loan_id
       })
     },
 
@@ -181,12 +211,6 @@ module.exports = {
       return billCategory.attributes;
     },
     deleteBillCategory: (parent, args, { knex }) => knex('bill_categories').where(args).del(),
-  }
-}
-
-
-
-
     updateUser: async (parent, args, {models, knex}) => {
       const { email } = args;
       const user = await new models.User({email}).fetch();
@@ -232,5 +256,7 @@ module.exports = {
     },
     
     deleteBillCategory: (parent, args, { knex }) => knex('bill_categories').where(args).del(),
+    createLoan: async (parent, args, { models }) => await new models.Loan(args).save(null, {method:'insert'}),
+    createLoanPayment: async (parent, args, { models }) => await new models.Loan_Payment(args).save(null, {method: 'insert'}),
   }
 }
