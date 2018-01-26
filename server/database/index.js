@@ -19,6 +19,7 @@ knex.schema.hasTable('users').then(exists => {
       table.string('zip_code');
       table.string('state');
       table.string('phone');
+      table.string('school');
     }).then(() => console.log('created table users'))
   }
 })

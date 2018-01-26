@@ -47,7 +47,7 @@ module.exports = `
   type School {
     id: Int!
     name: String!
-    users: [User!]
+    user_id: [User!]
   }
 
   type Query {
@@ -57,7 +57,7 @@ module.exports = `
     getAccount(account_id: String!): [Account!]
     getCategories(name: String!): [Category!]
     getCategory(category_id: String!): [Category!]
-    getSchools(school_id: Int!): [School!]
+    getSchools(user_id: Int!): [School!]
   }
 
   type Mutation {
@@ -68,5 +68,15 @@ module.exports = `
     createSchool(name: String!): School!
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
+    updateUser(
+      email: String!,
+      first_name: String,
+      last_name: String,
+      street: String,
+      zip_code: String,
+      state: String,
+      phone: String,
+      school: String
+    ): User
   }
   `
