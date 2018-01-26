@@ -60,6 +60,15 @@ knex.schema.hasTable('categories').then(exists => {
   }
 })
 
+knex.schema.hasTable('schools').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('schools', table => {
+      table.increments('id').primary();
+      table.string('name');
+    }).then(() => console.log('created table schools'));
+  }
+})
+
 const db = require('bookshelf')(knex);
 
 module.exports = { db, knex };

@@ -1,7 +1,7 @@
 const { db } = require('../index.js');
 const bcrypt = require('bcrypt');
 const Promise = require('bluebird');
-const School = require('/school.js');
+const School = require('./school.js');
 
 const User = db.Model.extend({
   tableName: 'users',

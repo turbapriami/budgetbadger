@@ -1,5 +1,4 @@
 const { db } = require('../index.js');
-const School = require('./school.js');
 
 const School = db.Model.extend({
   tableName: 'schools',

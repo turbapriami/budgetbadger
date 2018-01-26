@@ -44,6 +44,12 @@ module.exports = `
     transactions: [Transaction!]
   }
 
+  type School {
+    id: Int!
+    name: String!
+    users: [User!]
+  }
+
   type Query {
     getUser(email: String!, id: Int): [User!]
     getTransactions(user_id: Int!): [Transaction!]
@@ -51,6 +57,7 @@ module.exports = `
     getAccount(account_id: String!): [Account!]
     getCategories(name: String!): [Category!]
     getCategory(category_id: String!): [Category!]
+    getSchools(school_id: Int!): [School!]
   }
 
   type Mutation {
@@ -58,13 +65,8 @@ module.exports = `
     createUser(email: String!, password: String!): User
     createAccount(id: String!, user_id: Int!, bank_name: String!, type: String!, access_token: String!): Account!
     createCategory(name: String!): Category
+    createSchool(name: String!): School!
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
   }
-
-  type School {
-    id: Int!
-    name: String!
-    users: [User!]
-  }
-`
+  `

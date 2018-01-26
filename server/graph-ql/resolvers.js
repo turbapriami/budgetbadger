@@ -120,6 +120,10 @@ module.exports = {
      const category = await new models.Category(args).save(null, {method: 'insert'});
      return category.attributes;
     },
+    createSchool: async (parent, args, { models }) => {
+      const school = await new models.School(args).save(null, {method: 'insert'});
+      return school.attributes;
+    }
   }
 }
 
