@@ -22,7 +22,6 @@ class Loans extends React.Component {
   render(){
     return(
       <div>
-        <h2>Loans Page</h2>
         <Hero background={<Image src='https://geriatricnursing.org/wp-content/uploads/2016/03/University-of-Washington.jpg'
           fit='cover'
           full={true} />}
@@ -42,7 +41,7 @@ class Loans extends React.Component {
             </Box>
           </Box>
         </Hero>
-        <Section pad='large' justify='center' align='center' colorIndex='light-2'>
+        <Section pad='large' justify='center' align='center' colorIndex='light-2' >
           <Headline margin='none'>
             <Chart style={{fontSize: "20px"}}>
               <Axis count={5}
@@ -82,31 +81,31 @@ class Loans extends React.Component {
           </Headline>
         </Section>
         <Footer justify='between'>
-        <Title>
-          <s />
-          Budget Badger
-        </Title>
-        <Box direction='row'
-          align='center'
-          pad={{"between": "medium"}}>
-          <Paragraph margin='none'>
-            © 2018 Priam Labs
-          </Paragraph>
-          <Menu direction='row'
-            size='small'
-            dropAlign={{"right": "right"}}>
-            <Anchor href='#'>
-              Support
-            </Anchor>
-            <Anchor href='#'>
-              Contact
-            </Anchor>
-            <Anchor href='#'>
-              About
-            </Anchor>
-          </Menu>
-        </Box>
-      </Footer>
+          <Title>
+            <s />
+            Budget Badger
+          </Title>
+          <Box direction='row'
+            align='center'
+            pad={{"between": "medium"}}>
+            <Paragraph margin='none'>
+              © 2018 Priam Labs
+            </Paragraph>
+            <Menu direction='row'
+              size='small'
+              dropAlign={{"right": "right"}}>
+              <Anchor href='#'>
+                Support
+              </Anchor>
+              <Anchor href='#'>
+                Contact
+              </Anchor>
+              <Anchor href='#'>
+                About
+              </Anchor>
+            </Menu>
+          </Box>
+        </Footer>
       </div>
     )
   }
