@@ -42,13 +42,18 @@ const logger = (req, res, next) => {
   // req.body = {query: req.body}
   next();
 }
-app.use(express.static(path.join(__dirname, '../public')))
 
 app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
 app.use(/\/((?!graphql).)*/, bodyParser.json());
 app.use(bodyParser.text({ type: 'text/plain' }));
 
-// app.use(getToken); // => uncomment to enable authentication
+app.use(express.static(path.join(__dirname, '../public')))
+
+
+
+app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
+app.use(/\/((?!graphql).)*/, bodyParser.json());
+app.use(bodyParser.text({ type: 'text/plain' }));
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
