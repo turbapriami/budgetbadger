@@ -1,5 +1,6 @@
 const webpack = require('webpack');  
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const path = require('path')
 
 const config = {  
@@ -19,7 +20,7 @@ const config = {
       loader: 'babel-loader',
       query:
       {
-        presets: ['react']
+        presets: ['react'],
       }
     },
     {
@@ -30,7 +31,14 @@ const config = {
         test: /\.css$/, 
         loader: "style-loader!css-loader" 
     },
-    ]
+    ],
+    // rules: [
+    //   {
+    //     test: /\.(gql)$/,
+    //     exclude: /node_modules/,
+    //     loader: 'graphql-tag/loader',
+    //   },
+    // ],
   },
   devServer: {
     historyApiFallback: true,
@@ -38,6 +46,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({ 'process.env':{ 'NODE_ENV': JSON.stringify('production') } }),
+    new HardSourceWebpackPlugin()
   ]
 };
 
