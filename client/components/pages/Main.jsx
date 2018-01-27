@@ -3,6 +3,8 @@ import Bills from '../containers/Bills.jsx';
 import Loans from '../containers/LoansContainer.jsx';
 import {Tab, Tabs, Paragraph} from 'grommet';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import TransactionContainer from '../containers/TransactionContainer.jsx';
+
 
 class Main extends Component {
   constructor(props) {
@@ -44,13 +46,11 @@ class Main extends Component {
         </Tab>
         <Tab title='Balance' onClick={()=>{this.setState({activeIndex: 1})}} >
           <Redirect to='/balance'/>
-          <div>
-          </div>
+            <div/>
         </Tab>
         <Tab title='Transactions' onClick={()=>{this.setState({activeIndex: 2})}}>
           <Redirect to='/transactions'/>
-          <div>
-          </div>
+          <TransactionContainer />
         </Tab>
         <Tab title='Bills' onClick={()=>{this.setState({activeIndex: 3})}}>
           <Redirect to='/bills'/>
