@@ -20,7 +20,6 @@ class Main extends React.Component {
     }
   }
   componentWillMount() {
-    console.log('mounting')
     this.setState({
       activeIndex: this.indexChooser[this.props.location.pathname]
     })
@@ -30,8 +29,6 @@ class Main extends React.Component {
       if (this.props.location.pathname === '/profile') {
         this.setState({
           activeIndex: 5
-        }, ()=> {
-          console.log(this.props.location.pathname)
         })
       }
     }, 1)
