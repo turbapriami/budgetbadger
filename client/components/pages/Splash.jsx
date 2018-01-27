@@ -226,7 +226,6 @@ export default class extends Component {
                 </Box>
               </div>
             </Box>
-
           <Footer style={{background: "#000"}}
             justify='between'
             size='medium'
