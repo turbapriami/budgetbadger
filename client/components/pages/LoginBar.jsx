@@ -1,6 +1,6 @@
 import React from 'react';
 import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon} from 'grommet';
-import styles from '../../../public/main/jStyles'
+import styles from '../../../public/main/jStyles';
 
 const LoginBar = (props) => {
   return (

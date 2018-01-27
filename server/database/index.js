@@ -113,7 +113,7 @@ knex.schema.hasTable('bills').then(exists => {
       table.integer('user_id');
       table.integer('bill_category_id');
       table.string('description');
-      table.float('amount');
+      table.decimal('amount',14,2);
       table.date('due_date');
       table.boolean('paid');
       table.date('paid_date');
