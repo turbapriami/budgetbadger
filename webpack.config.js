@@ -27,7 +27,14 @@ const config = {
         test: /\.css$/, 
         loader: "style-loader!css-loader" 
     },
-    ]
+    ],
+    // rules: [
+    //   {
+    //     test: /\.(gql)$/,
+    //     exclude: /node_modules/,
+    //     loader: 'graphql-tag/loader',
+    //   },
+    // ],
   },
   devServer: {
     historyApiFallback: true,

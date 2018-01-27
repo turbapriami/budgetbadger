@@ -111,10 +111,11 @@ module.exports = {
       // }
     // },
 
-    getTransactions: (parent, { user_id }, { knex }) => 
-      knex('transactions').where({
+    getTransactions: (parent, { user_id }, { knex }) => {
+      console.log('transaction')
+      return knex('transactions').where({
         user_id
-      }),
+      })},
 
     getAccounts: (parent, { user_id }, { knex }) => 
       knex('accounts').where({
