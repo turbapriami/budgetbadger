@@ -12,8 +12,9 @@ class LoansContainer extends React.Component {
 
   render(){
     return(
-      
-
+      <div>
+        <Loans />
+      </div>
     )
   }
 };
