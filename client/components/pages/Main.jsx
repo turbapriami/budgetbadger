@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Bills from '../containers/Bills.jsx';
 import {Tab, Tabs, Paragraph} from 'grommet';
+import TransactionContainer from '../containers/TransactionContainer.jsx';
 
 const Main = (props) => {
     return (
@@ -14,8 +15,7 @@ const Main = (props) => {
             </div>
           </Tab>
           <Tab title='Transaction'>
-            <div>
-            </div>
+            <TransactionContainer />
           </Tab>
           <Tab title='Bills'>
           <div>

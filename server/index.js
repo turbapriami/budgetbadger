@@ -43,7 +43,6 @@ app.use(bodyParser.text({ type: 'text/plain' }));
 
 const logger = (req, res, next) => {
   console.log(req.body)
-  // req.body = {query: req.body}
   next();
 }
 app.use(express.static(path.join(__dirname, '../public/main')))

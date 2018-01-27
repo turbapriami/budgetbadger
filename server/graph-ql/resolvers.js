@@ -19,16 +19,15 @@ module.exports = {
         user_id: id
       }),
 
-    // use bank to update accounts/transactions info via Plaid
     banks: ({ id }, args, { knex }) =>
       knex('banks').where({
         user_id: id
       }),
 
     bills: ({ id }, args, { knex }) => 
-    knex('bills').where({
-      user_id: id
-    })
+      knex('bills').where({
+        user_id: id
+      })
   },
 
   Loan: {
@@ -100,12 +99,10 @@ module.exports = {
 
 
   Query: {
-    getUser: (parent, { email }, { knex, user }) => 
+    getUser: (parent, args, { knex, user }) => 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
       // if (user) {
-        knex('users').where({
-          email
-        }),
+        knex('users').where(args),
       // } else {
         // throw new Error('Not authenticated')
       // }
