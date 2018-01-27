@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom'
 import {App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, SkipLinkAnchor, Card, Hero, Label, Heading, Columns } from 'grommet';
 
 export default class extends Component {
@@ -17,7 +18,7 @@ export default class extends Component {
                 <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-small"></div>
                 <nav className="grommetux-box grommetux-box--direction-row grommetux-box--responsive grommetux-box--flex-grow grommetux-box--pad-none grommetux-menu grommetux-menu--row grommetux-menu--inline">
                   <a href="#" style={{ color: "#000" }} class="grommetux-anchor">About</a>
-                  <a href="#" style={{ color: "#000" }} class="grommetux-anchor">Sign In</a>
+                  <a href="#" style={{ color: "#000" }} class="grommetux-anchor">Login</a>
                   <a href="#" style={{ color: "#000" }} class="grommetux-anchor">Sign Up</a>
                 </nav>
                 <Box flex={true}
