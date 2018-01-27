@@ -85,9 +85,9 @@ module.exports = {
   },
 
   Bill: {
-    bill_category: ({ id }, args, { knex }) => 
-    knex('bills').where({
-      bill_category_id: id
+    bill_category: ({ bill_category_id }, args, { knex }) => 
+    knex('bill_categories').where({
+      id: bill_category_id
     })
   },
 
@@ -146,10 +146,19 @@ module.exports = {
         user_id
       }).distinct('bill_categories.name').select(),
     
-    getBills: (parent, { user_id }, { knex }) => 
-      knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
-        user_id
-      }),
+    getBills: (parent, { user_id, paid }, { knex }) => {
+      if (paid) {
+        return knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+          user_id:user_id,
+          paid:paid
+        });
+      } else {
+        return knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+          user_id
+        })
+      }
+    },
+
     getLoans: (parent, { user_id }, { knex }) => 
       knex('loans').where({
         user_id

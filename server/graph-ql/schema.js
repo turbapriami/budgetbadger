@@ -109,7 +109,7 @@ module.exports = `
     getCategories(name: String!): [Category!]
     getCategory(category_id: String!): [Category!]
     getSchools(user_id: Int!): [School!]
-    getBills(user_id: Int!): [Bill!]
+    getBills(user_id: Int!, paid: Boolean): [Bill!]
     getBillCategories(user_id: Int!): [Category!]
     getLoans(user_id: Int!): [Loan!]
     getLoanPayments(loan_id: Int!): [Loan_Payment!]
