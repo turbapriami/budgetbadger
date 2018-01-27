@@ -1,5 +1,5 @@
 import React from 'react';
-import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon} from 'grommet';
+import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon, MoneyIcon} from 'grommet';
 import styles from '../../../public/main/jStyles'
 
 const LoginBar = (props) => {
@@ -25,6 +25,13 @@ const LoginBar = (props) => {
           path='/profile'
         >
           Your Profile
+        </Anchor>
+        <Anchor
+          href='#'
+          icon={<MoneyIcon size='small'/>}
+          path='/add'
+        >
+          Add Acount
         </Anchor>
         <Anchor
           href='#'
