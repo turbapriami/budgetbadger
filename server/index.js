@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+const cors = require('cors')
 const typeDefs = require('./graph-ql/Schema.js');
 const resolvers = require('./graph-ql/resolvers.js')
 const db = require('./database/index.js');
@@ -18,7 +19,8 @@ const app = express();
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolvers
+  resolvers,
+  printErrors: true
 })
 
 const getToken = async (req) => {
@@ -31,23 +33,32 @@ const getToken = async (req) => {
   }
   req.next()
 }
+app.use(cors())
 
-app.use(morgan('dev'));
+app.use(morgan('dev'))
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());
+app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
+app.use(/\/((?!graphql).)*/, bodyParser.json());
+app.use(bodyParser.text({ type: 'text/plain' }));
 
+const logger = (req, res, next) => {
+  console.log(req.body)
+  // req.body = {query: req.body}
+  next();
+}
 app.use(express.static(path.join(__dirname, '../public/main')))
 
 // app.use(getToken); // => uncomment to enable authentication
+
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
 
-app.use('/graphql', 
+
+app.use('/graphql',
+  bodyParser.json(), 
+  logger,
   graphqlExpress(req => ({
     schema: schema,
     pretty: true,
