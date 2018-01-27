@@ -6,6 +6,15 @@ import reduxThunk from 'redux-thunk';
 import reducers from './redux/reducers/index.js'
 import App from './components/pages/App.jsx';
 import Splash from './components/pages/Splash.jsx';
+import ApolloClient from 'apollo-client'
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloProvider } from 'react-apollo'
+
+  const client = new ApolloClient({
+    link: new HttpLink({ uri: 'http://localhost:3000' }),
+    cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
+  });
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -13,9 +22,9 @@ const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENS
 document.addEventListener('DOMContentLoaded', () => {
   return (
     ReactDOM.render(
-      <Provider store={ store }>
+      <ApolloProvider client={ client }>
         <App/>
-      </Provider>,
+      </ApolloProvider>,
       document.getElementById('app')
     )
   )
