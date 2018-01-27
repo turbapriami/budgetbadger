@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
@@ -13,9 +14,11 @@ const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENS
 document.addEventListener('DOMContentLoaded', () => {
   return (
     ReactDOM.render(
-      <Provider store={ store }>
-        <App/>
-      </Provider>,
+      <BrowserRouter>
+        <Provider store={ store }>
+          <App/>
+        </Provider>
+      </BrowserRouter>,
       document.getElementById('app')
     )
   )
