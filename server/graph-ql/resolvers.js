@@ -85,9 +85,9 @@ module.exports = {
   },
 
   Bill: {
-    bill_category: ({ id }, args, { knex }) => 
-    knex('bills').where({
-      bill_category_id: id
+    bill_category: ({ bill_category_id }, args, { knex }) => 
+    knex('bill_categories').where({
+      id: bill_category_id
     })
   },
 
@@ -111,10 +111,11 @@ module.exports = {
       // }
     // },
 
-    getTransactions: (parent, { user_id }, { knex }) => 
-      knex('transactions').where({
+    getTransactions: (parent, { user_id }, { knex }) => {
+      console.log('transaction')
+      return knex('transactions').where({
         user_id
-      }),
+      })},
 
     getAccounts: (parent, { user_id }, { knex }) => 
       knex('accounts').where({
@@ -145,10 +146,19 @@ module.exports = {
         user_id
       }).distinct('bill_categories.name').select(),
     
-    getBills: (parent, { user_id }, { knex }) => 
-      knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
-        user_id
-      }),
+    getBills: (parent, { user_id, paid }, { knex }) => {
+      if (paid) {
+        return knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+          user_id:user_id,
+          paid:paid
+        });
+      } else {
+        return knex('bills').innerJoin('bill_categories', 'bills.bill_category_id', 'bill_categories.id').where({
+          user_id
+        })
+      }
+    },
+
     getLoans: (parent, { user_id }, { knex }) => 
       knex('loans').where({
         user_id
@@ -160,20 +170,28 @@ module.exports = {
     },
 
   Mutation: {
-    createUser: async (parent, args, { models }) => await new models.User(args).save(),
+    createUser: async (parent, args, { models }) => {
+      const { email } = args;
+      const user = await new models.User({ email }).fetch();
+      if (user) {
+        throw new Error('That email already exists');
+      }
+      const newUser = await new models.User(args).save();
+      return newUser
+    },
 
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
 
     loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
-      const newUser = await new models.User({ email }).fetch();
-      if (!newUser) {
+      const user = await new models.User({ email }).fetch();
+      if (!user) {
         throw new Error('Unable to match the provided credentials');
       }
-      const match = await newUser.comparePassword(password);
+      const match = await user.comparePassword(password);
       if (!match) {
         throw new Error('Unable to match the provided credentials');
       }
-      const token = jwt.sign({ user: _.pick(newUser.attributes, ['id', 'email'])}, APP_SECRET, {
+      const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
       })
       return token
