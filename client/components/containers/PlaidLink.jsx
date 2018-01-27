@@ -7,6 +7,7 @@ class PlaidLink extends Component {
     super(props);
   }
   componentDidMount() {
+    console.log(this.refs.plaid)
     this.refs.plaid.handleOnClick()
   }
   handleOnSuccess(token, metadata) {
