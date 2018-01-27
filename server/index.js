@@ -37,12 +37,6 @@ app.use(cors())
 
 app.use(morgan('dev'))
 
-const logger = (req, res, next) => {
-  console.log(req.body)
-  // req.body = {query: req.body}
-  next();
-}
-
 app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
 app.use(/\/((?!graphql).)*/, bodyParser.json());
 app.use(bodyParser.text({ type: 'text/plain' }));
@@ -52,7 +46,7 @@ const logger = (req, res, next) => {
   // req.body = {query: req.body}
   next();
 }
-app.use(express.static(path.join(__dirname, '../public')))
+app.use(express.static(path.join(__dirname, '../public/main')))
 
 // app.use(getToken); // => uncomment to enable authentication
 

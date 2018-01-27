@@ -4,7 +4,7 @@ import LoginBar from '../pages/LoginBar.jsx';
 import Main from '../pages/Main.jsx';
 import {App, Tab, Tabs, Paragraph} from 'grommet';
 
-class App extends Component {
+export default class extends Component {
   render() {
     return (
       <div>
@@ -16,4 +16,3 @@ class App extends Component {
     )
   }
 } 
-export default App
