@@ -20,9 +20,21 @@ class Main extends React.Component {
     }
   }
   componentWillMount() {
+    console.log('mounting')
     this.setState({
       activeIndex: this.indexChooser[this.props.location.pathname]
     })
+  }
+  componentWillReceiveProps() {
+    setTimeout(()=> {
+      if (this.props.location.pathname === '/profile') {
+        this.setState({
+          activeIndex: 5
+        }, ()=> {
+          console.log(this.props.location.pathname)
+        })
+      }
+    }, 1)
   }
   render() {
     return (
