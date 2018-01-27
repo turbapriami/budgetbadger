@@ -3,7 +3,7 @@ import Bills from '../containers/Bills.jsx';
 import {Tab, Tabs, Paragraph} from 'grommet';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-class Main extends React.Component {
+class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
