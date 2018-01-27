@@ -48,6 +48,10 @@ const logger = (req, res, next) => {
 }
 app.use(express.static(path.join(__dirname, '../public/main')))
 
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
+})
+
 // app.use(getToken); // => uncomment to enable authentication
 
 

@@ -19,13 +19,18 @@ const LoginBar = (props) => {
       direction='row'
       dropAlign={{top: 'bottom', top: 'bottom'}}
       style={{paddingRight: '30px'}}>
-        <Anchor href='#'
-            icon={<UserIcon size='small'/>}>
-            Your Profile
+        <Anchor
+          href='#'
+          icon={<UserIcon size='small'/>}
+          path='/profile'
+        >
+          Your Profile
         </Anchor>
-        <Anchor href='#'
-            icon={<LogoutIcon size='small'/>}>
-            Sign out
+        <Anchor
+          href='#'
+          icon={<LogoutIcon size='small'/>}
+        >
+          Sign out
         </Anchor>
       </Menu>
   </Header>)

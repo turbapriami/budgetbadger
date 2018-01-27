@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Bills from '../containers/Bills.jsx';
 import LoginBar from '../pages/LoginBar.jsx';
 import Main from '../pages/Main.jsx';
+import Profile from '../containers/Profile.jsx';
 import {App, Tab, Tabs, Paragraph} from 'grommet';
+import { Route } from 'react-router-dom';
 
 export default class extends Component {
   render() {
@@ -10,7 +11,8 @@ export default class extends Component {
       <div>
         <App centered={false}>
           <LoginBar/>
-          <Main/>
+          <Route path='/' component={Main} />
+          <Route path='/profile' component={Profile} />
         </App>
       </div>
     )
