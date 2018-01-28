@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Bills from '../containers/Bills.jsx';
+import Loans from '../containers/LoansContainer.jsx';
 import {Tab, Tabs, Paragraph} from 'grommet';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
@@ -60,6 +61,7 @@ class Main extends Component {
         <Tab title='Loans' onClick={()=>{this.setState({activeIndex: 4})}}>
           <Redirect to='/loans'/>
           <div>
+            <Route path='/loans' component={Loans} />
           </div>
         </Tab>
       </Tabs>
