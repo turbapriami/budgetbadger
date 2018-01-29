@@ -102,7 +102,7 @@ module.exports = `
   }
 
   type Query {
-    getUser(email: String!, id: Int): [User!]
+    getUser(email: String, id: Int): [User!]
     getTransactions(user_id: Int!): [Transaction!]
     getAccounts(user_id: Int!): [Account!]
     getAccount(account_id: String!): [Account!]
