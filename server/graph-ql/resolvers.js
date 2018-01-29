@@ -65,10 +65,10 @@ module.exports = {
         id: account_id
       }),
 
-    category: ({ category_id }, args, { knex }) =>
-      knex('categories').where({
-        id: category_id
-      })
+    // category: ({ category_id }, args, { knex }) =>
+    //   knex('categories').where({
+    //     id: category_id
+    //   })
   },
 
   Account: {
@@ -112,6 +112,7 @@ module.exports = {
 
     getTransactions: (parent, { user_id }, { knex }) => {
       console.log('transaction')
+      console.log(user_id.constructor)
       return knex('transactions').where({
         user_id
       })},
@@ -213,6 +214,7 @@ module.exports = {
               let newTransaction = {
                 user_id: args.user_id,
                 category,
+                date: transaction.date,
                 account_id: transaction.account_id,
                 amount: transaction.amount,
                 name: transaction.name              

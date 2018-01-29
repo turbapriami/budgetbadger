@@ -44,8 +44,8 @@ module.exports = `
   type Transaction {
     id: Int!
     user_id: Int!
-    amount: Int!
-    category_id: String!
+    amount: Float!
+    category: String!
     name: String!
     account_id: String
     street: String
@@ -53,7 +53,6 @@ module.exports = `
     state: String
     user: [User!]
     account: [Account!]
-    category: [Category!]
   }
 
   type Category {
@@ -116,7 +115,7 @@ module.exports = `
   }
 
   type Mutation {
-    createTransaction(user_id: Int!, amount: Int!, category_id: String!, name: String!, street: String, zip_code: String, state: String, account_id: String, ): Transaction
+    createTransaction(user_id: Int!, amount: Float!, category_id: String!, name: String!, street: String, zip_code: String, state: String, account_id: String, ): Transaction
     createUser(email: String!, password: String!): User
     createAccount(id: String!, user_id: Int!, bank_name: String!, type: String!, access_token: String!): Account!
     createCategory(name: String!): Category

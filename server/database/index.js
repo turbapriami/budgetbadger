@@ -59,6 +59,7 @@ knex.schema.hasTable('transactions').then(exists => {
       table.string('category');
       table.string('account_id');
       table.string('amount');
+      table.string('date');
       table.string('name');
       table.string('street');
       table.string('zip_code');

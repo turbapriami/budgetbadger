@@ -11,12 +11,10 @@ const TRANS_ACC_QUERY = gql`
     getTransactions(user_id: $user_id) {
         amount
         name
+        category
         account {
           type
           bank_name
-        }
-        category {
-          name
         }
       }
     getAccounts(user_id: $user_id) {
@@ -59,6 +57,7 @@ class TransactionContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('next', nextProps)
     this.setState({
       transactions: nextProps.data.getTransactions,
     })
