@@ -37,14 +37,8 @@ class TransactionContainer extends Component {
     const transactions = [{amount: 100, category: 'taxi', description: 'taxi service', date: '10/10/17'}, {amount: 200, category: 'food', description: 'pizza', date: '10/10/17'}]
     const accounts = [{bank_name: 'Wells Fargo', type: 'Credit', id: '1231ac'}, {bank_name: 'Chase', type: 'Debit', id: '121131ac'}]
     return (
-      <div>
-      <Box
-        align='start'
-        margin='small'
-        pad='small'
-      >
+      <div style={{ display: "inlineBlock" }} >
         <Navigation accounts={accounts}/>
-      </Box>
         <TransactionList transactions={this.props.data.getTransactions}/>        
       </div>
     )
