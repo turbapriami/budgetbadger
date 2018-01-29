@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom'
 import {App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, SkipLinkAnchor, Card, Hero, Label, Heading, Columns } from 'grommet';
 
-export default class extends Component {
-  render() {
+const Splash = ({ match, location, history }) => {
     return (
-      <App centered={false}>
+      
         <Article>
 
 
@@ -238,7 +236,8 @@ export default class extends Component {
             </Box>
           </Footer>
         </Article>
-      </App>
+      
     )
-  }
 }
+
+export default Splash;
