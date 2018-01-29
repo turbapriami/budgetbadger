@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon, MoneyIcon} from 'grommet';
-import styles from '../../../public/main/jStyles';
-import ReactPlaidLink from 'react-plaid-link';
-
-
-
-
+import styles from '../../../public/main/jStyles'
+import ReactPlaidLink from 'react-plaid-link'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 class LoginBar extends Component {
   constructor(props) {
@@ -15,8 +13,23 @@ class LoginBar extends Component {
     this.refs.plaid.handleOnClick()
   }
   handleOnSuccess(token, metadata) {
-    console.log(token)
-    console.log(metadata)
+    const NEW_BANK_DATA = gql`
+      mutation NEW_BANK_DATA($user_id: Int!, $public_token: String!) {
+        CreateBankAccounts(user_id: $user_id, public_token: $public_token) {
+          id
+        }
+      }
+    `
+    const CreateBankAccounts = graphql(NEW_BANK_DATA, {
+      options: (props) => ({
+        variables: {
+          user_id: 1,
+          public_token: 123123123
+        },
+        name: 'CreateBankAccounts'
+      })
+    })
+    CreateBankAccounts(LoginBar)
   }
   handleOnExit() {
     // handle the case when your user exits Link
