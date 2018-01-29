@@ -3,6 +3,8 @@ import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon,
 import styles from '../../../public/main/jStyles'
 import ReactPlaidLink from 'react-plaid-link'
 
+
+
 class LoginBar extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +14,7 @@ class LoginBar extends Component {
   }
   handleOnSuccess(token, metadata) {
     console.log(token)
+    console.log(metadata)
   }
   handleOnExit() {
     // handle the case when your user exits Link
