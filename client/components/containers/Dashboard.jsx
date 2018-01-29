@@ -2,22 +2,19 @@ import React, { Component } from 'react';
 import {Tiles, Tile} from 'grommet';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import BillsDueTable from '../pages/BillsDueTable.jsx';
+import BillsSummary from '../pages/BillsSummary.jsx';
 import Bills from './Bills.jsx';
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
-import { getTransactions } from '../../redux/actions/index 2';
 
 const DashQuery = gql`
-  query TRANS_ACC_QUERY($user_id: Int!) {
+  query DashQuery($user_id: Int!) {
     getTransactions(user_id: $user_id) {
         amount
         name
         account {
           type
-        }
-        category {
-          name
         }
       }
     getAccounts(user_id: $user_id) {
