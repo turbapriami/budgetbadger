@@ -45,6 +45,8 @@ const logger = (req, res, next) => {
   console.log(req.body)
   next();
 }
+<<<<<<< HEAD
+=======
 app.use(express.static(path.join(__dirname, '../public/splash')))
 
 app.get('*', (req, res) => {
@@ -53,6 +55,7 @@ app.get('*', (req, res) => {
 
 // app.use(getToken); // => uncomment to enable authentication
 
+>>>>>>> Starting to route to sign up and login on splash page
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
