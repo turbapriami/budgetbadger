@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const _ = require('lodash')
+const plaid = require('../plaid.js')
+const moment = require('moment')
 
 module.exports = {
 

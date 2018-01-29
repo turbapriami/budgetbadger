@@ -1,17 +1,17 @@
 require('dotenv').config()
 const express = require('express');
 const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
-const { makeExecutableSchema } = require('graphql-tools')
+const { makeExecutableSchema } = require('graphql-tools');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-const cors = require('cors')
+const cors = require('cors');
 const typeDefs = require('./graph-ql/Schema.js');
-const resolvers = require('./graph-ql/resolvers.js')
+const resolvers = require('./graph-ql/resolvers.js');
 const db = require('./database/index.js');
 const APP_SECRET = process.env.APP_SECRET;
-const models = require('./database/models/index.js')
+const models = require('./database/models/index.js');
 
 const port = process.env.PORT || 1337;
 
@@ -46,19 +46,10 @@ const logger = (req, res, next) => {
   // req.body = {query: req.body}
   next();
 }
-app.use(express.static(path.join(__dirname, '../public/main')))
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
-})
-
-// app.use(getToken); // => uncomment to enable authentication
-
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
-
 
 app.use('/graphql',
   bodyParser.json(), 
@@ -74,6 +65,14 @@ app.use('/graphql',
     }
   }))
 );
+
+app.use(express.static(path.join(__dirname, '../public/main')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
+})
+
+// app.use(getToken); // => uncomment to enable authentication
 
 app.listen(port, (err) => {
   console.log('Listening on port: ' + port);
