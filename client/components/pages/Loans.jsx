@@ -3,26 +3,30 @@ import LoansContainer from '../containers/LoansContainer.jsx';
 import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput } from 'grommet';
 import Chart, {Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots} from 'grommet/components/chart/Chart';
 
+// Alternate Hero background image:
+// https://geriatricnursing.org/wp-content/uploads/2016/03/University-of-Washington.jpg
+
 class Loans extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      PayLevel: '5'
+      payLevel: '5',
+      interestRate: '10',
+      term: '20'
     }
-    this.handlePayLevel = this.handlePayLevel.bind(this);
-  }
+    this.handleChange = this.handleChange.bind(this);
+  };
 
-  handlePayLevel(e){
+  handleChange(e){
     this.setState({
-      PayLevel: e.target.value
+      [e.target.name]: e.target.value
     })
-    e.preventDefault();
-  }
+  };
 
   render(){
     return(
       <div>
-        <Hero background={<Image src='https://geriatricnursing.org/wp-content/uploads/2016/03/University-of-Washington.jpg'
+        <Hero background={<Image src='http://bobkim.net/wp-content/uploads/2014/01/UW-Cherry-BlossomWA-1.jpg'
           fit='cover'
           full={true} />}
           backgroundColorIndex='dark'>
@@ -35,7 +39,7 @@ class Loans extends React.Component {
             <Box basis='1/2'
               align='start'
               pad='medium'>
-              <Heading margin='none'>
+              <Heading margin='none' style={{fontSize: "85px", fontWeight: "400"}} >
                 Loan Balance
               </Heading>
             </Box>
@@ -77,13 +81,25 @@ class Loans extends React.Component {
           <Headline margin='none' style={{fontSize: "20px"}}>
             Adjust Monthly Payments:
             <p />
-            <NumberInput value={this.state.PayLevel} onChange={this.handlePayLevel} />
+            <NumberInput name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
+          </Headline>
+          <p />
+          <Headline margin='none' style={{fontSize: "20px"}}>
+            Adjust Loan Term:
+            <p />
+            <NumberInput name='term' value={this.state.term} onChange={this.handleChange} />
+          </Headline>
+          <p />
+          <Headline margin='none' style={{fontSize: "20px"}}>
+            Adjust Interest Rate:
+            <p />
+            <NumberInput name='interestRate' value={this.state.interestRate} onChange={this.handleChange} />
           </Headline>
         </Section>
       </div>
     )
   }
-}
+};
 
 
 module.exports = Loans;
