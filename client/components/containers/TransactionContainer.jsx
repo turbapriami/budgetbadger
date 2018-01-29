@@ -13,6 +13,7 @@ const TRANS_ACC_QUERY = gql`
         name
         account {
           type
+          bank_name
         }
         category {
           name
@@ -45,19 +46,11 @@ class TransactionContainer extends Component {
   }
 
   filterTransactions(e, type) {
-    e.preventDefault();
     let transactions;
-    console.log(type)
     type === 'all' ?
     transactions = this.props.data.getTransactions :
     transactions = this.props.data.getTransactions.filter(transaction => {
-      if (type === 'bank') {
-        return transaction.bank_name === e.target.text;
-      } else {
-        let test = e.target.text;
-        test = test.slice(0, test.indexOf(' '));
-        return transaction.account[0].type === test;
-      }
+      return transaction.account[0][type] === e.target.text;
     })
 
     this.setState({
