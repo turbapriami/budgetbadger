@@ -3,6 +3,7 @@ import Bills from '../containers/Bills.jsx';
 import Loans from '../containers/LoansContainer.jsx';
 import {Tab, Tabs, Paragraph, Footer, Title, Box, Menu, Anchor} from 'grommet';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import styles from '../../../public/main/jStyles';
 
 class Main extends Component {
   constructor(props) {
@@ -66,9 +67,10 @@ class Main extends Component {
           </div>
         </Tab>
       </Tabs>
-      <Footer justify='between'>
+      <Footer justify='between'size='large'>
       <Title>
         <s />
+        <img src="https://visualpharm.com/assets/2/Badger-595b40b75ba036ed117d8786.svg" style={styles.footerImage}/>
         Budget Badger
       </Title>
       <Box direction='row'
