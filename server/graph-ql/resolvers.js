@@ -169,6 +169,60 @@ module.exports = {
     },
 
   Mutation: {
+    createBankAccounts: (parent, { user_id, public_key }, { knex, models }) => {
+      let accessToken = plaid.exchangeToken(public_key, (res) => {
+        let newBank = new models.Bank({ user_id, id: res.item_id, access_token: res.access_token})
+        newBank.fetch()
+        .then((bank) => {
+          const { access_token, id} = bank.attributes;
+          if (bank) return {access_token, id};
+          else {
+            return newBank.save(null, {method: 'insert'}).attributes;
+          }
+        })
+        .then(({ access_token, id }) => {
+          plaid.getAccounts(res.access_token, (res) => {
+            let accounts = res.accounts.forEach(account => {
+              let toStore = {};
+              toStore.id = account.account_id;
+              toStore.user_id = user_id;
+              toStore.bank_name = account.name;
+              toStore.access_token = access_token;
+              toStore.limit = account.balances.limit;
+              toStore.current_balance = account.balances.current;
+              toStore.bank_id = id;
+              toStore.type = account.type;
+              let newAccount = new models.Account(toStore);
+              newAccount.save(null, {method:'insert'});
+            })
+          })
+        })
+        .catch(() => {throw Error('Bank has already been added')})
+      })
+    },
+    getUpdatedTransactions: async (parent, args, { knex, models }) => {
+      let accs = await module.exports.Query.getAccounts(parent, args, { knex });
+      accs.forEach(account => {
+        let date = account.last_update ? account.last_update : '1999-10-10';
+        account.last_update = moment().format('YYYY-MM-DD');
+        new models.Account(account).save();
+        plaid.getAccountsAndTransactions(account.access_token, '1999-10-10', (transactions) => {
+          if (transactions) {
+            transactions.transactions.forEach((transaction) => {
+              let category = transaction.category ? transaction.category[0] : 'none';
+              let newTransaction = {
+                user_id: args.user_id,
+                category,
+                account_id: transaction.account_id,
+                amount: transaction.amount,
+                name: transaction.name              
+              }
+              new models.Transaction(newTransaction).save(null, {method: 'insert'});
+            })
+          }
+        })
+      })
+    },
     createUser: async (parent, args, { models }) => {
       const { email } = args;
       const user = await new models.User({ email }).fetch();

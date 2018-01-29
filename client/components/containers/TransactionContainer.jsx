@@ -66,7 +66,7 @@ class TransactionContainer extends Component {
 
   render() {
     return (
-      <div style={{ display: "inlineBlock" }} >
+      <div style={{ display: "flex", padding: '5px'}} >
         <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
         <TransactionList transactions={this.state.transactions} />        
       </div>

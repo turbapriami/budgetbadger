@@ -140,5 +140,7 @@ module.exports = `
     createBillCategory(name: String!): BillCategory!
     updateBillCategory(id: Int!, name: String!): BillCategory!
     deleteBillCategory(id: Int!): Int!
+    createBankAccounts(user_id: Int!, public_key: String!): String!
+    getUpdatedTransactions(user_id: Int!): [Transaction!]
   }
   `

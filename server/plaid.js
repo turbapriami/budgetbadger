@@ -9,12 +9,13 @@ const plaidClient = new plaid.Client(PLAID_CLIENT_ID, PLAID_SECRET, PLAID_PUBLIC
 
 const exchangeToken = (public_token, callback) => {
   plaidClient.exchangePublicToken(public_token || 'public-sandbox-e19fb01e-7942-40a7-81fd-ba9af519aecb', (err, res) => {
+    console.log('res', res)
     callback(res)
   });
 }
 
 const getAccounts = (access_token, callback) => {
-  plaidClient.getAccounts(access_token, (err, res) => {
+  plaidClient.getAccounts(access_token, async(err, res) => {
     callback(res)
   })
 }
