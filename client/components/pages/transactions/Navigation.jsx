@@ -2,27 +2,27 @@ import React from 'react'
 import SideBar from 'grommet/components/SideBar';
 import { Box, Anchor, Menu, Header, Title } from 'grommet';
 
-const Navigation = (props) => (
+const Navigation = ({ accounts, filter }) => (
     <SideBar>
       <Header><Title>Types</Title></Header>
       <Box flex='grow' justify='start'>
         <Menu primary={true}>
-          <Anchor>
-            Cash & Credit
+          <Anchor onClick={(e) => filter(e, 'all')}>
+            Debit & Credit
           </Anchor>
-          <Anchor>
-            Cash Only
+          <Anchor onClick={(e) => filter(e)}>
+            Debit Only
           </Anchor>
-          <Anchor>
+          <Anchor onClick={(e) => filter(e)}>
             Credit Only
           </Anchor>
         </Menu>
       <Header><Title>Accounts</Title></Header>
         <Menu primary={true}>
         {
-          props.accounts ?
-          props.accounts.map(account => (
-            <Anchor>
+          accounts ?
+          accounts.map(account => (
+            <Anchor onClick={(e) => filter(e, 'bank')}>
               {account.bank_name}
             </Anchor>
           )):
