@@ -20,11 +20,13 @@ const Navigation = (props) => (
       <Header><Title>Accounts</Title></Header>
         <Menu primary={true}>
         {
+          props.accounts ?
           props.accounts.map(account => (
             <Anchor>
               {account.bank_name}
             </Anchor>
-          ))
+          )):
+          null
         }
         </Menu>
       </Box>
