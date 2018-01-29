@@ -80,32 +80,6 @@ class Loans extends React.Component {
             <NumberInput value={this.state.PayLevel} onChange={this.handlePayLevel} />
           </Headline>
         </Section>
-        <Footer justify='between'>
-          <Title>
-            <s />
-            Budget Badger
-          </Title>
-          <Box direction='row'
-            align='center'
-            pad={{"between": "medium"}}>
-            <Paragraph margin='none'>
-              © 2018 Priam Labs
-            </Paragraph>
-            <Menu direction='row'
-              size='small'
-              dropAlign={{"right": "right"}}>
-              <Anchor href='#'>
-                Support
-              </Anchor>
-              <Anchor href='#'>
-                Contact
-              </Anchor>
-              <Anchor href='#'>
-                About
-              </Anchor>
-            </Menu>
-          </Box>
-        </Footer>
       </div>
     )
   }
