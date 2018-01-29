@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon, MoneyIcon} from 'grommet';
-import styles from '../../../public/main/jStyles'
-import ReactPlaidLink from 'react-plaid-link'
+import styles from '../../../public/main/jStyles';
+import ReactPlaidLink from 'react-plaid-link';
 
 class LoginBar extends Component {
   constructor(props) {
