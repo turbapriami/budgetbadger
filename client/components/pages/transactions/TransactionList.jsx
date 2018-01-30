@@ -7,14 +7,18 @@ import { Box } from 'grommet'
 
 
 
-const TransactionList = (props) => (
+const TransactionList = ({ transactions }) => (
       <Table>
         <TableHeader
           labels={['Date', 'Type', 'Category','Description', 'Amount']}
         />
-        {props.transactions ? props.transactions.map((transaction, idx) => {
-          return <Transaction {...transaction} key={idx}/>
-        }): null}
+        {
+          transactions ? 
+          transactions.map((transaction, idx) => {
+            return <Transaction {...transaction} key={idx}/>
+        }): 
+          null
+        }
       </Table>
 )
 

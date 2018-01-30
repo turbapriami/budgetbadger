@@ -6,8 +6,8 @@ const Transaction = (props) => (
     justify='between'
     separator='horizontal'>
     <td>10/10/17</td>
-    <td>{props.account[0].type}</td>
-    <td>{props.category[0].name}</td>
+    <td>{props.account[0].type === 'depository' ? 'Debit' : 'Credit'}</td>
+    <td>{props.category}</td>
     <td>{props.name}</td>
     <td>${props.amount}</td>
   </TableRow>

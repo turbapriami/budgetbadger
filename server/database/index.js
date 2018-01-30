@@ -56,9 +56,10 @@ knex.schema.hasTable('transactions').then(exists => {
     knex.schema.createTable('transactions', table => {
       table.increments('id').primary();
       table.integer('user_id');
-      table.string('category_id');
+      table.string('category');
       table.string('account_id');
       table.string('amount');
+      table.string('date');
       table.string('name');
       table.string('street');
       table.string('zip_code');
@@ -74,8 +75,11 @@ knex.schema.hasTable('accounts').then(exists => {
       table.integer('user_id');
       table.string('bank_name');
       table.string('type');
+      table.string('access_token');
+      table.integer('current_balance');
+      table.integer('limit');
       table.string('bank_id');
-      table.integer('balance');
+      table.string('last_update');
     }).then(() => console.log('created table accounts'))
   }
 })
@@ -84,6 +88,7 @@ knex.schema.hasTable('categories').then(exists => {
   if (!exists) {
     knex.schema.createTable('categories', table => {
       table.increments('id').primary();
+      table.string('plaid_id');
       table.string('name');
     }).then(() => console.log('created table categories'))
   }
