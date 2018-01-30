@@ -70,6 +70,17 @@ class TransactionContainer extends Component {
     });
   }
 
+  handleSearch(searchString) {
+    const transactions = this.state.transactions;
+    const searchResult = transactions.filter(transaction => {
+      return transaction.name.includes(searchString);
+    });
+
+    this.setState({
+      transactions: searchResult
+    }, () => console.log('hi'))
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       transactions: nextProps.data.getTransactions,
@@ -117,7 +128,6 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
 })
 
 export default compose(withApollo, withTransactionsAndAccounts)(TransactionContainer);
-
 
 
 
