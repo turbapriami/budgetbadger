@@ -128,3 +128,6 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
 })
 
 export default compose(withApollo, withTransactionsAndAccounts)(TransactionContainer);
+
+
+
