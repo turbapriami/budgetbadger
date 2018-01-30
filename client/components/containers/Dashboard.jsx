@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import {Tiles, Tile} from 'grommet';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
-import BillsDueTable from '../pages/BillsDueTable.jsx';
-import BillsSummary from '../pages/BillsSummary.jsx';
-import Bills from './Bills.jsx';
+import BillsDueTable from '../pages/bills/BillsDueTable.jsx';
+import BillsSummary from '../pages/bills/BillsSummary.jsx';
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
