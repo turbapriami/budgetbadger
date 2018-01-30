@@ -6,24 +6,19 @@ import Bills from './Bills.jsx';
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
-import { getTransactions } from '../../redux/actions/index 2';
 
 const DashQuery = gql`
-  query TRANS_ACC_QUERY($user_id: Int!) {
+  query DashQuery($user_id: Int!) {
     getTransactions(user_id: $user_id) {
-        amount
-        name
-        account {
-          type
-        }
-        category {
-          name
-        }
+      amount
+      name
+      account {
+        type
       }
+    }
     getAccounts(user_id: $user_id) {
       type
       bank_name
-      id
     }
     getBills(user_id: $user_id) {
       description
@@ -44,7 +39,6 @@ const WithDashQuery = graphql(DashQuery, {
     name: 'Dashboard Data'
   })
 })
-
 
 class DashBoard extends React.Component {
   
