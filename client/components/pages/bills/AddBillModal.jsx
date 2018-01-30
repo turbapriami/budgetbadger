@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
+import { gql, graphql } from 'react-apollo';
 import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, NumberInput, SearchInput, Select, TextInput} from 'grommet'
 
 class AddBillModal extends React.Component {
@@ -62,8 +63,6 @@ class AddBillModal extends React.Component {
       paid_date:'',
       alert:'false'
   });
-
-
   }
 
   render() {
