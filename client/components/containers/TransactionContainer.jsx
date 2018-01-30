@@ -32,7 +32,6 @@ class TransactionContainer extends Component {
   }
 
   handleSearch(searchString) {
-    console.log('called')
     const transactions = this.state.transactions;
     const searchResult = transactions.filter(transaction => {
       return transaction.name.includes(searchString);
