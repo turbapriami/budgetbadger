@@ -9,7 +9,6 @@ import { graphql, compose, withApollo } from 'react-apollo'
 import { TRANS_ACC_QUERY } from '../../queries.js';
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag';
->>>>>>> c3
 
 class TransactionContainer extends Component {
   constructor() {
@@ -68,7 +67,6 @@ class TransactionContainer extends Component {
     e.preventDefault();
     this.setState({
       displayModal: !this.state.displayModal
->>>>>>> c3
     });
   }
 
