@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <Splash />
               )} />
               <Route exact={true} path="/SplashSignIn" render={() => (
-                <SplashSignIn />
+                <SplashSignIn client={client}/>
               )} />
               <Route exact={true} path="/SplashSignUp" render={() => (
                 <SplashSignUp />

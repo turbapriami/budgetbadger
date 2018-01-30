@@ -4,13 +4,12 @@ import { Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header,
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const LOGIN_USER = gql`
-  query LOGIN_USER($user_email: String!) {
-    loginUser()
-  }
-`
-
 class SplashSignIn extends Component {
+    state = {
+      user_email: '',
+      password: ''
+    }
+
   render() {
     return (
       <Box align="center" focusable={true}>
@@ -21,18 +20,17 @@ class SplashSignIn extends Component {
             <Box pad={{ vertical: "small", width: "100%" }} >
               <FormFields style={{ width: "100%" }} >
                   <Label>Email</Label>
-                  <input style={{ width: "100%" }} name="userEmail" />
+                  <TextInput onDOMChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
   
                   <Label>Password</Label>
-                  <input style={{ width: "100%" }} type="password" />
+                  <TextInput onDOMChange={e => this.setState({ password: e.target.value })} style={{ width: "100%" }} type="password" />
               </FormFields>
             </Box>
             <CheckBox label="Remember me" pad="medium" />
             <Footer size="small" direction="column"
               align={'center' ? 'stretch' : 'start'}
               pad={{ vertical: "medium" }}>
-              <Button primary={true} fill="center" label='Sign In'
-                type='submit'
+              <Button onClick={this._confirm()} primary={true} fill="center" label='Sign In'
                 primary={true} />
             </Footer>
           </Form>
@@ -52,6 +50,27 @@ class SplashSignIn extends Component {
       </Box>
     )
   }
+
+  _confirm = async() => {
+    const { user_email, password } = this.state;
+    const result = await this.props.loginUser({
+      variables: {
+        user_email,
+        password
+      }
+    })
+    console.log(result.data.loginUser);
+  }
 }
 
-export default SplashSignIn;
+const LOGIN_USER = gql`
+mutation LOGIN($user_email: String!, $password: String!) {
+    loginUser(user_email: $user_email, password: $password) {
+      token
+    }
+  }
+`
+
+export default compose(
+  graphql(LOGIN_USER, { name: 'LOGIN' })
+)(SplashSignIn);
