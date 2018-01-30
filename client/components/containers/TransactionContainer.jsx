@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import Navigation from '../pages/transactions/Navigation.jsx';
 import Search from '../pages/transactions/Search.jsx'
+import PieChart from '../pages/transactions/PieChart.jsx'
 import SearchFilter from '../pages/transactions/SearchFilters.jsx'
 import { Box } from 'grommet'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { TRANS_ACC_QUERY } from '../../queries.js'
 import gql from 'graphql-tag'
 
 class TransactionContainer extends Component {
@@ -13,7 +15,7 @@ class TransactionContainer extends Component {
     this.state = {
       transactions: [],
       searchResult: [],
-      categoryBreakdown: {},
+      categoryBreakdown: [],
       selected: 'All Debit & Credit'
     }
     this.filterTransactions = this.filterTransactions.bind(this);
@@ -31,15 +33,19 @@ class TransactionContainer extends Component {
     this.setState({
       transactions,
       selected: 'All ' + e.target.text
-    });
+    }, () => this.generateCategories());
   }
 
   generateCategories() {
+    let columns = [];
     const breakdown = this.state.transactions.reduce((a, b) => {
       a[b.category] ? a[b.category] += b.amount : a[b.category] = b.amount;
       return a;
     }, {});
-    console.log(breakdown);
+    for (let pair in breakdown) {
+      columns.push([pair, breakdown[pair]])
+    }
+    this.setState({categoryBreakdown: columns});
   }
 
   handleSearch(searchString) {
@@ -50,7 +56,7 @@ class TransactionContainer extends Component {
 
     this.setState({
       transactions: searchResult
-    }, () => console.log('hi'))
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,6 +69,7 @@ class TransactionContainer extends Component {
     return (
       <div style={{padding: '5px'}}>
         <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
+        <PieChart breakdown={this.state.categoryBreakdown}/>
         <h2>{this.state.selected}</h2>
         <div style={{ display: "flex"}} >
           <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
@@ -73,23 +80,23 @@ class TransactionContainer extends Component {
   }
 }
 
-const TRANS_ACC_QUERY = gql`
-  query TRANS_ACC_QUERY($user_id: Int!) {
-    getTransactions(user_id: $user_id) {
-        amount
-        name
-        category
-        account {
-          type
-          bank_name
-        }
-      }
-    getAccounts(user_id: $user_id) {
-      type
-      bank_name
-      id
-    }
-  }`
+// const TRANS_ACC_QUERY = gql`
+//   query TRANS_ACC_QUERY($user_id: Int!) {
+//     getTransactions(user_id: $user_id) {
+//         amount
+//         name
+//         category
+//         account {
+//           type
+//           bank_name
+//         }
+//       }
+//     getAccounts(user_id: $user_id) {
+//       type
+//       bank_name
+//       id
+//     }
+//   }`
 
 const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   options: (props) => ({
@@ -99,7 +106,6 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
     name: 'TransactionsAndAccounts'
   })
 })
-
 
 export default compose(withApollo, withTransactionsAndAccounts)(TransactionContainer);
 
