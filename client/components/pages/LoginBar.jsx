@@ -8,25 +8,20 @@ import gql from 'graphql-tag'
 class LoginBar extends Component {
   constructor(props) {
     super(props);
-  }
-  // componentDidUpdate() {
-  //   console.log(this)
-  // }
-  componentDidMount() {
-    console.log('akshjdakjsdhakjdhakjsdh')
+    this.handleOnSuccess = this.handleOnSuccess.bind(this)
   }
   handleClick() {
     this.refs.plaid.handleOnClick()
   }
   handleOnSuccess(token, metadata) {
     console.log(token)
-    // this.props.mutate({
-    //   variables: {user_id: 1, public_token: token}
-    // }).then(({ data }) => {
-    //   console.log('got data', data);
-    // }).catch((error) => {
-    //   console.log('there was an error sending the query', error);
-    // });
+    this.props.mutate({
+      variables: {user_id: 1, public_token: token}
+    }).then(({ data }) => {
+      console.log('got data', data);
+    }).catch((error) => {
+      console.log('there was an error sending the query', error);
+    });
   }
   handleOnExit() {
     // handle the case when your user exits Link
