@@ -15,7 +15,7 @@ const TransactionList = ({ transactions }) => (
         {
           transactions ? 
           transactions.map((transaction, idx) => {
-          return <Transaction {...transaction} key={idx}/>
+            return <Transaction {...transaction} key={idx}/>
         }): 
           null
         }
