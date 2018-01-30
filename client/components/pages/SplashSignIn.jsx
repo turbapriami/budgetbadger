@@ -4,23 +4,9 @@ import { Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header,
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const LOGIN_USER = gql`
-mutation LOGIN($user_email: String!, $password: String!) {
-    loginUser(user_email: $user_email, password: $password) {
-      token
-    }
-  }
-`
 
-const _confirm = async({user_email, password}) => {
-  const result = await graphql(LOGIN_USER, {
-    variables: {
-      user_email,
-      password
-    }
-  })
-  console.log(result.data.loginUser);
-}
+
+
 
 class SplashSignIn extends Component {
   constructor() {
@@ -31,7 +17,14 @@ class SplashSignIn extends Component {
     }
   }
 
+
+
   render() {
+    const _confirm = async () => {
+      console.log(this.props)
+    }
+
+    _confirm()
     return (
       <Box align="center" focusable={true}>
         <Card align="center" style={{ outline: "#000 solid thin" }}> 
@@ -73,6 +66,14 @@ class SplashSignIn extends Component {
   }
 }
 
+const LOGIN_USER = gql`
+mutation LOGIN($user_email: String!, $password: String!) {
+    loginUser(user_email: $user_email, password: $password) {
+      token
+    }
+  }
+`
+
 export default compose(
-  graphql(LOGIN_USER, { name: 'LOGIN' })
+  graphql(LOGIN_USER, { name: 'loginMutation' })
 )(SplashSignIn);
