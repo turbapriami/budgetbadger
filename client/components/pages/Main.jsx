@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Bills from '../containers/Bills.jsx';
 import Loans from '../containers/LoansContainer.jsx';
 import {Tab, Tabs, Paragraph, Footer, Title, Box, Menu, Anchor} from 'grommet';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import styles from '../../../public/main/jStyles';
 import TransactionContainer from '../containers/TransactionContainer.jsx';
+import BillsContainer from '../containers/BillsContainer.jsx';
 
 
 class Main extends Component {
@@ -57,7 +57,7 @@ class Main extends Component {
         <Tab title='Bills' onClick={()=>{this.setState({activeIndex: 3})}}>
           <Redirect to='/bills'/>
           <div>
-            <Route path='/bills' component={Bills} />
+            <Route path='/bills' component={BillsContainer} />
           </div>
         </Tab>
         <Tab title='Loans' onClick={()=>{this.setState({activeIndex: 4})}}>
