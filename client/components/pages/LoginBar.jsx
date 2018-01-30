@@ -9,23 +9,28 @@ class LoginBar extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidUpdate() {
-    console.log(this)
+  // componentDidUpdate() {
+  //   console.log(this)
+  // }
+  componentDidMount() {
+    console.log('akshjdakjsdhakjdhakjsdh')
   }
   handleClick() {
     this.refs.plaid.handleOnClick()
   }
   handleOnSuccess(token, metadata) {
-    this.props.mutate({
-      variables: {user_id: 1, public_token: token}
-    }).then(({ data }) => {
-      console.log('got data', data);
-    }).catch((error) => {
-      console.log('there was an error sending the query', error);
-    });
+    console.log(token)
+    // this.props.mutate({
+    //   variables: {user_id: 1, public_token: token}
+    // }).then(({ data }) => {
+    //   console.log('got data', data);
+    // }).catch((error) => {
+    //   console.log('there was an error sending the query', error);
+    // });
   }
   handleOnExit() {
     // handle the case when your user exits Link
+    console.log('ok')
   }
   render() {
     return (
