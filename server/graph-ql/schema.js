@@ -67,7 +67,7 @@ module.exports = `
     bank_id: String!
     bank_name: String!
     type: String!
-    balance: Int!
+    current_balance: Int!
     transactions: [Transaction!]
   }
 
@@ -120,7 +120,7 @@ module.exports = `
   type Mutation {
     createTransaction(user_id: Int!, amount: Float!, category_id: String!, name: String!, street: String, zip_code: String, state: String, account_id: String, ): Transaction
     createUser(email: String!, password: String!): User
-    createAccount(id: String!, user_id: Int!, bank_name: String!, bank_id: String!, type: String!, balance: Int!): Account!
+    createAccount(id: String!, user_id: Int!, bank_name: String!, bank_id: String!, type: String!, current_balance: Int!): Account!
     createCategory(name: String!): Category
     createSchool(name: String!): School!
     createLoan(name: String!, amount: Int!, interest_rate: Int!, inception_date: String!, end_date: String!, user_id: Int!, recurrence: String!): Loan

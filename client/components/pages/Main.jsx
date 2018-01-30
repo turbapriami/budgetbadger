@@ -5,6 +5,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import styles from '../../../public/main/jStyles';
 import TransactionContainer from '../containers/TransactionContainer.jsx';
 import BillsContainer from '../containers/BillsContainer.jsx';
+import AccountsOverview from '../containers/AccountsOverview.jsx';
 import DashBoard from '../containers/Dashboard.jsx';
 
 class Main extends Component {
@@ -16,7 +17,7 @@ class Main extends Component {
     }
     this.indexChooser = {
       '/dashboard': 0,
-      '/balance': 1,
+      '/accounts': 1,
       '/transactions': 2,
       '/bills': 3,
       '/loans': 4,
@@ -45,8 +46,9 @@ class Main extends Component {
           <Redirect to='/' />
           <Route path='/' component={DashBoard} />
         </Tab>
-        <Tab title='Balance' onClick={()=>{this.setState({activeIndex: 1})}} >
-          <Redirect to='/balance'/>
+        <Tab title='Accounts Overview' onClick={()=>{this.setState({activeIndex: 1})}} >
+          <Redirect to='/accounts'/>
+          <Route path='/accounts' component={AccountsOverview} />
         </Tab>
         <Tab title='Transactions' onClick={()=>{this.setState({activeIndex: 2})}}>
           <Redirect to='/transactions'/>

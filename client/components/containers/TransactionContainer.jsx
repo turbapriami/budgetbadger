@@ -15,9 +15,6 @@ const TRANS_ACC_QUERY = gql`
           type
           bank_name
         }
-        category {
-          name
-        }
       }
     getAccounts(user_id: $user_id) {
       type
