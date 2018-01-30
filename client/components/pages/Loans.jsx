@@ -4,7 +4,7 @@ import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Sect
 import Chart, {Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots} from 'grommet/components/chart/Chart';
 import { amortizationSchedule } from 'amortization';
 
-// console.log(amortizationSchedule(50000, 5, 10))
+console.log(amortizationSchedule(50000, 5, 10))
 
 class Loans extends React.Component {
   constructor(props){
@@ -14,9 +14,10 @@ class Loans extends React.Component {
       chartPayments: [],
       chartOutstanding: [],
       principal: 100000,
-      payLevel: 418,
+      payLevel: 1000,
       interestRate: 8.5,
-      term: 20
+      term: 20,
+      inception: 2017
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleAmort = this.handleAmort.bind(this);
@@ -29,28 +30,31 @@ class Loans extends React.Component {
     var outstanding = [];
 
     amort.forEach((payment) => {
-      // principal.push(Math.floor(payment.principalBalance));
-      // this.state.chartPrincipal.push(payment.principalBalanceRounded/1000)
-      // payments.push(Math.floor(payment.payment));
-      // outstanding.push(this.state.principal - Math.floor(payment.principalBalance));
+      principal.push(Math.floor(payment.principalBalance));
+      payments.push(Math.floor(payment.payment));
+      outstanding.push(this.state.principal - Math.floor(payment.principalBalance));
     })
 
     this.setState({
-      chartPrincipal: principal
-    })
-
-  }
-
-  handleChange(e){
-    this.setState({
-      [e.target.name]: e.target.value
+      chartPrincipal: principal,
+      chartOutstanding: outstanding,
+      chartPayments: payments
     })
   };
 
-  // componentWillMount(){
-  //   this.handleAmort()
-  //   console.log('State of Play',this.state.chartPrincipal)
-  // };
+  handleChange(e){
+    if(e.target.value > 0){
+      this.setState({
+        [e.target.name]: parseFloat(e.target.value)
+      }, () => {
+        this.handleAmort();
+      })
+    }
+  };
+
+  componentWillMount(){
+    this.handleAmort()
+  };
 
   render(){
     return(
@@ -78,7 +82,7 @@ class Loans extends React.Component {
           <Headline margin='none'>
             <Chart style={{fontSize: "20px"}}>
               <Axis count={5}
-                labels={[{"index": 2, "label": "50"}, {"index": 4, "label": "100"}]}
+                labels={[{"index": 2, "label": "$" + this.state.principal/2}, {"index": 4, "label": "$" + this.state.principal}]}
                 vertical={true} />
               <Chart vertical={true}>
                 <Base height='small'
@@ -86,21 +90,24 @@ class Loans extends React.Component {
                 <Layers>
                   <Grid rows={10}
                     columns={3} />
-                  <Area values={[0, 3, 5, 7, 9, 12, 14, 16, 18, 20, 29, 50, 100]}
+                  <Area values={this.state.chartOutstanding}
                     colorIndex='graph-1'
                     points={true}
-                    activeIndex={-1} />
-                  <Bar values={[2, 3, 5, 3, 4, 4, 3, 2, 4, 7, 23, 14, 10]}
+                    activeIndex={-1} 
+                    max={this.state.principal} />
+                  <Bar values={this.state.chartPayments}
                     colorIndex='graph-2'
                     points={true}
-                    activeIndex={-1} />
-                  <Line values={[100, 97, 95, 93, 91, 88, 86, 84, 82, 80, 71, 50, 0]}
+                    activeIndex={-1} 
+                    max={this.state.principal} />
+                  <Line values={this.state.chartPrincipal}
                     colorIndex='accent-1'
                     points={true}
-                    activeIndex={-1} />
+                    activeIndex={-1} 
+                    max={this.state.principal}/>
                 </Layers>
                 <Axis count={3}
-                  labels={[{"index": 0, "label": "2017"}, {"index": 1, "label": "2027"}, {"index": 2, "label": "2037"}]} />
+                  labels={[{"index": 0, "label": this.state.inception}, {"index": 1, "label": Math.floor(this.state.inception + this.state.term/2)}, {"index": 2, "label": this.state.inception + this.state.term}]} />
                 <Legend style={{fontSize: "20px"}} series={[{"label": "Total Paid", "colorIndex": "graph-1"}, {"label": "Payment", "colorIndex": "graph-2"}, {"label": "Balance Outstanding", "colorIndex": "accent-1"}]} />
               </Chart>
             </Chart>
@@ -114,12 +121,6 @@ class Loans extends React.Component {
           </Headline>
           <p />
           <Headline margin='none' style={{fontSize: "20px"}}>
-            Monthly Payment ($)
-            <p />
-            <NumberInput name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
-          </Headline>
-          <p />
-          <Headline margin='none' style={{fontSize: "20px"}}>
             Annual Interest Rate (%)
             <p />
             <NumberInput name='interestRate' value={this.state.interestRate} onChange={this.handleChange} step={0.5}/>
@@ -129,6 +130,12 @@ class Loans extends React.Component {
             Loan Term (Years)
             <p />
             <NumberInput name='term' value={this.state.term} onChange={this.handleChange} />
+          </Headline>
+          <p />
+          <Headline margin='none' style={{fontSize: "20px"}}>
+            Monthly Payment ($)
+            <p />
+            <NumberInput name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
           </Headline>
         </Section>
       </div>
