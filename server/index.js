@@ -45,11 +45,11 @@ const logger = (req, res, next) => {
   console.log(req.body)
   next();
 }
-app.use(express.static(path.join(__dirname, '../public/splash')))
+// app.use(express.static(path.join(__dirname, '../public/splash')))
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'))
-})
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'))
+// })
 
 // app.use(getToken); // => uncomment to enable authentication
 
