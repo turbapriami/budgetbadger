@@ -74,6 +74,8 @@ knex.schema.hasTable('accounts').then(exists => {
       table.integer('user_id');
       table.string('bank_name');
       table.string('type');
+      table.string('bank_id');
+      table.integer('balance');
     }).then(() => console.log('created table accounts'))
   }
 })

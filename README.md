@@ -51,9 +51,14 @@ Create database bbadger
 If .env file not created:
 
 ```sh
-mv .sample-env .env
+touch .env
+DB_USER
+APP_SECRET
+PLAID_CLIENT_ID
+PLAID_SECRET
+PLAID_PUBLIC_KEY
+PLAID_ENV
 ```
-*Fill in environmental variables*
 
 ### Roadmap
 
