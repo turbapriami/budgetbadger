@@ -26,7 +26,7 @@ export default class Search extends Component {
   handleInput(e) {
     e.preventDefault();
     let suggestions = this.state.suggestions;
-    let filtered = suggestions.filter(a => a.includes(e.target.value));
+    let filtered = suggestions.filter(a => a.toLowerCase().includes(e.target.value));
     this.setState({
       searchString: e.target.value,
       filtered
@@ -40,6 +40,7 @@ export default class Search extends Component {
          value={this.state.searchString}
          onDOMChange={this.handleInput}
          onSelect={({ suggestion }) => this.setState({searchString: suggestion })}
+         onSearch={()=>console.log('he')}
          suggestions={ this.state.filtered }/>
       </div>
     )
