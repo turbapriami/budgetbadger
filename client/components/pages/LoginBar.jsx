@@ -83,9 +83,7 @@ class LoginBar extends Component {
 
 const newBankQuery = gql`
   mutation newBankQuery($user_id: Int!, $public_token: String!) {
-    CreateBankAccounts(user_id: $user_id, public_token: $public_token) {
-      id
-    }
+    CreateBankAccounts(user_id: $user_id, public_token: $public_token)
   }
 `
 
