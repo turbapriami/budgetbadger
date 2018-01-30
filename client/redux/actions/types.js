@@ -1,1 +1,0 @@
-export const RENDER_TRANSACTIONS = 'render_transactions'
