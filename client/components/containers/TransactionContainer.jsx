@@ -11,9 +11,11 @@ class TransactionContainer extends Component {
     super()
     this.state = {
       transactions: [],
+      searchResult: [],
       selected: 'All Debit & Credit'
     }
-    this.filterTransactions = this.filterTransactions.bind(this)
+    this.filterTransactions = this.filterTransactions.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   filterTransactions(e, type) {
@@ -29,6 +31,18 @@ class TransactionContainer extends Component {
     });
   }
 
+  handleSearch(searchString) {
+    console.log('called')
+    const transactions = this.state.transactions;
+    const searchResult = transactions.filter(transaction => {
+      return transaction.name.includes(searchString);
+    });
+
+    this.setState({
+      transactions: searchResult
+    }, () => console.log('hi'))
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       transactions: nextProps.data.getTransactions,
@@ -38,7 +52,7 @@ class TransactionContainer extends Component {
   render() {
     return (
       <div style={{padding: '5px'}}>
-        <Search style={{float: 'right'}} transactions={this.state.transactions}/>
+        <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
         <h2>{this.state.selected}</h2>
         <div style={{ display: "flex"}} >
           <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
