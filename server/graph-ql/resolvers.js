@@ -140,7 +140,6 @@ module.exports = {
       
     getBillCategories: (parent, { id }, { knex }) => 
       knex('bill_categories').where({
-        id
       }),
     
     getBills: (parent, { user_id }, { knex }) => 

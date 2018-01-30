@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Columns, Box, Button, Section, Heading, Paragraph, Table, TableHeader, TableRow, Timestamp, Toast} from 'grommet';
 import AddBillModal from '../bills/AddBillModal.jsx';
+import { gql, graphql } from 'react-apollo';
 
 class BillsDueTable extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class BillsDueTable extends Component {
               style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none', marginLeft:'850px'}}
               box='true'
             />
-            <AddBillModal billFormToggle={this.state.billFormToggle} handleFormToggle={this.handleFormToggle}/>
+            <AddBillModal bills = {this.props.bills} billCategories = {this.props.billCategories} billFormToggle={this.state.billFormToggle} handleFormToggle={this.handleFormToggle}/>
             <Heading
               align = 'left'
               margin = 'small'
