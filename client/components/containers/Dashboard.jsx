@@ -7,6 +7,7 @@ import Bills from './Bills.jsx';
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
+import { getTransactions } from '../../redux/actions/index 2';
 
 const DashQuery = gql`
   query DashQuery($user_id: Int!) {
