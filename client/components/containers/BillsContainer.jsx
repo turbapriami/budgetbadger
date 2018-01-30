@@ -11,18 +11,21 @@ import gql from 'graphql-tag'
 const BILLS_QUERY = gql`
   query BILLS_QUERY($user_id: Int!) {    
     getBills(user_id: $user_id) {
-        id
-        user_id
-        description
-        amount
-        due_date
-        paid
-        paid_date
-        alert
-        bill_category {
-          name
-        }
+      id
+      user_id
+      description
+      amount
+      due_date
+      paid
+      paid_date
+      alert
+      bill_category {
+        name
       }
+    }
+    getBillCategories(user_id: $user_id) {
+      name
+    }
   }`
 
 const withBills = graphql(BILLS_QUERY, {
@@ -39,14 +42,14 @@ class BillsContainer extends Component {
     super(props);
   }
 
-    render() {
-        return (
-          <div>
-            <BillsSummary/>
-            <BillsDueTable bills={this.props.data.getBills}/>
-            <BillsPaidTable bills={this.props.data.getBills}/>
-          </div>)
-    }
+  render() {
+    return (
+      <div>
+        <BillsSummary/>
+        <BillsDueTable bills={this.props.data.getBills} billCategories={this.props.data.getBillCategories}/>
+        <BillsPaidTable bills={this.props.data.getBills}/>
+      </div>)
+  }
 }
 
 export default compose(withApollo, withBills)(BillsContainer);

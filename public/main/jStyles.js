@@ -11,8 +11,7 @@ module.exports = {
       transform             : 'translate(-50%, -50%)'
     },
     overlay : {
-      backgroundColor   : 'red',
-      opacity:'60%'
+      backgroundColor   : 'rgba(73, 81, 111, 0.9)'
     }
   }
 }
