@@ -63,6 +63,8 @@ class AddBillModal extends React.Component {
       paid_date:'',
       alert:'false'
   });
+
+
   }
 
   render() {
