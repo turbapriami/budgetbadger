@@ -4,7 +4,7 @@ import Loans from '../containers/LoansContainer.jsx';
 import {Tab, Tabs, Paragraph} from 'grommet';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import TransactionContainer from '../containers/TransactionContainer.jsx';
-
+import DashBoard from '../containers/Dashboard.jsx';
 
 class Main extends Component {
   constructor(props) {
@@ -41,28 +41,22 @@ class Main extends Component {
       <Tabs justify='center' activeIndex={this.state.activeIndex}>
         <Tab title='Dashboard' onClick={()=>{this.setState({activeIndex: 0})}} >
           <Redirect to='/' />
-          <div>
-          </div>
+          <Route path='/' component={DashBoard} />
         </Tab>
         <Tab title='Balance' onClick={()=>{this.setState({activeIndex: 1})}} >
           <Redirect to='/balance'/>
-            <div/>
         </Tab>
         <Tab title='Transactions' onClick={()=>{this.setState({activeIndex: 2})}}>
           <Redirect to='/transactions'/>
-          <TransactionContainer />
+          <Route path='/transactions' component={TransactionContainer} />
         </Tab>
         <Tab title='Bills' onClick={()=>{this.setState({activeIndex: 3})}}>
           <Redirect to='/bills'/>
-          <div>
-            <Route path='/bills' component={Bills} />
-          </div>
+          <Route path='/bills' component={Bills} />
         </Tab>
         <Tab title='Loans' onClick={()=>{this.setState({activeIndex: 4})}}>
           <Redirect to='/loans'/>
-          <div>
-            <Route path='/loans' component={Loans} />
-          </div>
+          <Route path='/loans' component={Loans} />
         </Tab>
       </Tabs>
     )
