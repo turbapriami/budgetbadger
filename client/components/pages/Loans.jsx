@@ -2,25 +2,55 @@ import React, { Component } from 'react';
 import LoansContainer from '../containers/LoansContainer.jsx';
 import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput } from 'grommet';
 import Chart, {Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots} from 'grommet/components/chart/Chart';
+import { amortizationSchedule } from 'amortization';
 
+// console.log(amortizationSchedule(50000, 5, 10))
 
 class Loans extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      principal: '100000',
-      payLevel: '418',
-      interestRate: '8.5',
-      term: '20'
+      chartPrincipal: [],
+      chartPayments: [],
+      chartOutstanding: [],
+      principal: 100000,
+      payLevel: 418,
+      interestRate: 8.5,
+      term: 20
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleAmort = this.handleAmort.bind(this);
   };
+
+  handleAmort(){
+    var amort = amortizationSchedule(this.state.principal, this.state.term, this.state.interestRate);
+    var principal = [];
+    var payments = [];
+    var outstanding = [];
+
+    amort.forEach((payment) => {
+      // principal.push(Math.floor(payment.principalBalance));
+      // this.state.chartPrincipal.push(payment.principalBalanceRounded/1000)
+      // payments.push(Math.floor(payment.payment));
+      // outstanding.push(this.state.principal - Math.floor(payment.principalBalance));
+    })
+
+    this.setState({
+      chartPrincipal: principal
+    })
+
+  }
 
   handleChange(e){
     this.setState({
       [e.target.name]: e.target.value
     })
   };
+
+  // componentWillMount(){
+  //   this.handleAmort()
+  //   console.log('State of Play',this.state.chartPrincipal)
+  // };
 
   render(){
     return(
