@@ -10,11 +10,11 @@ const Navigation = ({ accounts, filter }) => (
           <Anchor onClick={(e) => filter(e, 'all')}>
             Debit & Credit
           </Anchor>
-          <Anchor onClick={(e) => filter(e)}>
-            Debit Only
+          <Anchor onClick={(e) => filter(e, 'type')}>
+            Debit
           </Anchor>
-          <Anchor onClick={(e) => filter(e)}>
-            Credit Only
+          <Anchor onClick={(e) => filter(e, 'type')}>
+            Credit
           </Anchor>
         </Menu>
       <Header><Title>Accounts</Title></Header>
@@ -22,7 +22,7 @@ const Navigation = ({ accounts, filter }) => (
         {
           accounts ?
           accounts.map(account => (
-            <Anchor onClick={(e) => filter(e, 'bank')}>
+            <Anchor onClick={(e) => filter(e, 'bank_name')}>
               {account.bank_name}
             </Anchor>
           )):
