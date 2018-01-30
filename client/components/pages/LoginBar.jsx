@@ -8,14 +8,13 @@ import gql from 'graphql-tag'
 class LoginBar extends Component {
   constructor(props) {
     super(props);
-  }
-  componentDidUpdate() {
-    console.log(this)
+    this.handleOnSuccess = this.handleOnSuccess.bind(this)
   }
   handleClick() {
     this.refs.plaid.handleOnClick()
   }
   handleOnSuccess(token, metadata) {
+    console.log(token)
     this.props.mutate({
       variables: {user_id: 1, public_token: token}
     }).then(({ data }) => {
@@ -26,6 +25,7 @@ class LoginBar extends Component {
   }
   handleOnExit() {
     // handle the case when your user exits Link
+    console.log('ok')
   }
   render() {
     return (
@@ -83,9 +83,7 @@ class LoginBar extends Component {
 
 const newBankQuery = gql`
   mutation newBankQuery($user_id: Int!, $public_token: String!) {
-    CreateBankAccounts(user_id: $user_id, public_token: $public_token) {
-      id
-    }
+    CreateBankAccounts(user_id: $user_id, public_token: $public_token)
   }
 `
 

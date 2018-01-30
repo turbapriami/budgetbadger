@@ -165,31 +165,39 @@ module.exports = {
       let accessToken = plaid.exchangeToken(public_key, (res) => {
         let newBank = new models.Bank({ user_id, id: res.item_id, access_token: res.access_token})
         newBank.fetch()
-        .then((bank) => {
-          const { access_token, id} = bank.attributes;
-          if (bank) return {access_token, id};
-          else {
-            return newBank.save(null, {method: 'insert'}).attributes;
+        .then(async (bank) => {
+          // console.log(bank, 'bank bnk anbkanbvka')
+          if (bank) {
+            const { access_token, id} = bank.attributes;
+            return {access_token, id}
+          } else {
+            console.log(bank, 'ELSE ELSE ELSE')
+            let bank2 = await newBank.save(null, {method: 'insert'}).attributes;
+            return bank2
           }
         })
-        .then(({ access_token, id }) => {
-          plaid.getAccounts(res.access_token, (res) => {
-            let accounts = res.accounts.forEach(account => {
+        .then(() => {
+          console.log('accounts executed')
+          plaid.getAccounts(res.access_token, (response) => {
+            console.log('plaid getting accounts')
+            let accounts = response.accounts.forEach(account => {
+              console.log('accounts for each')
               let toStore = {};
               toStore.id = account.account_id;
               toStore.user_id = user_id;
               toStore.bank_name = account.name;
-              toStore.access_token = access_token;
+              toStore.access_token = res.access_token;
               toStore.limit = account.balances.limit;
               toStore.current_balance = account.balances.current;
-              toStore.bank_id = id;
+              toStore.bank_id = res.item_id;
               toStore.type = account.type;
               let newAccount = new models.Account(toStore);
+              console.log(newAccount);
               newAccount.save(null, {method:'insert'});
             })
           })
         })
-        .catch(() => {throw Error('Bank has already been added')})
+        // .catch(() => {throw Error('Bank has already been added')})
       })
     },
     getUpdatedTransactions: async (parent, args, { knex, models }) => {
