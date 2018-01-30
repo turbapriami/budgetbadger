@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/turbapriami/budgetbadger#readme",
   "dependencies": {
+    "amortization": "^1.1.1",
     "apollo-cache-inmemory": "^1.1.5",
     "apollo-client": "^2.2.0",
     "apollo-fetch": "^0.7.0",
