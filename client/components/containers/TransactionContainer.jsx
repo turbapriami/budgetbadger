@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import Navigation from '../pages/transactions/Navigation.jsx';
 import Search from '../pages/transactions/Search.jsx'
+import SearchFilter from '../pages/transactions/SearchFilters.jsx'
 import { Box } from 'grommet'
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -12,10 +13,12 @@ class TransactionContainer extends Component {
     this.state = {
       transactions: [],
       searchResult: [],
+      categoryBreakdown: {},
       selected: 'All Debit & Credit'
     }
     this.filterTransactions = this.filterTransactions.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.generateCategories = this.generateCategories.bind(this);
   }
 
   filterTransactions(e, type) {
@@ -31,8 +34,15 @@ class TransactionContainer extends Component {
     });
   }
 
+  generateCategories() {
+    const breakdown = this.state.transactions.reduce((a, b) => {
+      a[b.category] ? a[b.category] += b.amount : a[b.category] = b.amount;
+      return a;
+    }, {});
+    console.log(breakdown);
+  }
+
   handleSearch(searchString) {
-    console.log('called')
     const transactions = this.state.transactions;
     const searchResult = transactions.filter(transaction => {
       return transaction.name.includes(searchString);
@@ -46,7 +56,7 @@ class TransactionContainer extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       transactions: nextProps.data.getTransactions,
-    })
+    },() => this.generateCategories())
   }
 
   render() {
