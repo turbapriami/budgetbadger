@@ -152,7 +152,7 @@ Deleting Bill Category:
 
 Creating a Bill:
   mutation {
-    createBill(id:1, user_id: 1, bill_category_id: 1,description: "Netflix", amount: 8.99, due_date: "12/21/2017", paid: false, alert: false) {
+    createBill(user_id: 1, bill_category_id: 1,description: "NBA LEAGUE PASS", amount: 108.9, due_date: "02/04/2018", paid: true, paid_date:"01/27/2018", alert: false) {
       id
     }
   }

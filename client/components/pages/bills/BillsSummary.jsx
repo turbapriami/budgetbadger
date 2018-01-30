@@ -1,6 +1,6 @@
 import { Columns, Box, Section,Title, Header, Heading, Paragraph} from 'grommet';
 import React, { Component } from 'react';
-import styles from '../../../public/main/jStyles';
+import styles from '../../../../public/main/jStyles';
 
 class BillsSummary extends Component {
   constructor(props) {
