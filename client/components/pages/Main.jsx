@@ -5,7 +5,8 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import styles from '../../../public/main/jStyles';
 import TransactionContainer from '../containers/TransactionContainer.jsx';
 import BillsContainer from '../containers/BillsContainer.jsx';
-
+import AccountsOverview from '../containers/AccountsOverview.jsx';
+import DashBoard from '../containers/Dashboard.jsx';
 
 class Main extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Main extends Component {
     }
     this.indexChooser = {
       '/dashboard': 0,
-      '/balance': 1,
+      '/accounts': 1,
       '/transactions': 2,
       '/bills': 3,
       '/loans': 4,
@@ -43,28 +44,23 @@ class Main extends Component {
       <Tabs justify='center' activeIndex={this.state.activeIndex}>
         <Tab title='Dashboard' onClick={()=>{this.setState({activeIndex: 0})}} >
           <Redirect to='/' />
-          <div>
-          </div>
+          <Route path='/' component={DashBoard} />
         </Tab>
-        <Tab title='Balance' onClick={()=>{this.setState({activeIndex: 1})}} >
-          <Redirect to='/balance'/>
-            <div/>
+        <Tab title='Accounts Overview' onClick={()=>{this.setState({activeIndex: 1})}} >
+          <Redirect to='/accounts'/>
+          <Route path='/accounts' component={AccountsOverview} />
         </Tab>
         <Tab title='Transactions' onClick={()=>{this.setState({activeIndex: 2})}}>
           <Redirect to='/transactions'/>
-          <TransactionContainer />
+          <Route path='/transactions' component={TransactionContainer} />
         </Tab>
         <Tab title='Bills' onClick={()=>{this.setState({activeIndex: 3})}}>
           <Redirect to='/bills'/>
-          <div>
-            <Route path='/bills' component={BillsContainer} />
-          </div>
+          <Route path='/bills' component={BillsContainer} />
         </Tab>
         <Tab title='Loans' onClick={()=>{this.setState({activeIndex: 4})}}>
           <Redirect to='/loans'/>
-          <div>
-            <Route path='/loans' component={Loans} />
-          </div>
+          <Route path='/loans' component={Loans} />
         </Tab>
       </Tabs>
       <Footer justify='between'size='large'>

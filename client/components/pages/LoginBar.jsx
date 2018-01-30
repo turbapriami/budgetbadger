@@ -1,22 +1,28 @@
 import React, {Component} from 'react';
 import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon, MoneyIcon} from 'grommet';
-import styles from '../../../public/main/jStyles';
-import ReactPlaidLink from 'react-plaid-link';
-
-
-
-
+import styles from '../../../public/main/jStyles'
+import ReactPlaidLink from 'react-plaid-link'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 class LoginBar extends Component {
   constructor(props) {
     super(props);
   }
+  componentDidUpdate() {
+    console.log(this)
+  }
   handleClick() {
     this.refs.plaid.handleOnClick()
   }
   handleOnSuccess(token, metadata) {
-    console.log(token)
-    console.log(metadata)
+    this.props.mutate({
+      variables: {user_id: 1, public_token: token}
+    }).then(({ data }) => {
+      console.log('got data', data);
+    }).catch((error) => {
+      console.log('there was an error sending the query', error);
+    });
   }
   handleOnExit() {
     // handle the case when your user exits Link
@@ -75,4 +81,12 @@ class LoginBar extends Component {
   }
 }
 
-export default LoginBar;
+const newBankQuery = gql`
+  mutation newBankQuery($user_id: Int!, $public_token: String!) {
+    CreateBankAccounts(user_id: $user_id, public_token: $public_token) {
+      id
+    }
+  }
+`
+
+export default graphql(newBankQuery)(LoginBar);
