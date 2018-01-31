@@ -4,6 +4,7 @@ const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -24,11 +25,10 @@ const schema = makeExecutableSchema({
 })
 
 const getToken = async (req) => {
-  const token = req.headers.authorization;
+  console.log('TOKEN?????', req.cookies['TOKEN'])
   try {
-    const { user } = await jwt.verify(token, APP_SECRET);
+    const { user } = await jwt.verify(req.cookies['TOKEN'], APP_SECRET);
     req.user = user;
-      console.log(req.user)
   } catch (err) {
     console.log(err);
   }
@@ -38,19 +38,20 @@ const getToken = async (req) => {
 
 const chooseDirectory = (req, res) => {
   if (req.user) {
+    console.log("OOKOKOKKKKKKK", req.user)
     req.next()
   } else {
     res.redirect('/home')
   }
 }
 
-const homeCheck = (req, res) => {
-  if (req.user) {
-    res.redirect('/')
-  } else {
-    req.next()
-  }
-}
+// const homeCheck = (req, res) => {
+//   if (req.user) {
+//     res.redirect('/')
+//   } else {
+//     req.next()
+//   }
+// }
 
 app.use(cors())
 
@@ -59,6 +60,8 @@ app.use(morgan('dev'))
 app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
 app.use(/\/((?!graphql).)*/, bodyParser.json());
 app.use(bodyParser.text({ type: 'text/plain' }));
+
+app.use(cookieParser())
 
 const logger = (req, res, next) => {
   console.log(req.body)
@@ -85,14 +88,15 @@ app.use('/graphql',
 
 app.use(getToken); // => uncomment to enable authentication
 
-app.use('/home', homeCheck, express.static(path.join(__dirname, '../public/splash')));
+app.use('/home', express.static(path.join(__dirname, '../public/splash')));
 
-app.use(chooseDirectory, express.static(path.join(__dirname, '../public/main')));
+app.use(chooseDirectory)
+
+app.use(express.static(path.join(__dirname, '../public/main')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'));
 })
-
 
 app.listen(port, (err) => {
   console.log('Listening on port: ' + port);

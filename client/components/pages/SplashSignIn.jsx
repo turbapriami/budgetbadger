@@ -26,15 +26,12 @@ class SplashSignIn extends Component {
       })
       const token = result.data.loginUser;
       const cookie = new Cookies();
-      cookie.set('TOKEN', token);
-      console.log('TOKEN', token)
+      cookie.set('TOKEN', token, { path: '/' });
+      console.log(cookie)
+      window.location.reload()
     } catch(error) {
         console.log(error)
     }
-  }
-
-  componentDidMount() {
-    console.log('heloo')
   }
 
   render() {
