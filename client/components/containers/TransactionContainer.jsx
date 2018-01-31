@@ -6,9 +6,44 @@ import PieChart from '../pages/transactions/PieChart.jsx'
 import SearchFilter from '../pages/transactions/SearchFilters.jsx'
 import { Box } from 'grommet'
 import { graphql, compose, withApollo } from 'react-apollo'
-import { TRANS_ACC_QUERY } from '../../queries.js';
+// import { TRANS_ACC_QUERY } from '../../queries.js';
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag';
+
+const NEW_TRANS_MUTATION = gql`
+  mutation NEW_TRANS_MUTATION($user_id: Int!){
+    getUpdatedTransactions(user_id: $user_id) {
+      id
+    }
+  }
+`
+const withUpdatedTransactions = graphql(NEW_TRANS_MUTATION)
+
+const TRANS_ACC_QUERY = gql`
+  query TRANS_ACC_QUERY($user_id: Int!) {
+    getTransactions(user_id: $user_id) {
+      amount
+      name
+      account {
+        type
+        bank_name
+      }
+    }
+    getAccounts(user_id: $user_id) {
+      type
+      bank_name
+      id
+    }
+  }`
+
+const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
+  options: (props) => ({
+    variables: {
+      user_id: 1
+    },
+    name: 'TransactionsAndAccounts'
+  })
+})
 
 class TransactionContainer extends Component {
   constructor() {
@@ -25,6 +60,12 @@ class TransactionContainer extends Component {
     this.generateCategories = this.generateCategories.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.sortTransactions = this.sortTransactions.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.mutate({
+      variables: {user_id: 1}
+    })
   }
 
   filterTransactions(e, type) {
@@ -118,13 +159,4 @@ class TransactionContainer extends Component {
   }
 }
 
-const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
-  options: (props) => ({
-    variables: {
-      user_id: 1
-    },
-    name: 'TransactionsAndAccounts'
-  })
-})
-
-export default compose(withApollo, withTransactionsAndAccounts)(TransactionContainer);
+export default compose(withApollo, withUpdatedTransactions, withTransactionsAndAccounts)(TransactionContainer);

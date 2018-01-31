@@ -14,18 +14,14 @@ class LoginBar extends Component {
     this.refs.plaid.handleOnClick()
   }
   handleOnSuccess(token, metadata) {
-    console.log(token)
     this.props.mutate({
-      variables: {user_id: 1, public_token: token}
-    }).then(({ data }) => {
-      console.log('got data', data);
-    }).catch((error) => {
-      console.log('there was an error sending the query', error);
-    });
+      variables: {user_id: 1, public_key: token}
+    }).then((response) => {
+      // console.log(response);
+    })
   }
   handleOnExit() {
     // handle the case when your user exits Link
-    console.log('ok')
   }
   render() {
     return (
@@ -82,8 +78,8 @@ class LoginBar extends Component {
 }
 
 const newBankQuery = gql`
-  mutation newBankQuery($user_id: Int!, $public_token: String!) {
-    CreateBankAccounts(user_id: $user_id, public_token: $public_token)
+  mutation newBankQuery($user_id: Int!, $public_key: String!) {
+    createBankAccounts(user_id: $user_id, public_key: $public_key)
   }
 `
 

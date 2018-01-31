@@ -49,7 +49,7 @@ class DashBoard extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log(this.props.data)
+    // console.log(this.props.data)
   }
 
   render(){
