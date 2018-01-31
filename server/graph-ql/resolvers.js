@@ -249,7 +249,7 @@ module.exports = {
       const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
       })
-      return {token, id: user.attributes.id}
+      return token;
     },
 
     createTransaction: async (parent, args, { models }) => {
