@@ -5,6 +5,7 @@ import Search from '../pages/transactions/Search.jsx'
 import PieChart from '../pages/transactions/PieChart.jsx'
 import SearchFilter from '../pages/transactions/SearchFilters.jsx'
 import { Box } from 'grommet'
+import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { TRANS_ACC_QUERY, NEW_TRANS_MUTATION, NEW_BANK_QUERY } from '../../queries.js';
 import Modal from 'react-responsive-modal';
@@ -114,31 +115,14 @@ class TransactionContainer extends Component {
     const directionS = sorting[index];
     sorting[index] = !directionS;
     const sorted = transactions.sort((a, b) => {
-      if (Number(a[label])) {
-        return directionS ?
-          a[label] - b[label] :
-          b[label] - a[label];
-      } else if (label === 'date') {
-        return directionS ?
-          new Date(a[label]) - new Date(b[label]) :
-          new Date(b[label]) - new Date(a[label]);
-      } else if (label === 'type') { 
-        return directionS ?
-          
-      } else {
-        return directionS ?
-          a[label].localeCompare(b[label]) :
-          b[label].localeCompare(a[label]);
-      }
+      return sortingFuncs[label](a[label] || a, b[label] || a, directionS)
     })
     this.setState({
       sortIdx: index,
       sorting,
       transactions:sorted
     })
-    // this.setState({
-    //   transactions: sorted,
-    // })
+
   }
 
   // async newTransaction() {
