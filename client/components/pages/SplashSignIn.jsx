@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header, Heading, Label, Paragraph, TextInput, Tiles } from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
+import Cookies from 'universal-cookie'
 
 
 
@@ -15,16 +16,29 @@ class SplashSignIn extends Component {
       user_email: '',
       password: ''
     }
+    this._confirm = this._confirm.bind(this)
   }
 
-
+  async _confirm() {
+    const { user_email, password } = this.state;
+    try {
+      const result = await this.props.mutate({
+        variables: {
+          user_email,
+          password,
+        }
+      })
+      console.log(result.data)
+      // const token = result.data.loginUser;
+      // const cookie = new Cookies();
+      // cookie.set('TOKEN', token);
+      // console.log(cookie.get('TOKEN'))
+    } catch(error) {
+        console.log(error)
+      }
+  }
 
   render() {
-    const _confirm = async () => {
-      console.log(this.props)
-    }
-
-    _confirm()
     return (
       <Box align="center" focusable={true}>
         <Card align="center" style={{ outline: "#000 solid thin" }}> 
@@ -44,7 +58,7 @@ class SplashSignIn extends Component {
             <Footer size="small" direction="column"
               align={'center' ? 'stretch' : 'start'}
               pad={{ vertical: "medium" }}>
-              <Button onClick={_confirm(this.state)} primary={true} fill="center" label='Sign In'
+              <Button onClick={() => this._confirm()} primary={true} fill="center" label='Sign In'
                 primary={true} />
             </Footer>
           </Form>
@@ -67,13 +81,9 @@ class SplashSignIn extends Component {
 }
 
 const LOGIN_USER = gql`
-mutation LOGIN($user_email: String!, $password: String!) {
-    loginUser(user_email: $user_email, password: $password) {
-      token
-    }
+  mutation LOGIN($user_email: String!, $password: String!) {
+      loginUser(email: $user_email, password: $password)
   }
 `
 
-export default compose(
-  graphql(LOGIN_USER, { name: 'loginMutation' })
-)(SplashSignIn);
+export default compose(graphql(LOGIN_USER))(SplashSignIn);

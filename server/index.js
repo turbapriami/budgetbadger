@@ -45,6 +45,9 @@ const logger = (req, res, next) => {
   console.log(req.body)
   next();
 }
+app.use('/graphiql', graphiqlExpress({
+  endpointURL: '/graphql'
+}));
 app.use(express.static(path.join(__dirname, '../public/splash')))
 
 app.get('*', (req, res) => {
@@ -54,9 +57,6 @@ app.get('*', (req, res) => {
 app.use(getToken); // => uncomment to enable authentication
 
 
-app.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql'
-}));
 
 app.use('/graphql',
   bodyParser.json(), 
@@ -73,11 +73,11 @@ app.use('/graphql',
   }))
 );
 
-app.use(express.static(path.join(__dirname, '../public/main')))
+// app.use(express.static(path.join(__dirname, '../public/main')))
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
-})
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
+// })
 
 // app.use(getToken); // => uncomment to enable authentication
 
