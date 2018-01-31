@@ -33,6 +33,7 @@ const getToken = async (req) => {
   }
   req.next()
 }
+
 app.use(cors())
 
 app.use(morgan('dev'))
@@ -48,15 +49,14 @@ const logger = (req, res, next) => {
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
+
+
 app.use(express.static(path.join(__dirname, '../public/splash')))
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'))
 })
-
-app.use(getToken); // => uncomment to enable authentication
-
-
 
 app.use('/graphql',
   bodyParser.json(), 
@@ -73,13 +73,14 @@ app.use('/graphql',
   }))
 );
 
-// app.use(express.static(path.join(__dirname, '../public/main')))
+app.use(getToken); // => uncomment to enable authentication
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
-// })
+app.use(express.static(path.join(__dirname, '../public/main')));
 
-// app.use(getToken); // => uncomment to enable authentication
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'));
+})
+
 
 app.listen(port, (err) => {
   console.log('Listening on port: ' + port);
