@@ -46,6 +46,7 @@ module.exports = `
     user_id: Int!
     amount: Float!
     category: String!
+    date: String!
     name: String!
     account_id: String
     street: String
