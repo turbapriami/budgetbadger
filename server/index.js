@@ -32,10 +32,10 @@ const getToken = async (req) => {
   } catch (err) {
     console.log(err);
   }
+  // req.user = 'user' // <= uncomment to dummy authenticate
   req.next()
 }
 
-// change to req.user to load splash
 const chooseDirectory = (req, res) => {
   if (req.user) {
     req.next()
@@ -44,7 +44,6 @@ const chooseDirectory = (req, res) => {
   }
 }
 
-// change to req.user to load splash
 const homeCheck = (req, res) => {
   if (req.user) {
     res.redirect('/')
