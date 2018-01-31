@@ -20,9 +20,9 @@ const client = new ApolloClient({
 document.addEventListener('DOMContentLoaded', () => {
     return (
       ReactDOM.render(
+            <ApolloProvider client={client}>
         <App centered={false}>
           <BrowserRouter>
-            <ApolloProvider client={client}>
               <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--flex-off">
               <Header className="grommetux-box grommetux-box--direction-row grommetux-box--justify-center grommetux-box--align-center grommetux-box--pad-horizontal-none grommetux-box--pad-vertical-none grommetux-box--pad-between-small grommetux-background-color-index-neutral-4 grommetux-background-color-index--dark grommetux-header" fixed={false}
                 float={false}
@@ -60,9 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <SplashSignUp />
               )} />
             </div>
-          </ApolloProvider>
         </BrowserRouter>
-      </App>,
+      </App>
+          </ApolloProvider>,
         document.getElementById('splash')
       )
     )

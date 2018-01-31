@@ -237,6 +237,7 @@ module.exports = {
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
 
     loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
+      console.log("SERVER, CALLING LOGIN")
       const user = await new models.User({ email }).fetch();
       if (!user) {
         throw new Error('Unable to match the provided credentials');
@@ -248,7 +249,7 @@ module.exports = {
       const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
       })
-      return token
+      return token;
     },
 
     createTransaction: async (parent, args, { models }) => {

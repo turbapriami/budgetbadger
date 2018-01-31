@@ -25,6 +25,7 @@ export default class Search extends Component {
 
   handleInput(e) {
     e.preventDefault();
+    e.charCode == 13 ? this.props.search(searchString): null;
     let suggestions = this.state.suggestions;
     let filtered = suggestions.filter(a => a.toLowerCase().includes(e.target.value));
     this.setState({
@@ -38,8 +39,10 @@ export default class Search extends Component {
       <div style={{float: 'right', position:'relative', display:'inline'}}>
         <SearchInput placeHolder='Search' 
          value={this.state.searchString}
-         onDOMChange={this.handleInput}
-         onSelect={({ suggestion }) => this.setState({searchString: suggestion })}
+         onDOMChange={ this.handleInput }
+         onSelect={({ suggestion }) => {
+          this.props.search(suggestion) 
+        }}
          onSearch={()=>console.log('he')}
          suggestions={ this.state.filtered }/>
       </div>
