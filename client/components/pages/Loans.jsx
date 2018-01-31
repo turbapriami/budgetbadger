@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import LoansContainer from '../containers/LoansContainer.jsx';
-import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput } from 'grommet';
+import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput, Columns, Value, CurrencyIcon, LinkUpIcon } from 'grommet';
 import Chart, {Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots} from 'grommet/components/chart/Chart';
 import { amortizationSchedule } from 'amortization';
 
 console.log(amortizationSchedule(50000, 5, 10))
+
+const precisionRound = (number, precision) => {
+  var factor = Math.pow(10, precision);
+  return Math.round(number * factor) / factor;
+};
+
+const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 class Loans extends React.Component {
   constructor(props){
@@ -17,39 +26,49 @@ class Loans extends React.Component {
       payLevel: 1000,
       interestRate: 8.5,
       term: 20,
-      inception: 2017
+      inception: 2017,
+      totalInterestPaid: 0,
+      totalPayment: 0
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleAmort = this.handleAmort.bind(this);
   };
 
   handleAmort(){
+    if(this.state.principal === NaN){ return console.log("breaking out!") }
     var amort = amortizationSchedule(this.state.principal, this.state.term, this.state.interestRate);
     var principal = [];
     var payments = [];
     var outstanding = [];
+    var interest = [];
 
     amort.forEach((payment) => {
       principal.push(Math.floor(payment.principalBalance));
       payments.push(Math.floor(payment.payment));
       outstanding.push(this.state.principal - Math.floor(payment.principalBalance));
-    })
+      interest.push(payment.interestPayment);
+    });
+
+    var totalinterest = interest.reduce((a, b) => { return a + b });
+    var totalPayment = totalinterest + this.state.principal;
+    console.log('Helly',precisionRound(10000, 2));
 
     this.setState({
       chartPrincipal: principal,
       chartOutstanding: outstanding,
-      chartPayments: payments
-    })
+      chartPayments: payments,
+      totalInterestPaid: precisionRound(totalinterest, 2),
+      totalPayment: precisionRound(totalPayment, 2)
+    });
   };
 
   handleChange(e){
-    if(e.target.value > 0){
-      this.setState({
-        [e.target.name]: parseFloat(e.target.value)
-      }, () => {
-        this.handleAmort();
-      })
-    }
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: parseFloat(e.target.value)
+    }, () => {
+      this.handleAmort();
+    })
   };
 
   componentWillMount(){
@@ -114,29 +133,55 @@ class Loans extends React.Component {
           </Headline>
         </Section>
         <Section pad='large' justify='center' align='center'>
-          <Headline margin='none' style={{fontSize: "20px"}}>
-            Loan Amount ($)
+          <Columns responsive={false}
+            size='medium'
+            justify='center'
+            masonry={true}
+            maxCount={2}>
+            <Headline margin='none' style={{fontSize: "20px"}}>
+              Loan Amount ($)
+              <p />
+              <NumberInput align='left' name='principal' value={this.state.principal} onChange={this.handleChange} step={1000}/>
+            </Headline>
             <p />
-            <NumberInput name='principal' value={this.state.principal} onChange={this.handleChange} step={1000}/>
-          </Headline>
-          <p />
-          <Headline margin='none' style={{fontSize: "20px"}}>
-            Annual Interest Rate (%)
+            <Headline margin='none' style={{fontSize: "20px"}}>
+              Annual Interest Rate (%)
+              <p />
+              <NumberInput align='left' name='interestRate' value={this.state.interestRate} onChange={this.handleChange} step={0.5}/>
+            </Headline>
             <p />
-            <NumberInput name='interestRate' value={this.state.interestRate} onChange={this.handleChange} step={0.5}/>
-          </Headline>
-          <p />
-          <Headline margin='none' style={{fontSize: "20px"}}>
-            Loan Term (Years)
+            <Headline margin='none' style={{fontSize: "20px"}}>
+              Loan Term (Years)
+              <p />
+              <NumberInput align='left' name='term' value={this.state.term} onChange={this.handleChange} />
+            </Headline>
             <p />
-            <NumberInput name='term' value={this.state.term} onChange={this.handleChange} />
-          </Headline>
-          <p />
-          <Headline margin='none' style={{fontSize: "20px"}}>
-            Monthly Payment ($)
-            <p />
-            <NumberInput name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
-          </Headline>
+            <Headline margin='none' style={{fontSize: "20px"}}>
+              Monthly Payment ($)
+              <p />
+              <NumberInput align='left' name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
+            </Headline>
+            <Box align='right'
+              pad='medium'
+              margin='small'
+              colorIndex='light-2'>
+              <Headline margin='none' align='center' style={{fontSize: "25px"}} >
+                Over loan term
+                <p />
+              </Headline>
+              <Value value={numberWithCommas(this.state.totalInterestPaid)}
+                icon={<CurrencyIcon />}
+                label='Total Interest Paid'
+                trendIcon={<LinkUpIcon />}
+                units='$' />
+                <p />
+              <Value value={numberWithCommas(this.state.totalPayment)}
+                icon={<CurrencyIcon />}
+                label='Total Payment'
+                trendIcon={<LinkUpIcon />}
+                units='$' />
+            </Box>
+          </Columns>
         </Section>
       </div>
     )
