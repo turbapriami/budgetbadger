@@ -23,7 +23,7 @@ const schema = makeExecutableSchema({
   printErrors: true
 })
 
-const getToken = async (req) => {
+const getToken = async (req, res) => {
   const token = req.headers.authorization;
   try {
     const { user } = await jwt.verify(token, APP_SECRET);
@@ -38,16 +38,20 @@ const getToken = async (req) => {
 
 const chooseDirectory = (req, res) => {
   if (req.user) {
+    console.log("MADE IT PAST FIRST CHECK IN CHOOSE DIRECTORY");
     req.next()
   } else {
+    console.log("didn't make it past first check in choose directory");
     res.redirect('/home')
   }
 }
 
 const homeCheck = (req, res) => {
   if (req.user) {
+    console.log("MADE IT PAST FIRST CHECK IN HOME CHECK");
     res.redirect('/')
   } else {
+    console.log("didn't make it past first check in home check")
     req.next()
   }
 }
