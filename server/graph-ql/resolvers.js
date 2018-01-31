@@ -221,14 +221,18 @@ module.exports = {
         })
       })
     },
-    createUser: async (parent, args, { models }) => {
+    createUser: async (parent, args, { models, APP_SECRET }) => {
+      console.log("IN CREATE USER");
       const { email } = args;
       const user = await new models.User({ email }).fetch();
       if (user) {
         throw new Error('That email already exists');
       }
       const newUser = await new models.User(args).save();
-      return newUser
+      const token = jwt.sign({ newUser: _.pick(newUser.attributes, ['id', 'email'])}, APP_SECRET, {
+        expiresIn: 360*60
+      })
+      return token;
     },
 
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),

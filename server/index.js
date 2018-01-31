@@ -38,19 +38,24 @@ const getToken = async (req) => {
 
 const chooseDirectory = (req, res) => {
   if (req.user) {
+    console.log("OOKOKOKKKKKKK", req.user)
     req.next()
   } else {
+    console.log("didn't make it past first check in choose directory");
     res.redirect('/home')
   }
 }
 
-const homeCheck = (req, res) => {
-  if (req.user) {
-    res.redirect('/')
-  } else {
-    req.next()
-  }
-}
+
+// const homeCheck = (req, res) => {
+//   if (req.user) {
+//     res.redirect('/')
+//   } else {
+//     req.next()
+//   }
+// }
+
+// change to req.user to load splash
 
 app.use(cors())
 
