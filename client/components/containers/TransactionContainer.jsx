@@ -8,7 +8,42 @@ import { Box } from 'grommet'
 import { graphql, compose, withApollo } from 'react-apollo'
 // import { TRANS_ACC_QUERY } from '../../queries.js';
 import Modal from 'react-responsive-modal';
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
+
+const NEW_TRANS_MUTATION = gql`
+  mutation NEW_TRANS_MUTATION($user_id: Int!){
+    getUpdatedTransactions(user_id: $user_id) {
+      id
+    }
+  }
+`
+const withUpdatedTransactions = graphql(NEW_TRANS_MUTATION)
+
+const TRANS_ACC_QUERY = gql`
+  query TRANS_ACC_QUERY($user_id: Int!) {
+    getTransactions(user_id: $user_id) {
+      amount
+      name
+      account {
+        type
+        bank_name
+      }
+    }
+    getAccounts(user_id: $user_id) {
+      type
+      bank_name
+      id
+    }
+  }`
+
+const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
+  options: (props) => ({
+    variables: {
+      user_id: 1
+    },
+    name: 'TransactionsAndAccounts'
+  })
+})
 
 const NEW_TRANS_MUTATION = gql`
   mutation NEW_TRANS_MUTATION($user_id: Int!){
@@ -53,7 +88,7 @@ class TransactionContainer extends Component {
       searchResult: [],
       categoryBreakdown: [],
       selected: 'All Debit & Credit',
-      displayModal: true
+      displayModal: false
     }
     this.filterTransactions = this.filterTransactions.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -123,9 +158,11 @@ class TransactionContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      transactions: nextProps.data.getTransactions,
-    },() => this.generateCategories())
+    if (nextProps.transactions) {
+      this.setState({
+        transactions: nextProps.data.getTransactions,
+      },() => this.generateCategories())
+    }
   }
 
   sortTransactions(index, direction) {
