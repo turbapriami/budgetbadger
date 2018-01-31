@@ -45,41 +45,6 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   })
 })
 
-const NEW_TRANS_MUTATION = gql`
-  mutation NEW_TRANS_MUTATION($user_id: Int!){
-    getUpdatedTransactions(user_id: $user_id) {
-      id
-    }
-  }
-`
-const withUpdatedTransactions = graphql(NEW_TRANS_MUTATION)
-
-const TRANS_ACC_QUERY = gql`
-  query TRANS_ACC_QUERY($user_id: Int!) {
-    getTransactions(user_id: $user_id) {
-      amount
-      name
-      account {
-        type
-        bank_name
-      }
-    }
-    getAccounts(user_id: $user_id) {
-      type
-      bank_name
-      id
-    }
-  }`
-
-const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
-  options: (props) => ({
-    variables: {
-      user_id: 1
-    },
-    name: 'TransactionsAndAccounts'
-  })
-})
-
 class TransactionContainer extends Component {
   constructor() {
     super()
