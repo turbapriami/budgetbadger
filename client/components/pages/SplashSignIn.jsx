@@ -29,10 +29,9 @@ class SplashSignIn extends Component {
         }
       })
       console.log(result.data)
-      // const token = result.data.loginUser;
-      // const cookie = new Cookies();
-      // cookie.set('TOKEN', token);
-      // console.log(cookie.get('TOKEN'))
+      const token = result.data.loginUser;
+      const cookie = new Cookies();
+      cookie.set('TOKEN', token);
     } catch(error) {
         console.log(error)
       }
