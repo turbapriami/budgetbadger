@@ -166,22 +166,18 @@ module.exports = {
         let newBank = new models.Bank({ user_id, id: res.item_id, access_token: res.access_token})
         newBank.fetch()
         .then(async (bank) => {
-          // console.log(bank, 'bank bnk anbkanbvka')
           if (bank) {
             const { access_token, id} = bank.attributes;
             return {access_token, id}
           } else {
-            console.log(bank, 'ELSE ELSE ELSE')
             let bank2 = await newBank.save(null, {method: 'insert'}).attributes;
             return bank2
           }
         })
         .then(() => {
-          console.log('accounts executed')
           plaid.getAccounts(res.access_token, (response) => {
-            console.log('plaid getting accounts')
+            console.log(response.accounts)
             let accounts = response.accounts.forEach(account => {
-              console.log('accounts for each')
               let toStore = {};
               toStore.id = account.account_id;
               toStore.user_id = user_id;
@@ -207,6 +203,7 @@ module.exports = {
         account.last_update = moment().format('YYYY-MM-DD');
         new models.Account(account).save();
         plaid.getAccountsAndTransactions(account.access_token, '1999-10-10', (transactions) => {
+          console.log('TRANSACSASDF', transactions)
           if (transactions) {
             transactions.transactions.forEach((transaction) => {
               let category = transaction.category ? transaction.category[0] : 'none';

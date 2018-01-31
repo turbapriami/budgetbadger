@@ -13,14 +13,16 @@ export default class Search extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let suggestions = nextProps.transactions.map(a => {
-      return a.name;
-    })
-    suggestions = Array.from(new Set(suggestions));
-    this.setState({
-      suggestions,
-      filtered: suggestions,
-    })
+    if (nextProps.transactions) {
+      let suggestions = nextProps.transactions.map(a => {
+        return a.name;
+      })
+      suggestions = Array.from(new Set(suggestions));
+      this.setState({
+        suggestions,
+        filtered: suggestions,
+      })
+    }
   }
 
   handleInput(e) {

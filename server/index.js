@@ -51,11 +51,11 @@ app.use('/graphiql', graphiqlExpress({
 }));
 
 
-app.use(express.static(path.join(__dirname, '../public/splash')))
+app.use(express.static(path.join(__dirname, '../public/main')))
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'))
+  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
 })
 
 app.use('/graphql',
