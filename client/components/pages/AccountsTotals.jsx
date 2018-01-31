@@ -5,13 +5,12 @@ const AccountsTotals = ({accounts}) => {
   if (accounts) {
     let cash = 0;
     let debt = 0;
-    for (let item of accounts.filter(account => account.current_balance >= 0)) {
+    for (let item of accounts.filter(account => account.type === 'depository')) {
       cash += item.current_balance
     }
-    for (let item of accounts.filter(account => account.current_balance < 0)) {
+    for (let item of accounts.filter(account => account.type === 'credit')) {
       debt += item.current_balance
     }
-    debt *= -1;
     return (
       <div>
         <Value 
