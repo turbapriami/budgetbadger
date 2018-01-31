@@ -44,6 +44,9 @@ const config = {
     historyApiFallback: true,
     contentBase: './public'
   },
+  watchOptions: {
+    poll: true
+  },
   plugins: [
     new webpack.DefinePlugin({ 'process.env':{ 'NODE_ENV': JSON.stringify('production') } }),
     new HardSourceWebpackPlugin()
