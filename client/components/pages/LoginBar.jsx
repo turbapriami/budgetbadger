@@ -4,6 +4,7 @@ import styles from '../../../public/main/jStyles'
 import ReactPlaidLink from 'react-plaid-link'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import Cookies from 'universal-cookie'
 
 class LoginBar extends Component {
   constructor(props) {
@@ -12,6 +13,11 @@ class LoginBar extends Component {
   }
   handleClick() {
     this.refs.plaid.handleOnClick()
+  }
+  handleLogout() {
+    console.log('loggin out')
+    new Cookies().remove('TOKEN')
+    window.location.reload()
   }
   handleOnSuccess(token, metadata) {
     this.props.mutate({
@@ -69,6 +75,7 @@ class LoginBar extends Component {
           <Anchor
             href='#'
             icon={<LogoutIcon size='small'/>}
+            onClick={()=> {this.handleLogout()}}
           >
             Sign out
           </Anchor>
