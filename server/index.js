@@ -28,10 +28,29 @@ const getToken = async (req) => {
   try {
     const { user } = await jwt.verify(token, APP_SECRET);
     req.user = user;
+      console.log(req.user)
   } catch (err) {
     console.log(err);
   }
   req.next()
+}
+
+// change to req.user to load splash
+const chooseDirectory = (req, res) => {
+  if (req.user) {
+    req.next()
+  } else {
+    res.redirect('/home')
+  }
+}
+
+// change to req.user to load splash
+const homeCheck = (req, res) => {
+  if (req.user) {
+    res.redirect('/')
+  } else {
+    req.next()
+  }
 }
 
 app.use(cors())
@@ -50,14 +69,6 @@ app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
 
-
-app.use(express.static(path.join(__dirname, '../public/splash')))
-
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'))
-})
-
 app.use('/graphql',
   bodyParser.json(), 
   logger,
@@ -75,7 +86,9 @@ app.use('/graphql',
 
 app.use(getToken); // => uncomment to enable authentication
 
-app.use(express.static(path.join(__dirname, '../public/main')));
+app.use('/home', homeCheck, express.static(path.join(__dirname, '../public/splash')));
+
+app.use(chooseDirectory, express.static(path.join(__dirname, '../public/main')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'));
