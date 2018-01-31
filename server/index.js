@@ -38,20 +38,19 @@ const getToken = async (req) => {
 
 const chooseDirectory = (req, res) => {
   if (req.user) {
-    console.log("OOKOKOKKKKKKK", req.user)
     req.next()
   } else {
     res.redirect('/home')
   }
 }
 
-// const homeCheck = (req, res) => {
-//   if (req.user) {
-//     res.redirect('/')
-//   } else {
-//     req.next()
-//   }
-// }
+const homeCheck = (req, res) => {
+  if (req.user) {
+    res.redirect('/')
+  } else {
+    req.next()
+  }
+}
 
 app.use(cors())
 
@@ -88,7 +87,7 @@ app.use('/graphql',
 
 app.use(getToken); // => uncomment to enable authentication
 
-app.use('/home', express.static(path.join(__dirname, '../public/splash')));
+app.use('/home', homeCheck, express.static(path.join(__dirname, '../public/splash')));
 
 app.use(chooseDirectory)
 
