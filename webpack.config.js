@@ -31,6 +31,41 @@ const config = {
         test: /\.css$/, 
         loader: "style-loader!css-loader" 
     },
+    {
+      test: /\.(png|jpg|gif)$/,
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            limit: 8192
+          }
+        }
+      ]
+    },
+    {
+      test: /\.(png|jpg|gif)$/,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[ext]',
+            outputPath: 'img/'
+          }
+        }
+      ]
+    },
+    {
+      test: /\.(gif|png|jpe?g|svg)$/i,
+      use: [
+        'file-loader',
+        {
+          loader: 'image-webpack-loader',
+          options: {
+            bypassOnDebug: true,
+          },
+        }
+      ],
+    },
     ],
     // rules: [
     //   {

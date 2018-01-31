@@ -10,6 +10,8 @@ const Profile = (props) => {
       Change Info
       <br/>
       Reset Password
+      <br/>
+      Bill Notifications
     </div>
   )
 }
