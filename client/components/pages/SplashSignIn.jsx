@@ -5,10 +5,6 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Cookies from 'universal-cookie'
 
-
-
-
-
 class SplashSignIn extends Component {
   constructor() {
     super()
@@ -28,13 +24,12 @@ class SplashSignIn extends Component {
           password,
         }
       })
-      console.log(result.data)
       const token = result.data.loginUser;
       const cookie = new Cookies();
       cookie.set('TOKEN', token);
     } catch(error) {
         console.log(error)
-      }
+    }
   }
 
   render() {
