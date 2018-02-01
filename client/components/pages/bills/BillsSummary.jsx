@@ -26,7 +26,7 @@ class BillsSummary extends Component {
               justify = 'center'
               style={{paddingTop:'45px'}}
             >
-              <Heading
+              <Heading  
                 align = 'left'
                 margin = 'none'
                 strong = 'true'
@@ -40,7 +40,7 @@ class BillsSummary extends Component {
               >
               ${this.props.bills ? this.props.bills
                 .filter(bill => (bill.paid === false))
-                .reduce((total, bill) => total += bill.amount, 0): 0 }
+                .reduce((total, bill) => total += bill.amount, 0).toFixed(2): 0 }
               </Paragraph>
               <Heading
                 align = 'left'

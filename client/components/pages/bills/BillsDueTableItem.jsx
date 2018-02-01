@@ -61,6 +61,7 @@ class BillsDueTableItem extends Component {
         <td>
           ${this.props.bill.amount}
         </td>
+        <td>
           <Menu 
             responsive={true}
             icon={<MoreIcon/>}>
@@ -93,6 +94,7 @@ class BillsDueTableItem extends Component {
             billEditFormToggle={this.state.billEditFormToggle} 
             handleFormToggle={this.handleEditFormToggle}
           />
+        </td>
       </TableRow>
       )
     }

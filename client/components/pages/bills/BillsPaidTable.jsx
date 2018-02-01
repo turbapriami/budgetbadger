@@ -32,7 +32,7 @@ class BillsPaidTable extends Component {
             <Table
               responsive = 'true'
             >
-              <TableHeader labels={['Bill Description', 'Category','Due Date', 'Paid Date', 'Amount','']}
+              <TableHeader labels={['Bill Description', 'Category','Due Date', 'Paid Date', 'Amount','Action']}
                 sortIndex={0}
                 sortAscending={true} />
               <tbody>

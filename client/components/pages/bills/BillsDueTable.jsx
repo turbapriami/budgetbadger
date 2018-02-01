@@ -52,9 +52,10 @@ class BillsDueTable extends Component {
           <Table
             responsive = 'true'
           >
-            <TableHeader labels={['Bill Description', 'Category', 'Due Date', 'Amount']}
+            <TableHeader labels={['Bill Description', 'Category', 'Due Date', 'Amount', 'Actions']}
               sortIndex={0}
-              sortAscending={true} />
+              sortAscending={true}
+              style={{align:"center"}}/>
             <tbody>
               {this.props.bills ? this.props.bills.filter(bill => (bill.paid === false)).map((bill) => 
               (<BillsDueTableItem bill={bill} bills = {this.props.bills} billCategories = {this.props.billCategories}/>)
