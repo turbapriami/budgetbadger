@@ -5,36 +5,12 @@ import Search from '../pages/transactions/Search.jsx'
 import PieChart from '../pages/transactions/PieChart.jsx'
 import SearchFilter from '../pages/transactions/SearchFilters.jsx'
 import { Box } from 'grommet'
+import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
-// import { TRANS_ACC_QUERY } from '../../queries.js';
+import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY } from '../../queries.js';
+import NewTransaction from '../pages/transactions/NewTransaction.jsx'
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag'
-
-const NEW_TRANS_MUTATION = gql`
-  mutation NEW_TRANS_MUTATION($user_id: Int!){
-    getUpdatedTransactions(user_id: $user_id) {
-      id
-    }
-  }
-`
-const withUpdatedTransactions = graphql(NEW_TRANS_MUTATION)
-
-const TRANS_ACC_QUERY = gql`
-  query TRANS_ACC_QUERY($user_id: Int!) {
-    getTransactions(user_id: $user_id) {
-      amount
-      name
-      account {
-        type
-        bank_name
-      }
-    }
-    getAccounts(user_id: $user_id) {
-      type
-      bank_name
-      id
-    }
-  }`
 
 const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   options: (props) => ({
@@ -45,6 +21,7 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   })
 })
 
+
 class TransactionContainer extends Component {
   constructor() {
     super()
@@ -53,19 +30,24 @@ class TransactionContainer extends Component {
       searchResult: [],
       categoryBreakdown: [],
       selected: 'All Debit & Credit',
-      displayModal: false
+      displayModal: false,
+      sorting: [false, false, false, false, false],
+      sortIdx: 0,
+      transactionForm: {
+        name: '',
+        category:'',
+        amount: 0,
+        type: '',
+        date:'',
+      }
     }
     this.filterTransactions = this.filterTransactions.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.generateCategories = this.generateCategories.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.sortTransactions = this.sortTransactions.bind(this);
-  }
-
-  componentWillMount() {
-    this.props.mutate({
-      variables: {user_id: 1}
-    })
+    this.newTransaction = this.newTransaction.bind(this);
+    this.handleForm = this.handleForm.bind(this);
   }
 
   filterTransactions(e, type) {
@@ -119,46 +101,75 @@ class TransactionContainer extends Component {
 
     this.setState({
       transactions: searchResult
-    }, () => console.log('hi'))
+    })
+  }
+
+  handleForm(e) {
+    let field = e.target.name;
+    let form = this.state.transactionForm;
+    form[field] = e.target.value;
+    console.log(form[field])
+    this.setState({
+      transactionForm: form,
+    })
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.transactions) {
+    if (nextProps.data.getTransactions) {
+      const transactions = nextProps.data.getTransactions.sort((a,b) => {
+        return new Date(b.date) - new Date(a.date)
+      })
       this.setState({
-        transactions: nextProps.data.getTransactions,
+        transactions
       },() => this.generateCategories())
     }
   }
 
   sortTransactions(index, direction) {
-    const { transactions } = this.state;
-    console.log()
+    const { transactions, sorting } = this.state;
     const labels = ['date', 'type', 'category','name', 'amount'];
-    const label = index === 2 ? labels[index]: labels[index];
+    const label = labels[index];
+    const directionS = sorting[index];
+    sorting[index] = !directionS;
     const sorted = transactions.sort((a, b) => {
-      return direction ?
-             a[label].toString().localeCompare(b[label].toString(), undefined, {numeric: true, sensitivity: 'base'}):
-             b[label].toString().localeCompare(a[label].toString(), undefined, {numeric: true, sensitivity: 'base'})
+      return sortingFuncs[label](a[label] || a, b[label] || a, directionS)
     })
     this.setState({
-      transactions: sorted,
+      sortIdx: index,
+      sorting,
+      transactions:sorted
     })
+
+  }
+
+  async newTransaction(e, date, type, description, amount, category = 'none') {
+    e.preventDefault()
+    const transaction = await this.props.mutate({
+      variables: {
+        date, type, description, amount, category
+      }
+    });
+    console.log(transaction)
   }
 
   render() {
     const { displayModal } = this.state;
+    // console.log(this.props)
     return (
       <div style={{padding: '5px'}}>
         <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
         { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
         <h2>{this.state.selected}</h2>
+        <div style={{marginLeft: '270px'}}>
+          <NewTransaction handleForm={this.handleForm} form={this.state.transactionForm}/>
+        </div>
         <div style={{ display: "flex"}} >
           <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
-          <TransactionList sort={this.sortTransactions} transactions={this.state.transactions} />        
+          <TransactionList sort={this.sortTransactions} sortIdx={this.state.sortIdx} dir={this.state.sorting[this.state.sortIdx]} transactions={this.state.transactions} />        
         </div>
       </div>
     )
   }
 }
 
-export default compose(withApollo, withUpdatedTransactions, withTransactionsAndAccounts)(TransactionContainer);
+export default compose(withApollo, withTransactionsAndAccounts, graphql(CREATE_TRANSACTION))(TransactionContainer);

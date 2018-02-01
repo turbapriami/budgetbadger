@@ -27,6 +27,7 @@ export default class Search extends Component {
 
   handleInput(e) {
     e.preventDefault();
+    console.log(e)
     e.charCode == 13 ? this.props.search(searchString): null;
     let suggestions = this.state.suggestions;
     let filtered = suggestions.filter(a => a.toLowerCase().includes(e.target.value));
