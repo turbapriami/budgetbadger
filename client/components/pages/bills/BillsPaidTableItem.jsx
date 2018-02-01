@@ -40,6 +40,12 @@ class BillsPaidTableItem extends Component {
         </td>
         <td>
           <Timestamp 
+            value={`${this.props.bill.due_date}`}
+            fields='date'
+          />
+        </td>
+        <td>
+          <Timestamp 
             value={`${this.props.bill.paid_date}`}
             fields='date'
           />

@@ -13,6 +13,7 @@ const BILLS_QUERY = gql`
     getBills(user_id: $user_id) {
       id
       user_id
+      bill_category_id
       description
       amount
       due_date

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button,Form, Heading, Header, Layer} from 'grommet';
+import {Box, Button,Form, Heading, Header, Layer, Columns} from 'grommet';
 import EditBillForm from '../bills/EditBillForm.jsx';
 import { gql, graphql } from 'react-apollo';
 
@@ -37,16 +37,32 @@ class DeleteBillForm extends Component {
           <Header>
             <Heading tag='h3' strong='true'>Are you sure you want to delete this bill?</Heading>
           </Header>
+          <Columns
+            justify='center'
+            size='small'
+            maxCount='2'
+          >
+          <Box 
+            align='center'
+            pad='small'
+          >
             <Button label='Cancel'
               primary={true}
               onClick={this.props.handleDeleteBillFormToggle} 
               style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 20px', border:'none'}}
             />
-            <Button label='Delete'
-              primary={true}
-              onClick={this.handleDeleteClick} 
-              style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 20px', border:'none'}}
-            />
+          </Box>
+          <Box 
+            align='center'
+            pad='small'
+          >
+              <Button label='Delete'
+                primary={true}
+                onClick={this.handleDeleteClick} 
+                style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 20px', border:'none'}}
+              />
+          </Box>
+          </Columns>
         </Form>
       </Layer>)
     } else { 

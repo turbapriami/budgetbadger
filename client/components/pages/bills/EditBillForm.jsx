@@ -46,8 +46,8 @@ class EditBillForm extends React.Component {
   
   handleBillCategoryChange(e) {
     let categoryID = this.props.billCategories.filter(categoryObj => categoryObj.name === e.value)[0].id;
-    this.setState({bill_category_description:e.value},() => {console.log(this.state.bill_category_description)});
-    this.setState({bill_category_id:categoryID}, ()=>{console.log(this.state.bill_category_id)});
+    this.setState({bill_category_description:e.value});
+    this.setState({bill_category_id:categoryID});
   }
 
   handleDescriptionType(e) {
