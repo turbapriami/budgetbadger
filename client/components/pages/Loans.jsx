@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import LoansContainer from '../containers/LoansContainer.jsx';
-import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput, Columns, Value, CurrencyIcon, LinkUpIcon } from 'grommet';
-import Chart, {Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots} from 'grommet/components/chart/Chart';
+import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput, Columns, Value, CurrencyIcon, LinkUpIcon, Split } from 'grommet';
+import Chart, { Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots } from 'grommet/components/chart/Chart';
 import { amortizationSchedule } from 'amortization';
 
-console.log(amortizationSchedule(50000, 5, 10))
+console.log(amortizationSchedule(100000, 20, 8.5))
 
 const precisionRound = (number, precision) => {
   var factor = Math.pow(10, precision);
@@ -20,10 +20,9 @@ class Loans extends React.Component {
     super(props)
     this.state = {
       chartPrincipal: [],
-      chartPayments: [],
       chartOutstanding: [],
       principal: 100000,
-      payLevel: 1000,
+      payLevel: 850,
       interestRate: 8.5,
       term: 20,
       inception: 2017,
@@ -35,7 +34,6 @@ class Loans extends React.Component {
   };
 
   handleAmort(){
-    if(this.state.principal === NaN){ return console.log("breaking out!") }
     var amort = amortizationSchedule(this.state.principal, this.state.term, this.state.interestRate);
     var principal = [];
     var payments = [];
@@ -43,32 +41,37 @@ class Loans extends React.Component {
     var interest = [];
 
     amort.forEach((payment) => {
-      principal.push(Math.floor(payment.principalBalance));
-      payments.push(Math.floor(payment.payment));
-      outstanding.push(this.state.principal - Math.floor(payment.principalBalance));
+      principal.push(payment.principalBalanceRounded);
+      payments.push(payment.payment);
+      outstanding.push(this.state.principal - payment.principalBalanceRounded);
       interest.push(payment.interestPayment);
-    });
+    })
 
     var totalinterest = interest.reduce((a, b) => { return a + b });
     var totalPayment = totalinterest + this.state.principal;
-    console.log('Helly',precisionRound(10000, 2));
 
     this.setState({
       chartPrincipal: principal,
       chartOutstanding: outstanding,
-      chartPayments: payments,
+      payLevel: payments[0],
       totalInterestPaid: precisionRound(totalinterest, 2),
       totalPayment: precisionRound(totalPayment, 2)
-    });
+    })
   };
 
   handleChange(e){
     e.preventDefault();
-    this.setState({
-      [e.target.name]: parseFloat(e.target.value)
-    }, () => {
-      this.handleAmort();
-    })
+    if(e.target.value > 0.1){
+      this.setState({
+        [e.target.name]: parseFloat(e.target.value)
+      }, () => {
+        this.handleAmort();
+      })
+    } else {
+      this.setState({
+        [e.target.name]: ''
+      })
+    }
   };
 
   componentWillMount(){
@@ -114,11 +117,6 @@ class Loans extends React.Component {
                     points={true}
                     activeIndex={-1} 
                     max={this.state.principal} />
-                  <Bar values={this.state.chartPayments}
-                    colorIndex='graph-2'
-                    points={true}
-                    activeIndex={-1} 
-                    max={this.state.principal} />
                   <Line values={this.state.chartPrincipal}
                     colorIndex='accent-1'
                     points={true}
@@ -127,17 +125,15 @@ class Loans extends React.Component {
                 </Layers>
                 <Axis count={3}
                   labels={[{"index": 0, "label": this.state.inception}, {"index": 1, "label": Math.floor(this.state.inception + this.state.term/2)}, {"index": 2, "label": this.state.inception + this.state.term}]} />
-                <Legend style={{fontSize: "20px"}} series={[{"label": "Total Paid", "colorIndex": "graph-1"}, {"label": "Payment", "colorIndex": "graph-2"}, {"label": "Balance Outstanding", "colorIndex": "accent-1"}]} />
+                <Legend style={{fontSize: "20px"}} series={[{"label": "Total Paid", "colorIndex": "graph-1"}, {"label": "Balance Outstanding", "colorIndex": "accent-1"}]} />
               </Chart>
             </Chart>
           </Headline>
         </Section>
-        <Section pad='large' justify='center' align='center'>
-          <Columns responsive={false}
-            size='medium'
-            justify='center'
-            masonry={true}
-            maxCount={2}>
+        <Split>
+          <Box justify='center'
+            align='center'
+            pad='medium'>
             <Headline margin='none' style={{fontSize: "20px"}}>
               Loan Amount ($)
               <p />
@@ -161,28 +157,32 @@ class Loans extends React.Component {
               <p />
               <NumberInput align='left' name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
             </Headline>
-            <Box align='right'
-              pad='medium'
-              margin='small'
+            </Box>
+            <Box align='center'
+              justify='center'
+              pad='large'
+              margin='large'
               colorIndex='light-2'>
               <Headline margin='none' align='center' style={{fontSize: "25px"}} >
                 Over loan term
                 <p />
               </Headline>
+              <Value value={numberWithCommas(this.state.payLevel)}
+                icon={<CurrencyIcon />}
+                label='Monthly Payments'
+                units='$' />
+                <p />
               <Value value={numberWithCommas(this.state.totalInterestPaid)}
                 icon={<CurrencyIcon />}
                 label='Total Interest Paid'
-                trendIcon={<LinkUpIcon />}
                 units='$' />
                 <p />
               <Value value={numberWithCommas(this.state.totalPayment)}
                 icon={<CurrencyIcon />}
                 label='Total Payment'
-                trendIcon={<LinkUpIcon />}
                 units='$' />
             </Box>
-          </Columns>
-        </Section>
+        </Split>
       </div>
     )
   }
