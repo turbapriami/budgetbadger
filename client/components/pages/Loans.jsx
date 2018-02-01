@@ -4,7 +4,7 @@ import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Sect
 import Chart, { Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots } from 'grommet/components/chart/Chart';
 import { amortizationSchedule } from 'amortization';
 
-console.log(amortizationSchedule(100000, 20, 8.5))
+// console.log(amortizationSchedule(100000, 20, 8.5))
 
 const precisionRound = (number, precision) => {
   var factor = Math.pow(10, precision);
@@ -21,7 +21,7 @@ class Loans extends React.Component {
     this.state = {
       chartPrincipal: [],
       chartOutstanding: [],
-      principal: 100000,
+      principal: 45000,
       payLevel: 850,
       interestRate: 8.5,
       term: 20,
@@ -130,10 +130,11 @@ class Loans extends React.Component {
             </Chart>
           </Headline>
         </Section>
-        <Split>
+        <Split fixed={false}>
           <Box justify='center'
             align='center'
-            pad='medium'>
+            pad='large'>
+            <p />
             <Headline margin='none' style={{fontSize: "20px"}}>
               Loan Amount ($)
               <p />
@@ -150,12 +151,6 @@ class Loans extends React.Component {
               Loan Term (Years)
               <p />
               <NumberInput align='left' name='term' value={this.state.term} onChange={this.handleChange} />
-            </Headline>
-            <p />
-            <Headline margin='none' style={{fontSize: "20px"}}>
-              Monthly Payment ($)
-              <p />
-              <NumberInput align='left' name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
             </Headline>
             </Box>
             <Box align='center'
@@ -190,3 +185,14 @@ class Loans extends React.Component {
 
 
 module.exports = Loans;
+
+
+
+// Monthly Payments input field to be put back when it is dynamic
+
+// <p />
+// <Headline margin='none' style={{fontSize: "20px"}}>
+//   Monthly Payment ($)
+//   <p />
+//   <NumberInput align='left' name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
+// </Headline>
