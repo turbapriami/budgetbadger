@@ -163,4 +163,10 @@ const createBill = gql`
   }`;
 
 
-export default graphql(createBill)(AddBillForm);
+export default graphql(createBill, {
+  options: {
+    refetchQueries: [
+      'BILLS_QUERY'
+    ],
+  }
+})(AddBillForm);

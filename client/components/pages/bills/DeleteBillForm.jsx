@@ -76,4 +76,13 @@ const deleteBill = gql`
     deleteBill(id: $id)
   }`;
 
-export default graphql(deleteBill)(DeleteBillForm);
+export default graphql(deleteBill, {
+  options: {
+    refetchQueries: [
+      'BILLS_QUERY'
+    ],
+  }
+})(DeleteBillForm);
+
+
+

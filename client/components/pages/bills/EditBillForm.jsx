@@ -179,4 +179,10 @@ const updateBill = gql`
     }
   }`;
 
-export default graphql(updateBill)(EditBillForm);
+export default graphql(updateBill, {
+  options: {
+    refetchQueries: [
+      'BILLS_QUERY'
+    ],
+  }
+})(EditBillForm);
