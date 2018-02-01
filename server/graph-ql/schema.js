@@ -43,6 +43,7 @@ module.exports = `
 
   type Transaction {
     id: Int!
+    plaid_id: String
     user_id: Int!
     amount: Float!
     category: String!
@@ -56,10 +57,20 @@ module.exports = `
     account: [Account!]
   }
 
-  type Category {
+  type Daily_Transaction {
     id: Int!
+    plaid_id: String
+    user_id: Int!
+    amount: Float!
+    category: String!
+    date: String!
     name: String!
-    transactions: [Transaction!]
+    account_id: String
+    street: String
+    zip_code: String
+    state: String
+    user: [User!]
+    account: [Account!]
   }
 
   type Account {
@@ -81,6 +92,7 @@ module.exports = `
   type Bank {
     id: String!
     access_token: String!
+    last_updated: Date
     user_id: Int!
     accounts: [Account!]
   }
@@ -95,7 +107,7 @@ module.exports = `
     paid: Boolean
     paid_date: Date
     alert: Boolean
-    bill_category: [Category!]
+    bill_category: [BillCategory!]
   }
 
   type BillCategory {
@@ -109,12 +121,10 @@ module.exports = `
     getTransactions(user_id: Int!): [Transaction!]
     getAccounts(user_id: Int!): [Account!]
     getAccount(account_id: String!): [Account!]
-    getCategories(name: String!): [Category!]
-    getCategory(category_id: String!): [Category!]
     getSchools(user_id: Int!): [School!]
     getBill(id: Int!): [Bill!]
     getBills(user_id: Int!): [Bill!]
-    getBillCategories(user_id: Int): [Category!]
+    getBillCategories(user_id: Int): [BillCategory!]
     getLoans(user_id: Int!): [Loan!]
     getLoanPayments(loan_id: Int!): [Loan_Payment!]
   }
@@ -123,7 +133,6 @@ module.exports = `
     createTransaction(user_id: Int!, amount: Float!, date: String!, category: String!, name: String!, account_id: String!, street: String, zip_code: String, state: String ): Transaction
     createUser(email: String!, password: String!): User
     createAccount(id: String!, user_id: Int!, bank_name: String!, bank_id: String!, type: String!, current_balance: Int!): Account!
-    createCategory(name: String!): Category
     createSchool(name: String!): School!
     createLoan(name: String!, amount: Int!, interest_rate: Int!, inception_date: String!, end_date: String!, user_id: Int!, recurrence: String!): Loan
     createLoanPayment(amount: Int!, date: String!, loan_id: Int!, user_id: Int!): Loan_Payment

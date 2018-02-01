@@ -55,6 +55,7 @@ knex.schema.hasTable('transactions').then(exists => {
   if (!exists) {
     knex.schema.createTable('transactions', table => {
       table.increments('id').primary();
+      table.string('plaid_id');
       table.integer('user_id');
       table.string('category');
       table.string('account_id');
@@ -65,6 +66,24 @@ knex.schema.hasTable('transactions').then(exists => {
       table.string('zip_code');
       table.string('state');
     }).then(() => console.log('created table transactions'))
+  }
+})
+
+knex.schema.hasTable('daily_transactions').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('daily_transactions', table => {
+      table.increments('id').primary();
+      table.string('plaid_id');
+      table.integer('user_id');
+      table.string('category');
+      table.string('account_id');
+      table.string('amount');
+      table.string('date');
+      table.string('name');
+      table.string('street');
+      table.string('zip_code');
+      table.string('state');
+    }).then(() => console.log('created table daily_transactions'))
   }
 })
 
@@ -81,16 +100,6 @@ knex.schema.hasTable('accounts').then(exists => {
       table.string('bank_id');
       table.string('last_update');
     }).then(() => console.log('created table accounts'))
-  }
-})
-
-knex.schema.hasTable('categories').then(exists => {
-  if (!exists) {
-    knex.schema.createTable('categories', table => {
-      table.increments('id').primary();
-      table.string('plaid_id');
-      table.string('name');
-    }).then(() => console.log('created table categories'))
   }
 })
 

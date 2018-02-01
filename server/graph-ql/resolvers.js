@@ -63,25 +63,13 @@ module.exports = {
     account: ({ account_id }, args, { knex }) => 
       knex('accounts').where({
         id: account_id
-      }),
-
-    // category: ({ category_id }, args, { knex }) =>
-    //   knex('categories').where({
-    //     id: category_id
-    //   })
+      })
   },
 
   Account: {
     transactions: ({ id }, args, { knex }) => 
       knex('transactions').where({
         account_id: id
-      })
-  },
-
-  Category: {
-    transactions: ({ id }, args, { knex }) => 
-      knex('transactions').where({
-        category_id: id
       })
   },
 
@@ -126,16 +114,7 @@ module.exports = {
       knex('accounts').where({
         account_id
       }),
-
-    getCategories: (parent, args, { knex }) => 
-      knex('categories').where({
-      }),
-
-    getCategory: (parent, { category_id }, { knex }) =>
-      knex('categories').where({
-        category_id
-      }),
-
+  
     getSchools: (parent, { id }, { knex }) =>
       knex.select().from('schools').where({
         id
@@ -286,11 +265,7 @@ module.exports = {
       const bank = await new models.Bank(args).save(null, {method: 'insert'});
       return bank.attributes;
     },
-
-    createCategory: async (parent, args, { models }) => {
-      const category = await new models.Category(args).save(null, {method: 'insert'});
-      return category.attributes;
-    },
+    
     createBill: async (parent, args, { models }) => {
       const bill = await new models.Bill(args).save(null, {method: 'insert'});
       return bill.attributes;
