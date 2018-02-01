@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Columns from 'grommet/components/Columns'
-import Box from 'grommet/components/Box'
-import Spinning from 'grommet/components/icons/Spinning';
+import Spinner from '../pages/Spinner.jsx'
 import AccountsTable from '../pages/AccountsTable.jsx'
 import AccountsTotals from '../pages/AccountsTotals.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
@@ -23,14 +21,8 @@ class AccountsOverview extends React.Component {
       )
     } else {
       return (
-        <div>
-          <Columns justify='center' size='large'>
-            <Box align='center' pad='large'>
-              <Spinning size='huge' />
-            </Box>
-          </Columns>
-        </div>
-      ) 
+        <Spinner />
+      );
     }
   }
 };

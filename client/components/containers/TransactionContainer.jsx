@@ -5,6 +5,7 @@ import Search from '../pages/transactions/Search.jsx'
 import PieChart from '../pages/transactions/PieChart.jsx'
 import SearchFilter from '../pages/transactions/SearchFilters.jsx'
 import { Box } from 'grommet'
+import Spinner from '../pages/Spinner.jsx';
 import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY } from '../../queries.js';
@@ -155,20 +156,26 @@ class TransactionContainer extends Component {
   render() {
     const { displayModal } = this.state;
     // console.log(this.props)
-    return (
-      <div style={{padding: '5px'}}>
-        <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
-        { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
-        <h2>{this.state.selected}</h2>
-        <div style={{marginLeft: '270px'}}>
-          <NewTransaction handleForm={this.handleForm} form={this.state.transactionForm}/>
+    if (this.props.data.getAccounts) {
+      return (
+        <div style={{padding: '5px'}}>
+          <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
+          { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
+          <h2>{this.state.selected}</h2>
+          <div style={{marginLeft: '270px'}}>
+            <NewTransaction handleForm={this.handleForm} form={this.state.transactionForm}/>
+          </div>
+          <div style={{ display: "flex"}} >
+            <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
+            <TransactionList sort={this.sortTransactions} sortIdx={this.state.sortIdx} dir={this.state.sorting[this.state.sortIdx]} transactions={this.state.transactions} />        
+          </div>
         </div>
-        <div style={{ display: "flex"}} >
-          <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
-          <TransactionList sort={this.sortTransactions} sortIdx={this.state.sortIdx} dir={this.state.sorting[this.state.sortIdx]} transactions={this.state.transactions} />        
-        </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <Spinner />
+      )
+    }
   }
 }
 
