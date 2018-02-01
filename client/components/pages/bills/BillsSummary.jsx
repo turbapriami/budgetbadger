@@ -26,7 +26,7 @@ class BillsSummary extends Component {
               justify = 'center'
               style={{paddingTop:'45px'}}
             >
-              <Heading
+              <Heading  
                 align = 'left'
                 margin = 'none'
                 strong = 'true'
@@ -38,7 +38,9 @@ class BillsSummary extends Component {
                 size='xlarge'
                 style = {{textAlign:'center'}}
               >
-                $1,421
+              ${this.props.bills ? this.props.bills
+                .filter(bill => (bill.paid === false))
+                .reduce((total, bill) => total += bill.amount, 0).toFixed(2): 0 }
               </Paragraph>
               <Heading
                 align = 'left'
@@ -51,7 +53,7 @@ class BillsSummary extends Component {
               <Paragraph 
               size = 'xlarge' 
               style = {{textAlign:'center'}}>
-                $3,139
+                NEED TO GET DYNAMIC DATA
               </Paragraph>
               <Heading
                 align='left'
@@ -63,7 +65,7 @@ class BillsSummary extends Component {
               </Heading>
               <Paragraph size='xlarge'
                style = {{textAlign:'center'}}>
-                $17,000
+                NEED TO GET DYNAMIC DATA
               </Paragraph>
               </Columns>
           </div>)

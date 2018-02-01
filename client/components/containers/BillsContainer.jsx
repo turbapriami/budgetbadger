@@ -13,6 +13,7 @@ const BILLS_QUERY = gql`
     getBills(user_id: $user_id) {
       id
       user_id
+      bill_category_id
       description
       amount
       due_date
@@ -24,6 +25,7 @@ const BILLS_QUERY = gql`
       }
     }
     getBillCategories(user_id: $user_id) {
+      id
       name
     }
   }`
@@ -45,7 +47,7 @@ class BillsContainer extends Component {
   render() {
     return (
       <div>
-        <BillsSummary/>
+        <BillsSummary bills={this.props.data.getBills}/>
         <BillsDueTable bills={this.props.data.getBills} billCategories={this.props.data.getBillCategories}/>
         <BillsPaidTable bills={this.props.data.getBills}/>
       </div>)
