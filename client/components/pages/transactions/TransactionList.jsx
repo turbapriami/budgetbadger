@@ -7,13 +7,16 @@ import { Box } from 'grommet'
 
 
 
-const TransactionList = ({ transactions, sort }) => (
+const TransactionList = ({ transactions, sort, dir, sortIdx }) => (
       <Table>
         <TableHeader
           labels={['Date', 'Type', 'Category','Description', 'Amount']}
-          sortIndex={0}
-          sortAscending={false}
-          onSort={(index, direction) => sort(index, direction)}
+          sortIndex={sortIdx}
+          sortAscending={dir}
+          onSort={(index, direction) => {
+            sort(index, direction)
+          }
+          }
         />
         {
           transactions ? 
