@@ -27,6 +27,7 @@ const UPDATE_TRANSACTIONS = gql`
     }
   }`
 
+<<<<<<< HEAD
 const CREATE_TRANSACTION = gql`
   mutation CREATE_TRANSACTION($user_id: Int!, $amount: Float!, $category: String, $name: String!, $account: String) {
     createTransaction(user_id: $user_id, amount: $amount, category: $category, name: $name, account: $account) {
@@ -38,8 +39,15 @@ const CREATE_TRANSACTION = gql`
         type
         bank_name
       }
+=======
+export const CREATE_TRANSACTION = gql`
+  mutation CREATE_TRANSACTION($user_id: Int!, $amount: Float!, $date: String!, $category: String!, $name: String!, $account_id: String!) {
+    createTransaction(user_id: $user_id, amount: $amount, date: $date, category: $category, name: $name, account_id: $account_id) {
+      id
+>>>>>>> new-trans
     }
-  }`
+  }
+  `
 
 const NEW_BANK_QUERY = gql`
   mutation NEW_BANK_QUERY($user_id: Int!, $public_key: String!) {
