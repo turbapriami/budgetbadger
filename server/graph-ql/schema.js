@@ -112,6 +112,7 @@ module.exports = `
     getCategories(name: String!): [Category!]
     getCategory(category_id: String!): [Category!]
     getSchools(user_id: Int!): [School!]
+    getBill(id: Int!): [Bill!]
     getBills(user_id: Int!): [Bill!]
     getBillCategories(user_id: Int): [Category!]
     getLoans(user_id: Int!): [Loan!]
@@ -139,7 +140,7 @@ module.exports = `
       phone: String): User
     createBill(user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, due_date: Date!, paid: Boolean, paid_date: Date, alert: Boolean): Bill!
     deleteBill(id: Int!): Int!
-    updateBill(id: Int!, user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, due_date: Date!, paid: Boolean, paid_date: Date, alert: Boolean): Bill!
+    updateBill(id: Int!, user_id: Int!, bill_category_id: Int, description: String, amount: Float, due_date: Date, paid: Boolean, paid_date: Date, alert: Boolean): Bill
     createBillCategory(name: String!): BillCategory!
     updateBillCategory(id: Int!, name: String!): BillCategory!
     deleteBillCategory(id: Int!): Int!

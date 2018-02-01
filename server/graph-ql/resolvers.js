@@ -145,6 +145,11 @@ module.exports = {
       knex('bill_categories').where({
       }),
     
+    getBill: (parent, { id }, { knex }) => 
+    knex('bills').where({
+      id
+    }),
+
     getBills: (parent, { user_id }, { knex }) => 
       knex('bills').where({
         user_id
