@@ -24,16 +24,16 @@ class EditBillForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.bill.id,
-      user_id:this.props.bill.user_id,
-      bill_category_id:this.props.bill.bill_category_id,
-      bill_category_description:this.props.bill.bill_category[0].name,
-      description:this.props.bill.description,
-      amount:this.props.bill.amount,
-      due_date:this.props.bill.due_date,
-      paid:this.props.bill.paid,
-      paid_date:this.props.bill.paid_date,
-      alert:this.props.bill.alert
+      id: '',
+      user_id:'',
+      bill_category_id:'',
+      bill_category_description:'',
+      description:'',
+      amount:'',
+      due_date:'',
+      paid:'',
+      paid_date:'',
+      alert:''
     }
     this.handleBillCategoryChange = this.handleBillCategoryChange.bind(this);
     this.handleBillAmountChange = this.handleBillAmountChange.bind(this);
@@ -44,7 +44,21 @@ class EditBillForm extends React.Component {
     this.handleUpdateClick = this.handleUpdateClick.bind(this);
     this.handleCancelUpdateClick = this.handleCancelUpdateClick.bind(this);
   }
-  
+
+  componentWillReceiveProps(){
+    this.setState({id: this.props.selectedBill.id,
+      user_id:this.props.selectedBill.user_id,
+      bill_category_id:this.props.selectedBill.bill_category_id,
+      bill_category_description:(this.props.selectedBill.bill_category ? this.props.selectedBill.bill_category[0].name : ''),
+      description:this.props.selectedBill.description,
+      amount:this.props.selectedBill.amount,
+      due_date: (this.props.selectedBill.due_date ? convertDateFormat(this.props.selectedBill.due_date) : ''),
+      paid:this.props.selectedBill.paid,
+      paid_date:this.props.selectedBill.paid_date,
+      alert:this.props.selectedBill.alert});
+  }
+
+
   handleBillCategoryChange(e) {
     console.log('state', this.state)
     let categoryID = this.props.billCategories.filter(categoryObj => categoryObj.name === e.value)[0].id;
@@ -151,7 +165,7 @@ class EditBillForm extends React.Component {
                 format='MM/DD/YYYY'
                 step={5}
                 onChange={this.handleDueDateChange}
-                value={convertDateFormat(this.state.due_date)} 
+                value={this.state.due_date} 
             />
             </div>
           </Heading>

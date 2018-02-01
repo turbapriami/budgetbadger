@@ -9,7 +9,8 @@ class BillsDueTableItem extends Component {
     super(props);
     this.state = {
       billEditFormToggle: false,
-      deleteBillFormToggle: false
+      deleteBillFormToggle: false,
+      selectedBill: {}
     }
     this.onMarkPaidClick = this.onMarkPaidClick.bind(this);
     this.handleEditFormToggle = this.handleEditFormToggle.bind(this);
@@ -34,7 +35,9 @@ class BillsDueTableItem extends Component {
         console.log('there was an error sending the query', error);
       });
   }
-
+  handleMenuClick(bill) { 
+    this.setState({selectedBill: bill});
+  }
 
   handleEditFormToggle() {
     this.setState({billEditFormToggle: !this.state.billEditFormToggle});
@@ -64,7 +67,7 @@ class BillsDueTableItem extends Component {
         <td>
           <Menu 
             responsive={true}
-            onClick={()=>{this.props.getCurrentBill(this.props.bill)}}
+            onClick={()=>{this.handleMenuClick(this.props.bill)}}
             icon={<MoreIcon/>}>
             <Anchor 
               icon={<CheckmarkIcon/>}
@@ -88,8 +91,8 @@ class BillsDueTableItem extends Component {
             deleteBillFormToggle={this.state.deleteBillFormToggle} 
             handleDeleteBillFormToggle={this.handleDeleteBillFormToggle}
           />
-          <EditBillForm 
-            bill = {this.props.bill} 
+          <EditBillForm
+            selectedBill = {this.state.selectedBill}
             bills = {this.props.bills} 
             billCategories = {this.props.billCategories} 
             billEditFormToggle={this.state.billEditFormToggle} 
