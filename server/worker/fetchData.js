@@ -1,22 +1,21 @@
-const banks = [ {
-    id: 'x36QeJXemLs6GMAjq5DvT16bJDo4NVsyaZXwN',
-    access_token: 'access-sandbox-d6993e81-16d3-4b11-aee4-fedf8bb9670a',
-    user_id: 1 } ]
+// const banks = [ {
+//     id: 'x36QeJXemLs6GMAjq5DvT16bJDo4NVsyaZXwN',
+//     access_token: 'access-sandbox-d6993e81-16d3-4b11-aee4-fedf8bb9670a',
+//     user_id: 1 } ]
 
-// const knex = require('../database/index.js').knex;
+const knex = require('../database/index.js').knex;
 const models = require('../database/index.js');
 const Promise = require('bluebird');
 const plaid = require('../plaid.js');
 
-// const fetchBanks = () => {
-//   return knex.select('*').from('banks').then(res => {
-//     return res
-//   });
-// }
+const fetchBanks = () => {
+  return knex.select('*').from('banks').then(res => {
+    return res
+  });
+}
 
 const fetchTransactions = async (banks) => {
-  const date1 = new Date(Date.now() - 864e5)
-  const date = '1990-10-10'
+  const date = new Date(Date.now() - 864e5)
   const banks = await fetchBanks()
   return await Promise.all(banks.map(async (bank) => {
     let user = await plaid.getAccountsAndTransactions(bank.access_token, date)
@@ -40,18 +39,27 @@ const parseTransactions = async () => {
         amount: transaction.amount,
         name: transaction.name
       }
-      new models.Transaction({plaid_id: transaction.id})
-      .fetch()
+      knex('daily_transactions').where({plaid_id: transaction.id})
       .then(exists => {
         if (!exists) {
-          new models.Transaction(newTransaction).save(null, {method: 'insert'});
+          knex('daily_transactions').insert(newTransaction);
         }
       })
     })
   })
 }
 
-module.exports = parseTransactions;
+const submitToMain = async () => {
+  const endOfDayTransactions = await knex.select('*').from('daily_transactions');
+  knex('transactions').insert(endOfDayTransactions).then(() => {
+    knex.raw(`DELETE * FROM daily_transactions WHERE id > 0`)
+  });
+}
+
+module.exports = {
+  parseTransactions,
+  submitToMain
+}
 
 
 // console.log(plaid.getAccountsAndTransactions(banks[0].access_token, '1990-10-10').then(res =>console.log(res)))
