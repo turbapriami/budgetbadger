@@ -8,7 +8,6 @@ import BillsPaidTableItem from './BillsPaidTableItem.jsx';
 class BillsPaidTable extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
   }
 
   render() {
@@ -16,7 +15,6 @@ class BillsPaidTable extends Component {
         <div>
           <Columns
               size = 'large'
-              masonry = {true}
               justify = 'center'
           >
             <Section style={{width:'1030px'}}>
@@ -32,9 +30,7 @@ class BillsPaidTable extends Component {
             <Table
               responsive = 'true'
             >
-              <TableHeader labels={['Bill Description', 'Category','Due Date', 'Paid Date', 'Amount','Action']}
-                sortIndex={0}
-                sortAscending={true} />
+              <TableHeader labels={['Bill Description', 'Category','Due Date', 'Paid Date', 'Amount','Action']}/>
               <tbody>
                 {this.props.bills ? this.props.bills.filter(bill => bill.paid === true).map((bill) => 
                 (<BillsPaidTableItem bill={bill}/>)

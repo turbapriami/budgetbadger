@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
-import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
+import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
 import billsQuery from '../../containers/BillsContainer.jsx';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -42,9 +42,11 @@ class EditBillForm extends React.Component {
     this.handleDescriptionSelect = this.handleDescriptionSelect.bind(this);
     this.handleAlertChange = this.handleAlertChange.bind(this);
     this.handleUpdateClick = this.handleUpdateClick.bind(this);
+    this.handleCancelUpdateClick = this.handleCancelUpdateClick.bind(this);
   }
   
   handleBillCategoryChange(e) {
+    console.log('state', this.state)
     let categoryID = this.props.billCategories.filter(categoryObj => categoryObj.name === e.value)[0].id;
     this.setState({bill_category_description:e.value});
     this.setState({bill_category_id:categoryID});
@@ -70,6 +72,10 @@ class EditBillForm extends React.Component {
     this.setState({alert: !this.state.alert});
   }
   
+  handleCancelUpdateClick(){
+    this.props.handleFormToggle();
+  }
+
   handleUpdateClick() {
     this.props.handleFormToggle();
     let variables = {
@@ -150,11 +156,32 @@ class EditBillForm extends React.Component {
             </div>
           </Heading>
           <Footer pad={{"vertical": "medium"}}>
-            <Button label='Update'
-              primary={true}
-              onClick={this.handleUpdateClick} 
-              style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
-            />
+            <Columns
+              justify='center'
+              size='small'
+              maxCount='2'
+            >
+              <Box 
+                align='center'
+                pad='small'
+              >
+                <Button label='Update'
+                  primary={true}
+                  onClick={this.handleUpdateClick} 
+                  style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
+                />
+              </Box>
+              <Box 
+                align='center'
+                pad='small'
+              >
+                <Button label='Cancel'
+                  primary={true}
+                  onClick={this.handleCancelUpdateClick} 
+                  style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
+                />
+              </Box>
+            </Columns>
           </Footer>
         </Form>
       </Layer>)
