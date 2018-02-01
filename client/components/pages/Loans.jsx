@@ -4,7 +4,7 @@ import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Sect
 import Chart, { Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots } from 'grommet/components/chart/Chart';
 import { amortizationSchedule } from 'amortization';
 
-console.log(amortizationSchedule(100000, 20, 8.5))
+// console.log(amortizationSchedule(100000, 20, 8.5))
 
 const precisionRound = (number, precision) => {
   var factor = Math.pow(10, precision);

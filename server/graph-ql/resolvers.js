@@ -250,6 +250,7 @@ module.exports = {
     },
 
     createTransaction: async (parent, args, { models }) => {
+      console.log('adding transaction')
       const transaction = await new models.Transaction(args).save(null, {method: 'insert'});
       return transaction.attributes;
     },

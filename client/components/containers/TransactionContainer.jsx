@@ -7,7 +7,7 @@ import SearchFilter from '../pages/transactions/SearchFilters.jsx'
 import { Box } from 'grommet'
 import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
-import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY } from '../../queries.js';
+import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
 import NewTransaction from '../pages/transactions/NewTransaction.jsx'
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag'
@@ -20,6 +20,15 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
     name: 'TransactionsAndAccounts'
   })
 })
+
+// const createNewTransaction = graphql(UPDATE_TRANSACTIONS, {
+//   options: (props) => ({
+//     variables: {
+//      user_id: 1 
+//     },
+//     name: 'createNewTransaction'
+//   })
+// })
 
 
 class TransactionContainer extends Component {
@@ -36,9 +45,9 @@ class TransactionContainer extends Component {
       transactionForm: {
         name: '',
         category:'',
-        amount: 0,
+        amount: '',
         type: '',
-        date:'',
+        date:'YYYY-M-D',
       }
     }
     this.filterTransactions = this.filterTransactions.bind(this);
@@ -104,11 +113,10 @@ class TransactionContainer extends Component {
     })
   }
 
-  handleForm(e) {
-    let field = e.target.name;
+  handleForm(e, value) {
+    let field = e.target ? e.target.name : e;
     let form = this.state.transactionForm;
-    form[field] = e.target.value;
-    console.log(form[field])
+    form[field] = e.target ? e.target.value : value;
     this.setState({
       transactionForm: form,
     })
@@ -142,26 +150,27 @@ class TransactionContainer extends Component {
 
   }
 
-  async newTransaction(e, date, type, description, amount, category = 'none') {
+  async newTransaction(e) {
     e.preventDefault()
-    const transaction = await this.props.mutate({
-      variables: {
-        date, type, description, amount, category
-      }
-    });
-    console.log(transaction)
+    const variables = this.state.transactionForm;
+    variables.user_id = 1;
+    variables.account_id = 'ejRmkzJkD4I9lMKy3AEqUw5kjD59Wmty39BML'
+    variables.amount = Number(variables.amount);
+    const { user_id, account_id, name, type, amount, date} = variables;
+    const transaction = await this.props.mutate({variables});
+
+    console.log('trans', transaction)
   }
 
   render() {
     const { displayModal } = this.state;
-    // console.log(this.props)
     return (
       <div style={{padding: '5px'}}>
         <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
         { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
         <h2>{this.state.selected}</h2>
         <div style={{marginLeft: '270px'}}>
-          <NewTransaction handleForm={this.handleForm} form={this.state.transactionForm}/>
+          <NewTransaction handleForm={this.handleForm} submitForm={this.newTransaction} form={this.state.transactionForm}/>
         </div>
         <div style={{ display: "flex"}} >
           <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
@@ -172,4 +181,4 @@ class TransactionContainer extends Component {
   }
 }
 
-export default compose(withApollo, withTransactionsAndAccounts, graphql(CREATE_TRANSACTION))(TransactionContainer);
+export default compose(withApollo, graphql(CREATE_TRANSACTION), withTransactionsAndAccounts)(TransactionContainer);
