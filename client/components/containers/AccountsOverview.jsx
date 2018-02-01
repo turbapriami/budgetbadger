@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Spinner from '../pages/Spinner.jsx'
 import AccountsTable from '../pages/AccountsTable.jsx'
 import AccountsTotals from '../pages/AccountsTotals.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
@@ -9,17 +10,20 @@ class AccountsOverview extends React.Component {
     super(props)
   }
 
-  componentDidUpdate() {
-    console.log(this.props.data)
-  }
-
   render(){
-    return(
-      <div>
-        <AccountsTotals accounts={this.props.data.getAccounts} />
-        <AccountsTable accounts={this.props.data.getAccounts} />
-      </div>
-    )
+    console.log('helloooooo')
+    if (this.props.data.getAccounts) {
+      return(
+        <div>
+          <AccountsTotals accounts={this.props.data.getAccounts} />
+          <AccountsTable accounts={this.props.data.getAccounts} />
+        </div>
+      )
+    } else {
+      return (
+        <Spinner />
+      );
+    }
   }
 };
 

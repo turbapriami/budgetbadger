@@ -18,6 +18,8 @@ const port = process.env.PORT || 1337;
 
 const app = express();
 
+app.use(cookieParser())
+
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -59,8 +61,6 @@ app.use(morgan('dev'))
 app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
 app.use(/\/((?!graphql).)*/, bodyParser.json());
 app.use(bodyParser.text({ type: 'text/plain' }));
-
-app.use(cookieParser())
 
 const logger = (req, res, next) => {
   console.log(req.body)
