@@ -75,7 +75,7 @@ class AddBillForm extends React.Component {
           bill_category_id:'',
           bill_category_description:'',
           description:'',
-          paind: false,
+          paid: false,
           amount:'$0.00',
           due_date:'',
         });

@@ -9,28 +9,11 @@ class BillsDueTableItem extends Component {
     super(props);
     this.state = {
       billEditFormToggle: false,
-      deleteBillFormToggle: false,
-      selectedBill: {
-        "id":12,
-        "user_id":1,
-        "bill_category_id":3,
-        "description":"NetflicASCASCxV8",
-        "amount":34.55,
-        "due_date":"2018-02-09T05:00:00.000Z",
-        "paid":false,
-        "paid_date":null,
-        "alert":null,
-        "bill_category":[
-          {"name":"Miscellaneous",
-          "__typename":"Category"}
-          ],
-        "__typename":"Bill"
-      }
+      deleteBillFormToggle: false
     }
     this.onMarkPaidClick = this.onMarkPaidClick.bind(this);
     this.handleEditFormToggle = this.handleEditFormToggle.bind(this);
     this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(this);
-    this.handleMenuClick = this.handleMenuClick.bind(this);
   }
   
   onMarkPaidClick(bill) {
@@ -61,11 +44,6 @@ class BillsDueTableItem extends Component {
     this.setState({deleteBillFormToggle: !this.state.deleteBillFormToggle});
   }
 
-  handleMenuClick() {
-    this.setState({selectedBill: this.props.bill}, ()=>{console.log('selectedBill Set to ', JSON.stringify(this.state.selectedBill))});
-  
-  }
-
   render() {
     return (<TableRow>
         <td>
@@ -86,7 +64,7 @@ class BillsDueTableItem extends Component {
         <td>
           <Menu 
             responsive={true}
-            onClick={this.handleMenuClick}
+            onClick={()=>{this.props.getCurrentBill(this.props.bill)}}
             icon={<MoreIcon/>}>
             <Anchor 
               icon={<CheckmarkIcon/>}

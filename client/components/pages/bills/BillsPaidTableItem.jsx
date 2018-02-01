@@ -8,7 +8,6 @@ import gql from 'graphql-tag'
 class BillsPaidTableItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
     this.onMarkUnpaidClick = this.onMarkUnpaidClick.bind(this)
   }
 
@@ -19,7 +18,6 @@ class BillsPaidTableItem extends Component {
       paid:false,
       paid_date:null,
     }
-
     this.props.mutate({
       variables: variables
     }).then(({ data }) => {
