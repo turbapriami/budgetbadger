@@ -8,7 +8,7 @@ const Splash = ({ match, location, history }) => {
 
 
           <Box full="horizontal">
-            <Hero background={<img src='/splash/img/download.jpg' fit="cover" full={true} />}>
+            <Hero background={<img src='/img/download.jpg' fit="cover" full={true} />}>
               <Box direction="row" justify="center" align="center">
                 <Box basis="1/2" align="end" pad="medium" />
                 <Box basis="1/2" align="start" pad={{horizontal: "large", vertical: "large", between: "medium"}}>

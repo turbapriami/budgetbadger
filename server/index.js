@@ -18,8 +18,6 @@ const port = process.env.PORT || 1337;
 
 const app = express();
 
-
-
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -34,7 +32,7 @@ const getToken = async (req) => {
   } catch (err) {
     console.log(err);
   }
-  // req.user = 'user' // <= uncomment to dummy authenticate
+  req.user = 'user' // <= uncomment to dummy authenticate
   req.next()
 }
 
@@ -48,7 +46,10 @@ const chooseDirectory = (req, res) => {
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Working in Profile.jsx under client/components/containers
 // const homeCheck = (req, res) => {
 //   if (req.user) {
 //     res.redirect('/')
@@ -56,8 +57,11 @@ const chooseDirectory = (req, res) => {
 //     req.next()
 //   }
 // }
+<<<<<<< HEAD
 
 // change to req.user to load splash
+=======
+>>>>>>> Working in Profile.jsx under client/components/containers
 
 app.use(cors())
 
