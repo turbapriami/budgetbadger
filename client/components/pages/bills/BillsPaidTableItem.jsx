@@ -3,6 +3,7 @@ import { Columns, Box, Button, Section, Heading, Paragraph, Table, TableHeader, 
 import styles from '../../../../public/main/jStyles';
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
+import {UPDATE_BILL} from '../../../queries.js';
 
 class BillsPaidTableItem extends Component {
   constructor(props) {
@@ -69,17 +70,7 @@ class BillsPaidTableItem extends Component {
   }
 }
 
-const updateBillToUnpaid = gql`
-  mutation updateBill($id: Int!, $user_id: Int!, $bill_category_id: Int, $description: String, $amount: Float, $due_date: Date, $paid: Boolean, $paid_date: Date, $alert: Boolean) {
-    updateBill(id: $id, user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, due_date: $due_date, paid: $paid, paid_date: $paid_date, alert: $alert) {
-      id
-      user_id
-      paid
-      paid_date
-    }
-  }`;
-
-export default graphql(updateBillToUnpaid, {
+export default graphql(UPDATE_BILL, {
   options: {
     refetchQueries: ['BILLS_QUERY'],
   },

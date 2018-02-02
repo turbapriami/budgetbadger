@@ -10,7 +10,7 @@ class BillsDueTable extends Component {
     this.state = {
       billFormToggle: false,
       sortIndex: 0,
-      sortAscending: true,
+      sortAscending: false,
     };
     this.handleFormToggle = this.handleFormToggle.bind(this);
     this.handleSortClick = this.handleSortClick.bind(this);
@@ -18,12 +18,13 @@ class BillsDueTable extends Component {
 
   handleSortClick(e) {
     let sortIdx = e;
+    if (e < 4) {
       if (sortIdx === this.state.sortIndex) {
         this.setState({ sortAscending: !this.state.sortAscending }, () => {
           this.props.sortBills(
             false,
             this.state.sortIndex,
-            this.state.sortAscending
+            !this.state.sortAscending
           );
         });
       } else {
@@ -31,9 +32,10 @@ class BillsDueTable extends Component {
           this.props.sortBills(
             false,
             this.state.sortIndex,
-            this.state.sortAscending
+            !this.state.sortAscending
           );
         }); 
+      }
     }
   }
 

@@ -7,27 +7,7 @@ import BillsPaidTable from '../pages/bills/BillsPaidTable.jsx';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import billSortingFunctions from '../pages/bills/billSortingFunctions.jsx';
-const BILLS_QUERY = gql`
-  query BILLS_QUERY($user_id: Int!) {    
-    getBills(user_id: $user_id) {
-      id
-      user_id
-      bill_category_id
-      description
-      amount
-      due_date
-      paid
-      paid_date
-      alert
-      bill_category {
-        name
-      }
-    }
-    getBillCategories(user_id: $user_id) {
-      id
-      name
-    }
-  }`;
+import {BILLS_QUERY} from '../../queries.js';
 
 const withBills = graphql(BILLS_QUERY, {
   options: props => ({
