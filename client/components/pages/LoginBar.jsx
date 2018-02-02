@@ -17,7 +17,7 @@ class LoginBar extends Component {
   }
   handleLogout() {
     console.log('loggin out')
-    new Cookies().remove('TOKEN')
+    new Cookies().remove('user')
     window.location.reload()
   }
   handleOnSuccess(token, metadata) {
