@@ -15,6 +15,10 @@ class SplashSignIn extends Component {
     this._confirm = this._confirm.bind(this)
   }
 
+  componentDidMount() {
+    
+  }
+
   async _confirm() {
     const { user_email, password } = this.state;
     try {

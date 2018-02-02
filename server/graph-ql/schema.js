@@ -132,8 +132,8 @@ module.exports = `
   }
 
   type Mutation {
-    createTransaction(user_id: Int!, amount: Float!, date: String!, category: String!, name: String!, account_id: String!, street: String, zip_code: String, state: String ): Transaction
-    createUser(email: String!, password: String!): User
+    createTransaction(user_id: Int!, amount: Float!, category_id: String!, name: String!, street: String, zip_code: String, state: String, account_id: String, ): Transaction
+    createUser(email: String!, password: String!): String!
     createAccount(id: String!, user_id: Int!, bank_name: String!, bank_id: String!, type: String!, current_balance: Int!): Account!
     createSchool(name: String!): School!
     createLoan(name: String!, amount: Int!, interest_rate: Int!, inception_date: String!, end_date: String!, user_id: Int!, recurrence: String!): Loan
