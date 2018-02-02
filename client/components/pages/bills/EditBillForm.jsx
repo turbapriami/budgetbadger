@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
-import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
+import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
 import billsQuery from '../../containers/BillsContainer.jsx';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -24,16 +24,16 @@ class EditBillForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.bill.id,
-      user_id:this.props.bill.user_id,
-      bill_category_id:this.props.bill.bill_category_id,
-      bill_category_description:this.props.bill.bill_category[0].name,
-      description:this.props.bill.description,
-      amount:this.props.bill.amount,
-      due_date:this.props.bill.due_date,
-      paid:this.props.bill.paid,
-      paid_date:this.props.bill.paid_date,
-      alert:this.props.bill.alert
+      id: '',
+      user_id:'',
+      bill_category_id:'',
+      bill_category_description:'',
+      description:'',
+      amount:'',
+      due_date:'',
+      paid:'',
+      paid_date:'',
+      alert:''
     }
     this.handleBillCategoryChange = this.handleBillCategoryChange.bind(this);
     this.handleBillAmountChange = this.handleBillAmountChange.bind(this);
@@ -42,9 +42,25 @@ class EditBillForm extends React.Component {
     this.handleDescriptionSelect = this.handleDescriptionSelect.bind(this);
     this.handleAlertChange = this.handleAlertChange.bind(this);
     this.handleUpdateClick = this.handleUpdateClick.bind(this);
+    this.handleCancelUpdateClick = this.handleCancelUpdateClick.bind(this);
   }
-  
+
+  componentWillReceiveProps(){
+    this.setState({id: this.props.selectedBill.id,
+      user_id:this.props.selectedBill.user_id,
+      bill_category_id:this.props.selectedBill.bill_category_id,
+      bill_category_description:(this.props.selectedBill.bill_category ? this.props.selectedBill.bill_category[0].name : ''),
+      description:this.props.selectedBill.description,
+      amount:this.props.selectedBill.amount,
+      due_date: (this.props.selectedBill.due_date ? convertDateFormat(this.props.selectedBill.due_date) : ''),
+      paid:this.props.selectedBill.paid,
+      paid_date:this.props.selectedBill.paid_date,
+      alert:this.props.selectedBill.alert});
+  }
+
+
   handleBillCategoryChange(e) {
+    console.log('state', this.state)
     let categoryID = this.props.billCategories.filter(categoryObj => categoryObj.name === e.value)[0].id;
     this.setState({bill_category_description:e.value});
     this.setState({bill_category_id:categoryID});
@@ -70,6 +86,10 @@ class EditBillForm extends React.Component {
     this.setState({alert: !this.state.alert});
   }
   
+  handleCancelUpdateClick(){
+    this.props.handleFormToggle();
+  }
+
   handleUpdateClick() {
     this.props.handleFormToggle();
     let variables = {
@@ -145,16 +165,37 @@ class EditBillForm extends React.Component {
                 format='MM/DD/YYYY'
                 step={5}
                 onChange={this.handleDueDateChange}
-                value={convertDateFormat(this.state.due_date)} 
+                value={this.state.due_date} 
             />
             </div>
           </Heading>
           <Footer pad={{"vertical": "medium"}}>
-            <Button label='Update'
-              primary={true}
-              onClick={this.handleUpdateClick} 
-              style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
-            />
+            <Columns
+              justify='center'
+              size='small'
+              maxCount='2'
+            >
+              <Box 
+                align='center'
+                pad='small'
+              >
+                <Button label='Update'
+                  primary={true}
+                  onClick={this.handleUpdateClick} 
+                  style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
+                />
+              </Box>
+              <Box 
+                align='center'
+                pad='small'
+              >
+                <Button label='Cancel'
+                  primary={true}
+                  onClick={this.handleCancelUpdateClick} 
+                  style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
+                />
+              </Box>
+            </Columns>
           </Footer>
         </Form>
       </Layer>)
@@ -179,4 +220,10 @@ const updateBill = gql`
     }
   }`;
 
-export default graphql(updateBill)(EditBillForm);
+export default graphql(updateBill, {
+  options: {
+    refetchQueries: [
+      'BILLS_QUERY'
+    ],
+  }
+})(EditBillForm);

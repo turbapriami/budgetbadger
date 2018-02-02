@@ -9,7 +9,8 @@ class BillsDueTableItem extends Component {
     super(props);
     this.state = {
       billEditFormToggle: false,
-      deleteBillFormToggle: false
+      deleteBillFormToggle: false,
+      selectedBill: {}
     }
     this.onMarkPaidClick = this.onMarkPaidClick.bind(this);
     this.handleEditFormToggle = this.handleEditFormToggle.bind(this);
@@ -17,13 +18,11 @@ class BillsDueTableItem extends Component {
   }
   
   onMarkPaidClick(bill) {
-    let date = new Date();
-    var formattedDate = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
     let variables = {
       id:bill.id,
       user_id:bill.user_id,
       paid:true,
-      paid_date:formattedDate,
+      paid_date:new Date(),
     }
 
     this.props.mutate({
@@ -34,7 +33,9 @@ class BillsDueTableItem extends Component {
         console.log('there was an error sending the query', error);
       });
   }
-
+  handleMenuClick(bill) { 
+    this.setState({selectedBill: bill});
+  }
 
   handleEditFormToggle() {
     this.setState({billEditFormToggle: !this.state.billEditFormToggle});
@@ -54,7 +55,7 @@ class BillsDueTableItem extends Component {
         </td>
         <td>
           <Timestamp
-            value={`${this.props.bill.due_date}`}
+            value={this.props.bill.due_date}
             fields='date'
           />
         </td>
@@ -64,6 +65,7 @@ class BillsDueTableItem extends Component {
         <td>
           <Menu 
             responsive={true}
+            onClick={()=>{this.handleMenuClick(this.props.bill)}}
             icon={<MoreIcon/>}>
             <Anchor 
               icon={<CheckmarkIcon/>}
@@ -87,8 +89,8 @@ class BillsDueTableItem extends Component {
             deleteBillFormToggle={this.state.deleteBillFormToggle} 
             handleDeleteBillFormToggle={this.handleDeleteBillFormToggle}
           />
-          <EditBillForm 
-            bill = {this.props.bill} 
+          <EditBillForm
+            selectedBill = {this.state.selectedBill}
             bills = {this.props.bills} 
             billCategories = {this.props.billCategories} 
             billEditFormToggle={this.state.billEditFormToggle} 
@@ -110,4 +112,10 @@ const updateBillToPaid = gql`
     }
   }`;
 
-export default graphql(updateBillToPaid)(BillsDueTableItem);
+export default graphql(updateBillToPaid, {
+  options: {
+    refetchQueries: [
+      'BILLS_QUERY'
+    ],
+  }
+})(BillsDueTableItem);
