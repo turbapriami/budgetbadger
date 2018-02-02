@@ -4,31 +4,33 @@ import styles from '../../../../public/main/jStyles';
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
 
-
 class BillsPaidTableItem extends Component {
   constructor(props) {
     super(props);
-    this.onMarkUnpaidClick = this.onMarkUnpaidClick.bind(this)
+    this.onMarkUnpaidClick = this.onMarkUnpaidClick.bind(this);
   }
 
   onMarkUnpaidClick(bill) {
     let variables = {
-      id:bill.id,
-      user_id:bill.user_id,
-      paid:false,
-      paid_date:null,
-    }
-    this.props.mutate({
-      variables: variables
-    }).then(({ data }) => {
+      id: bill.id,
+      user_id: bill.user_id,
+      paid: false,
+      paid_date: null,
+    };
+    this.props
+      .mutate({
+        variables: variables,
+      })
+      .then(({ data }) => {
         console.log('successfully updated bill to unpaid', data);
-      }).catch((error) => {
+      })
+      .catch(error => {
         console.log('there was an error sending the query', error);
       });
   }
 
   render() {
-      return (
+    return (
       <TableRow>
         <td>
           {this.props.bill.description}
@@ -37,33 +39,35 @@ class BillsPaidTableItem extends Component {
           {this.props.bill.bill_category[0].name}
         </td>
         <td>
-          <Timestamp 
-            value={`${this.props.bill.due_date}`}
-            fields='date'
-          />
+          <Timestamp value={`${this.props.bill.due_date}`} fields="date" />
         </td>
         <td>
-          <Timestamp 
-            value={`${this.props.bill.paid_date}`}
-            fields='date'
-          />
+          <Timestamp value={`${this.props.bill.paid_date}`} fields="date" />
         </td>
         <td>
           ${this.props.bill.amount}
         </td>
         <td>
           <Button
-            label='Mark Unpaid'
-            onClick={() => {this.onMarkUnpaidClick(this.props.bill)}}
-            primary ={false} 
-            hoverIndicator={{background: 'neutral-4-a'}}
-            style={{backgroundColor:'grey',color:'white', border:'none', fontSize:'18px', padding:'6px'}}
+            label="Mark Unpaid"
+            onClick={() => {
+              this.onMarkUnpaidClick(this.props.bill);
+            }}
+            primary={false}
+            hoverIndicator={{ background: 'neutral-4-a' }}
+            style={{
+              backgroundColor: 'grey',
+              color: 'white',
+              border: 'none',
+              fontSize: '18px',
+              padding: '6px',
+            }}
           />
         </td>
-      </TableRow>)
+      </TableRow>
+    );
   }
 }
-
 
 const updateBillToUnpaid = gql`
   mutation updateBill($id: Int!, $user_id: Int!, $bill_category_id: Int, $description: String, $amount: Float, $due_date: Date, $paid: Boolean, $paid_date: Date, $alert: Boolean) {
@@ -75,10 +79,8 @@ const updateBillToUnpaid = gql`
     }
   }`;
 
-  export default graphql(updateBillToUnpaid, {
-    options: {
-      refetchQueries: [
-        'BILLS_QUERY'
-      ],
-    }
-  })(BillsPaidTableItem);
+export default graphql(updateBillToUnpaid, {
+  options: {
+    refetchQueries: ['BILLS_QUERY'],
+  },
+})(BillsPaidTableItem);
