@@ -27,11 +27,14 @@ class Loans extends React.Component {
       term: 20,
       inception: 2017,
       totalInterestPaid: 0,
-      totalPayment: 0
+      totalPayment: 0,
+      name: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleAmort = this.handleAmort.bind(this);
+    this.handleLoan = this.handleLoan.bind(this);
   };
+
 
   handleAmort(){
     var amort = amortizationSchedule(this.state.principal, this.state.term, this.state.interestRate);
@@ -74,11 +77,19 @@ class Loans extends React.Component {
     }
   };
 
+  handleLoan(e){
+    e.preventDefault();
+    this.setState({
+    })
+    console.log('clicked', e.target.name)
+  }
+
   componentWillMount(){
     this.handleAmort()
   };
 
   render(){
+    console.log('props', this.props)
     return(
       <div>
         <Hero background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}
@@ -102,6 +113,22 @@ class Loans extends React.Component {
         </Hero>
         <Section pad='large' justify='center' align='center' colorIndex='light-2' >
           <Headline margin='none'>
+            <Menu responsive={false}
+              label='Select Loan'
+              inline={false}
+              primary={true}
+              closeOnClick={true}
+              direction='row'
+              size='small'>
+                {this.props.loans ? this.props.loans.map((loan) => {
+                  return(
+                    <Anchor name={loan} value={loan.amount} onClick={this.handleLoan}>
+                    {loan.name}
+                  </Anchor>
+                  )
+                }) : ''}
+            </Menu>
+            <p />
             <Chart style={{fontSize: "20px"}}>
               <Axis count={5}
                 labels={[{"index": 2, "label": "$" + this.state.principal/2}, {"index": 4, "label": "$" + this.state.principal}]}
@@ -136,6 +163,7 @@ class Loans extends React.Component {
             pad='large'>
             <p />
             <Headline margin='none' style={{fontSize: "20px"}}>
+              {this.state.name}
               Loan Amount ($)
               <p />
               <NumberInput align='left' name='principal' value={this.state.principal} onChange={this.handleChange} step={1000}/>
