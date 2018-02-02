@@ -32,8 +32,8 @@ class BillsPaidTable extends Component {
             >
               <TableHeader labels={['Bill Description', 'Category','Due Date', 'Paid Date', 'Amount','Action']}/>
               <tbody>
-                {this.props.bills ? this.props.bills.filter(bill => bill.paid === true).map((bill) => 
-                (<BillsPaidTableItem bill={bill}/>)
+                {this.props.bills ? this.props.bills.filter(bill => bill.paid === true).map((bill, j) => 
+                (<BillsPaidTableItem key = {j} bill={bill}/>)
                 ): null}
               </tbody>
             </Table>

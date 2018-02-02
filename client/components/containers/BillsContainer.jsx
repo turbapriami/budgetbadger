@@ -42,14 +42,29 @@ const withBills = graphql(BILLS_QUERY, {
 class BillsContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      bills: []
+    }
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.getBills) {
+      const bills = nextProps.data.getBills.sort((a, b) => {
+        return (new Date(a.due_date) - new Date(b.due_date))
+      })
+      this.setState({
+        bills
+      })
+    }
   }
 
   render() {
     return (
       <div>
-        <BillsSummary bills={this.props.data.getBills}/>
-        <BillsDueTable bills={this.props.data.getBills} billCategories={this.props.data.getBillCategories}/>
-        <BillsPaidTable bills={this.props.data.getBills}/>
+        <BillsSummary bills={this.state.bills}/>
+        <BillsDueTable bills={this.state.bills} billCategories={this.props.data.getBillCategories}/>
+        <BillsPaidTable bills={this.state.bills}/>
       </div>)
   }
 }

@@ -62,9 +62,9 @@ class AddBillForm extends React.Component {
       bill_category_id:this.state.bill_category_id,
       description:this.state.description,
       amount:this.state.amount,
-      due_date:this.state.due_date,
+      due_date: new Date(this.state.due_date),
       paid:this.state.paid,
-      paid_date:this.state.paid_date,
+      paid_date:new Date(this.state.paid_date),
       alert:this.state.alert
     }
     this.props.mutate({

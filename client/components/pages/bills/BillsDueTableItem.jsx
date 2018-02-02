@@ -18,13 +18,11 @@ class BillsDueTableItem extends Component {
   }
   
   onMarkPaidClick(bill) {
-    let date = new Date();
-    var formattedDate = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
     let variables = {
       id:bill.id,
       user_id:bill.user_id,
       paid:true,
-      paid_date:formattedDate,
+      paid_date:new Date(),
     }
 
     this.props.mutate({
@@ -57,7 +55,7 @@ class BillsDueTableItem extends Component {
         </td>
         <td>
           <Timestamp
-            value={`${this.props.bill.due_date}`}
+            value={this.props.bill.due_date}
             fields='date'
           />
         </td>
