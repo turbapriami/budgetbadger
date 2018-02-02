@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
-import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
-import billsQuery from '../../containers/BillsContainer.jsx';
+import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 
