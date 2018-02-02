@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, SkipLinkAnchor, Card, Hero, Label, Heading, Columns } from 'grommet';
+import {App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, SkipLinkAnchor, Card, Hero, Label, Heading, Columns, Image } from 'grommet';
 
 const Splash = ({ match, location, history }) => {
     return (
@@ -8,38 +8,25 @@ const Splash = ({ match, location, history }) => {
 
 
           <Box full="horizontal">
-            <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-background-color-index-light-1 grommetux-background-color-index--light grommetux-hero grommetux-hero--large grommetux-hero--bg-center">
-              <div className="grommetux-box__container grommetux-box__container--full-horizontal grommetux-hero__background" style={{background: `url(${"https://lh3.googleusercontent.com/RVtiDsAKiGTWlZM24vHwBb7cDaMX-EV7O_3budGa2DtrUKGMmItxnjZeFi0Ucsi6RhAmXXl2dJ9MYpVJKq-IpzZEebiiHP9Gi2R6Nq36vBIGRgmsRCOHWUaRup1Nff2473YyDoDabkN77sNpzQw32gGvY9sfuM1sOFsIps1KRGW9Y3Xx6gyPBGoFWv83OtXOI7P9dzXzL3FhSMuJ8I_TbDwSkueYOAEMqGP6ctj-Qp7HdsZboyKIkCD33CfeSIb953TUY4y1ECtA61VYSPyDg9EPPogbO3piURMHBnBz9Xb07PdpTolmdFcJoSy-J-OF1ev9pQAApI7iOC7BWUE0bx-08WT-yMgp-x2XlVGZu5mDr1FqPnItKAl24j-lNHI2r-POvTjc8Ju1L_BdKL9tzhb6lAQ16V-7G6F8iLpU_VUgnPtc1brrTyOcesg__y7G456F97ujv2_k-DWejTKfreyIPnY_lbc_dIhHXKAOg6Pn420W_a-vfDy0QvGrro7_KrmzicF3xEEnrxAg3W9z7EjnhYczL-B_x-tIyb3Qu9J12aA1h3_xx0gQ6ri1DqXGBrS_VoRIRUaBwYEAiXpS56BKMA80Em7xh-iWDTw=w2400-h1160-no"}) center center / cover no-repeat`}}>
-                <div className="grommetux-box grommetux-box--full-horizontal grommetux-box--full-responsive grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none"></div>
-              </div>
-              <div class="grommetux-box grommetux-box--full-horizontal grommetux-box--full-responsive grommetux-box--direction-row grommetux-box--justify-end grommetux-box--align-center grommetux-box--responsive grommetux-box--pad-none grommetux-hero__overlay">
-                <a tabindex="-1" aria-hidden="true" id="skip-link-main_content" className="grommetux-skip-link-anchor">Main Content</a>
-                <div className="grommetux-box grommetux-box--direction-column grommetux-box--justify-center grommetux-box--align-center grommetux-box--responsive grommetux-box--basis-1-2 grommetux-box--pad-none"></div>
-                <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--basis-1-2 grommetux-box--pad-horizontal-large grommetux-box--pad-vertical-large grommetux-box--pad-between-medium">
-                    <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--wrap grommetux-box--size-large grommetux-box--size grommetux-card">
-                        <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-medium grommetux-card__content">
-                            <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Learn to Life</label>
-                            <h1 class="grommetux-heading grommetux-heading--strong">Accelerate your wallet with Budget Badger, he got yo back</h1>
-                            <p className="grommetux-paragraph grommetux-paragraph--large grommetux-paragraph--margin-medium">Budget Badger can help you benefit now, just sign up and stop spending so much $$$</p>
-                            <a href="#" style={{ color: "#000" }} className="grommetux-anchor grommetux-anchor--animate-icon grommetux-anchor--icon grommetux-anchor--icon-label grommetux-anchor--primary">
-                              <svg version="1.1" viewBox="0 0 24 24" width="24px" height="24px" role="img" className="grommetux-control-icon grommetux-control-icon-link-next grommetux-control-icon--responsive" aria-label="link next">
-                                <path fill="none" stroke="#000" stroke-width="2" d="M2,12 L22,12 M13,3 L22,12 L13,21"></path>
-                              </svg>Learn More
-                            </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
+            <Hero background={<img src='/img/download.jpg' fit="cover" full={true} />}>
+              <Box direction="row" justify="center" align="center">
+                <Box basis="1/2" align="end" pad="medium" />
+                <Box basis="1/2" align="start" pad={{horizontal: "large", vertical: "large", between: "medium"}}>
+                  <Label margin="none" size="medium" uppercase={true}>Learn to Life</Label>
+                  <h1>Accelerate your wallet with Budget Badger, he got yo back</h1>
+                  <p>Budget Badger can help you benefit now, just sign up and stop spending so much $$$</p>
+                </Box>
+              </Box>
+            </Hero>
           </Box>
           
           <Section>
-            <div class="grommetux-box grommetux-box--direction-column grommetux-box--align-center grommetux-box--responsive grommetux-box--pad-none">
-              <div class="grommetux-box grommetux-box--direction-column grommetux-box--align-center grommetux-box--responsive grommetux-box--pad-large grommetux-box--text-align-center grommetux-box--width-max-xxlarge grommetux-box--width-max">
+            <Box align="center" pad="none">
+              <Box align="center" pad="large" textAlign="center" align="center" size={{ width: {max: "xxlarge"}}}>
                 <h1 class="grommetux-heading grommetux-heading--strong grommetux-heading--margin-none">Sumo accumsan mel ignota hendrerit.</h1>
                 <p class="grommetux-paragraph grommetux-paragraph--xlarge grommetux-paragraph--width-large">Lorem ipsum dolor sit amet, dicat sonet congue ei mei, est summo copiosae facilisi an. Sumo accumsan mel ea, eu ignota hendrerit consequuntur me.</p>
-              </div>
-            </div>
+              </Box>
+            </Box>
           </Section>
 
           <Box align="center"

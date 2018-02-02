@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header, Heading, Label, Paragraph, TextInput, Tiles } from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import Cookies from 'universal-cookie'
+import Cookies from 'universal-cookie';
 
 class SplashSignIn extends Component {
   constructor() {
@@ -13,6 +13,10 @@ class SplashSignIn extends Component {
       password: ''
     }
     this._confirm = this._confirm.bind(this)
+  }
+
+  componentDidMount() {
+    
   }
 
   async _confirm() {
@@ -31,6 +35,8 @@ class SplashSignIn extends Component {
       window.location.reload()
     } catch(error) {
         console.log(error)
+    } finally {
+      console.log("FINALLY")
     }
   }
 
@@ -54,7 +60,7 @@ class SplashSignIn extends Component {
             <Footer size="small" direction="column"
               align={'center' ? 'stretch' : 'start'}
               pad={{ vertical: "medium" }}>
-              <Button onClick={() => this._confirm()} primary={true} fill="center" label='Sign In'
+              <Button onSubmit={() => this._confirm()} primary={true} fill="center" label='Sign In' type="submit"
                 primary={true} />
             </Footer>
           </Form>
@@ -82,4 +88,4 @@ const LOGIN_USER = gql`
   }
 `
 
-export default compose(graphql(LOGIN_USER))(SplashSignIn);
+export default graphql(LOGIN_USER)(SplashSignIn);

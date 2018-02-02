@@ -14,7 +14,7 @@ export default class extends Component {
           <LoginBar/>
           <Route path='/' component={Main} />
           <Route path='/profile' component={Profile} />
-          <Footer justify='between'size='large' primary>
+          <Footer justify='between'size='large'>
             <Title>
               <s />
               <img src="https://visualpharm.com/assets/2/Badger-595b40b75ba036ed117d8786.svg" style={styles.footerImage}/>

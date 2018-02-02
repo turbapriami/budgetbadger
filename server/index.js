@@ -18,7 +18,11 @@ const port = process.env.PORT || 1337;
 
 const app = express();
 
+<<<<<<< HEAD
 app.use(cookieParser())
+=======
+
+>>>>>>> e13f666cf5868c56a16e863514559b9be3ed0e0b
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -34,22 +38,41 @@ const getToken = async (req) => {
   } catch (err) {
     console.log(err);
   }
-  // req.user = 'user' // <= uncomment to dummy authenticate
+  req.user = 'user' // <= uncomment to dummy authenticate
   req.next()
 }
 
 const chooseDirectory = (req, res) => {
   if (req.user) {
+<<<<<<< HEAD
+    console.log("MADE IT PAST FIRST CHECK IN CHOOSE DIRECTORY");
+=======
+    console.log("OOKOKOKKKKKKK", req.user)
+>>>>>>> e13f666cf5868c56a16e863514559b9be3ed0e0b
     req.next()
   } else {
+    console.log("didn't make it past first check in choose directory");
     res.redirect('/home')
   }
 }
 
+// const homeCheck = (req, res) => {
+//   if (req.user) {
+//     res.redirect('/')
+//   } else {
+//     req.next()
+//   }
+// }
+
+
+// change to req.user to load splash
+
 const homeCheck = (req, res) => {
   if (req.user) {
+    console.log("MADE IT PAST FIRST CHECK IN HOME CHECK");
     res.redirect('/')
   } else {
+    console.log("didn't make it past first check in home check")
     req.next()
   }
 }
