@@ -43,18 +43,39 @@ class BillsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bills: []
+      billsDueThisMonth:[],
+      overdueBills: [],
+      paidBills:[],
+      unpaidBills: []
     }
   }
 
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.getBills) {
-      const bills = nextProps.data.getBills.sort((a, b) => {
+      const paidBills = nextProps.data.getBills.sort((a, b) => {
+        return (new Date(b.paid_date) - new Date(a.paid_date))
+      }).filter(bill => bill.paid)
+
+      const unpaidBills = nextProps.data.getBills.sort((a, b) => {
         return (new Date(a.due_date) - new Date(b.due_date))
       })
+
+      const billsDueThisMonth = nextProps.data.getBills.filter(bill => {
+        const dueDate = new Date(bill.due_date);
+        const currentDate = new Date();
+        return ((currentDate.getMonth() === dueDate.getMonth()) && !bill.paid);
+        return bill;
+      })
+
+      const overdueBills = nextProps.data.getBills.filter(bill => {
+        const dueDate = new Date(bill.due_date);
+        const currentDate = new Date();
+        return ((currentDate > dueDate) && !bill.paid);
+      })
+
       this.setState({
-        bills
+        billsDueThisMonth, overdueBills, unpaidBills, paidBills
       })
     }
   }
@@ -62,9 +83,9 @@ class BillsContainer extends Component {
   render() {
     return (
       <div>
-        <BillsSummary bills={this.state.bills}/>
-        <BillsDueTable bills={this.state.bills} billCategories={this.props.data.getBillCategories}/>
-        <BillsPaidTable bills={this.state.bills}/>
+        <BillsSummary overdueBills={this.state.overdueBills} billsDueThisMonth={this.state.billsDueThisMonth}/>
+        <BillsDueTable bills={this.state.unpaidBills} billCategories={this.props.data.getBillCategories}/>
+        <BillsPaidTable bills={this.state.paidBills}/>
       </div>)
   }
 }

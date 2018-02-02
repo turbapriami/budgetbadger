@@ -12,61 +12,105 @@ class BillsSummary extends Component {
           <div>
             <Header>
               <Heading
-                  align = 'left'
-                  margin = 'small'
-                  strong = 'true'
-                  style = {{fontSize:'30px', marginLeft: '19%'}}
-                >
-                Summary
+                align = 'center'
+                margin = 'small'
+                strong = 'true'
+                style = {{fontSize:'30px', marginLeft:'22%'}}
+              >
+                Monthly Summary
               </Heading>
             </Header>
-            <Columns size='medium'
+            <Columns
               masonry={false}
-              maxCount={3}
-              justify = 'center'
-              style={{paddingTop:'45px'}}
+              justify='center'
+              size='small'
             >
-              <Heading  
-                align = 'left'
-                margin = 'none'
-                strong = 'true'
-                style = {{fontSize:'20px', textAlign:'center'}}
+              <Box 
+                align='stretch'
+                pad='none'
+                direction='column'
+                margin='small'
+                style={{width: '180px'}}
               >
-                Bills Due
-              </Heading>
-              <Paragraph
-                size='xlarge'
+              <Heading  
+                  align = 'center'
+                  margin = 'none'
+                  strong = 'true'
+                  style = {{fontSize:'20px', textAlign:'center'}}
+                >
+                  Bills Due
+                </Heading>
+                <Paragraph
+                  size='xlarge'
+                  style = {{textAlign:'center'}}
+                >
+                  ${this.props.billsDueThisMonth ? this.props.billsDueThisMonth.reduce((total, bill) => total += bill.amount, 0).toFixed(2): 0 }
+                </Paragraph>
+              </Box>
+              <Box 
+                align='stretch'
+                pad='none'
+                direction='column'
+                margin='small'
+                style={{width: '180px'}}
+              >
+                <Heading  
+                  align = 'left'
+                  margin = 'none'
+                  strong = 'true'
+                  style = {{fontSize:'20px', textAlign:'center'}}
+                >
+                  Bills Overdue
+                </Heading>
+                  <Paragraph
+                    size='xlarge'
+                    style = {{textAlign:'center'}}
+                  >
+                    ${this.props.overdueBills ? this.props.overdueBills.reduce((total, bill) => total += bill.amount, 0).toFixed(2): 0 }
+                  </Paragraph>
+              </Box>
+              <Box 
+                align='center'
+                pad='none'
+                direction='column'
+                margin='small'
+                style={{width: '180px'}}
+              >
+                <Heading
+                  align = 'left'
+                  margin = 'none'
+                  strong = 'true'
+                  style = {{fontSize:'20px', textAlign:'center'}}
+                >
+                  Cash Available
+                </Heading>
+              <Paragraph 
+                size = 'xlarge' 
                 style = {{textAlign:'center'}}
               >
-              ${this.props.bills ? this.props.bills
-                .filter(bill => (bill.paid === false))
-                .reduce((total, bill) => total += bill.amount, 0).toFixed(2): 0 }
+                Need Data
               </Paragraph>
-              <Heading
-                align = 'left'
-                margin = 'none'
-                strong = 'true'
-                style = {{fontSize:'20px', textAlign:'center'}}
-              >
-                Cash Available
-              </Heading>
-              <Paragraph 
-              size = 'xlarge' 
-              style = {{textAlign:'center'}}>
-                NEED TO GET DYNAMIC DATA
-              </Paragraph>
-              <Heading
-                align='left'
-                margin='none'
-                strong='true'
-                style={{fontSize:'20px',textAlign:'center'}}
-              >
-                Credit Available
-              </Heading>
-              <Paragraph size='xlarge'
-               style = {{textAlign:'center'}}>
-                NEED TO GET DYNAMIC DATA
-              </Paragraph>
+              </Box>
+                <Box 
+                  align='center'
+                  pad='none'
+                  direction='column'
+                  margin='small'
+                  style={{width: '180px'}}
+                >
+                  <Heading
+                    align='left'
+                    margin='none'
+                    strong='true'
+                    style={{fontSize:'20px',textAlign:'center'}}
+                  >
+                    Credit Available
+                  </Heading>
+                  <Paragraph size='xlarge'
+                  style = {{textAlign:'center'}}>
+                    Need Data
+                  </Paragraph>
+                </Box>
               </Columns>
           </div>)
     }
