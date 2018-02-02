@@ -22,13 +22,6 @@ const mergeTables = schedule.scheduleJob('12 * *', () => {
   worker.submitToMain();
 })
 
-// setInterval(() => {
-//   console.log('running worker')
-//   worker.parseTransactions()
-//   // worker.submitToMain();
-// }, 10 * 1000)
-
-
 app.listen(port, () => {
   console.log('WORKER running on port ' + port)
 })
