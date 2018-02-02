@@ -4,17 +4,6 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Cookies from 'universal-cookie';
 
-const { createApolloFetch } = require('apollo-fetch');
-const fetch = createApolloFetch({
-  uri: 'http://localhost:1337/graphql'
-});
-
-const CREATE_USER = gql`
-  mutation createUser($user_email: String!, $password: String!) {
-    createUser(email: $user_email, password: $password)
-  }
-`
-
 class SplashSignUp extends Component {
   constructor() {
     super()
@@ -22,35 +11,24 @@ class SplashSignUp extends Component {
       user_email: '',
       password: ''
     }
-    // this._confirm = this._confirm.bind(this);
-    this.createUser = this.createUser.bind(this);
+    this._confirm = this._confirm.bind(this);
   }
 
-  // async _confirm() {
-  //   const { user_email, password } = this.state;
-  //   try {
-  //     const result = await this.props.mutate({
-  //       variables: {
-  //         user_email,
-  //         password,
-  //       }
-  //     })
-  //     // const token = result.data.createUser;
-  //     // const cookie = new Cookies();
-  //     // cookie.set('TOKEN', token);
-  //   } catch(error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  createUser() {
-    fetch({
-      query: CREATE_USER,
-      variables: {
-        user_email: this.state.user_email,
-        password: this.state.password
-      }
-    }).then(res => console.log("RESPONSE CREATE USER:", res))
+  async _confirm() {
+    const { user_email, password } = this.state;
+    try {
+      const result = await this.props.mutate({
+        variables: {
+          user_email,
+          password,
+        }
+      })
+      // const token = result.data.createUser;
+      // const cookie = new Cookies();
+      // cookie.set('TOKEN', token);
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   render() {
@@ -71,7 +49,7 @@ class SplashSignUp extends Component {
                 <Footer size="small" direction="column"
                   align={'center' ? 'stretch' : 'start'}
                   pad={{ vertical: "medium" }}>
-                  <Button onClick={() => this.createUser} primary={true} fill="center" label='Create account' />
+                  <Button onClick={() => this._confirm()} primary={true} fill="center" label='Create account' />
                 </Footer>
               </Form>
         </Card>
@@ -80,4 +58,10 @@ class SplashSignUp extends Component {
   }
 }
 
-export default SplashSignUp;
+const CREATE_USER = gql`
+  mutation createUser($user_email: String!, $password: String!) {
+    createUser(email: $user_email, password: $password)
+  }
+`
+
+export default graphql(CREATE_USER)(SplashSignUp);
