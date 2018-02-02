@@ -116,12 +116,10 @@ module.exports = {
       // }
     // },
 
-    getTransactions: (parent, { user_id }, { knex }) => {
-      console.log('transaction')
-      console.log(user_id.constructor)
-      return knex('transactions').where({
+    getTransactions: (parent, { user_id }, { knex }) => 
+      knex('transactions').where({
         user_id
-      })},
+      }),
 
     getAccounts: (parent, { user_id }, { knex }) => 
       knex('accounts').where({
@@ -270,7 +268,9 @@ module.exports = {
       const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
       })
-      return token;
+      // user.token = token;
+      return [token, user.attributes.id]
+      // return {id, token};
     },
 
     createTransaction: async (parent, args, { models }) => {
