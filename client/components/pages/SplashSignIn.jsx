@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header, Heading, Label, Paragraph, TextInput, Tiles } from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import Cookies from 'universal-cookie';
+import Cookies from 'universal-cookie'
 
 class SplashSignIn extends Component {
   constructor() {
@@ -15,10 +15,6 @@ class SplashSignIn extends Component {
     this._confirm = this._confirm.bind(this)
   }
 
-  componentDidMount() {
-    
-  }
-
   async _confirm() {
     const { user_email, password } = this.state;
     try {
@@ -28,15 +24,15 @@ class SplashSignIn extends Component {
           password,
         }
       })
-      const user = result.data.loginUser;
+      const user = {
+        user_id: result.data.loginUser[1],
+        token: result.data.loginUser[0]
+      }
       const cookie = new Cookies();
-      cookie.set('id', user[1]);
-      cookie.set('TOKEN', user[0], { path: '/' });
+      cookie.set('user', user, {path:'/'});
       window.location.reload()
     } catch(error) {
         console.log(error)
-    } finally {
-      console.log("FINALLY")
     }
   }
 
@@ -60,7 +56,7 @@ class SplashSignIn extends Component {
             <Footer size="small" direction="column"
               align={'center' ? 'stretch' : 'start'}
               pad={{ vertical: "medium" }}>
-              <Button onSubmit={() => this._confirm()} primary={true} fill="center" label='Sign In' type="submit"
+              <Button onClick={() => this._confirm()} primary={true} fill="center" label='Sign In'
                 primary={true} />
             </Footer>
           </Form>
@@ -88,4 +84,4 @@ const LOGIN_USER = gql`
   }
 `
 
-export default graphql(LOGIN_USER)(SplashSignIn);
+export default compose(graphql(LOGIN_USER))(SplashSignIn);

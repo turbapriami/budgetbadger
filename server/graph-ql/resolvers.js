@@ -243,7 +243,7 @@ module.exports = {
       })
     },
 
-    createUser: async (parent, args, { models }) => {
+    createUser: async (parent, args, { models, APP_SECRET }) => {
       const { email } = args;
       const user = await new models.User({ email }).fetch();
       if (user) {
@@ -253,7 +253,9 @@ module.exports = {
       const token = jwt.sign({ newUser: _.pick(newUser.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
       })
-      return token;
+      console.log('uuuuuser',newUser.attributes.id)
+      console.log([token, newUser.attributes.id])
+      return [token, newUser.attributes.id]
     },
 
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),

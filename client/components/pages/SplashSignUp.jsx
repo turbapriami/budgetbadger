@@ -23,9 +23,13 @@ class SplashSignUp extends Component {
           password,
         }
       })
-      const token = result.data.createUser;
+      const user = {
+        user_id: result.data.createUser[1],
+        token: result.data.createUser[0]
+      }
       const cookie = new Cookies();
-      cookie.set('TOKEN', token);
+      cookie.set('user', user, {path:'/'});
+      window.location.reload()
     } catch(error) {
       console.log(error);
     }
