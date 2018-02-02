@@ -8,11 +8,10 @@ const cookieParser = require('cookie-parser')
 const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
-const typeDefs = require('./graph-ql/Schema.js');
+const typeDefs = require('./graph-ql/schema.js');
 const resolvers = require('./graph-ql/resolvers.js');
 const db = require('./database/index.js');
 const APP_SECRET = process.env.APP_SECRET;
-console.log(APP_SECRET)
 const models = require('./database/models/index.js');
 
 const port = process.env.PORT || 1337;
