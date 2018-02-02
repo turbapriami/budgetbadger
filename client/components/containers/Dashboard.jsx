@@ -3,6 +3,8 @@ import {Tiles, Tile} from 'grommet';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import BillsDueTable from '../pages/bills/BillsDueTable.jsx';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
+import AccountsTotals from '../pages/AccountsTotals.jsx'
+import Spinner from '../pages/Spinner.jsx'
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { DASH_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
@@ -33,7 +35,7 @@ class DashBoard extends React.Component {
     }
   }
 
-  componentDidUpdate() {
+  componentWillMount() {
     this.props.mutate({
       variables: {user_id: 1}
     })
@@ -43,42 +45,37 @@ class DashBoard extends React.Component {
     // make sure bills exist before rendering
     let billsDue = null
     if (this.props.data.getBills) {
-      billsDue = <BillsDueTable billsDue = {this.props.data.getBills.filter((bill)=> {return bill.paid === false})}/>
+      billsDue = <BillsSummary 
+        overdueBills={this.props.data.getBills.filter(bill => {
+          const dueDate = new Date(bill.due_date);
+          const currentDate = new Date();
+          return ((currentDate > dueDate) && !bill.paid);
+        })} 
+        billsDueThisMonth={this.props.data.getBills.filter(bill => {
+          const dueDate = new Date(bill.due_date);
+          const currentDate = new Date();
+          return ((currentDate.getMonth() === dueDate.getMonth()) && !bill.paid);
+        })}
+      />
     } else {
-      const billsDue = <div>Loading...</div>
+      const billsDue = <Spinner/>
+    }
+    let totalBalance = null
+    if (this.props.data.getAccounts) {
+      totalBalance = <AccountsTotals accounts={this.props.data.getAccounts} />
+    } else {
+      totalBalance = <Spinner />
     }
     return(
       <div>
-        <Tiles flush={false}
+        <Tiles 
+          flush={false}
           fill={true}
-          selectable={true}
         >
-          <Tile
-            separator='top'
-            align='start'
-            basis='1/3'
-          >
-            {billsDue}
+          <Tile>
+            {totalBalance}
           </Tile>
-          <Tile
-            separator='top'
-            align='start'
-            basis='1/3'
-          >
-            {billsDue}
-          </Tile>
-          <Tile
-            separator='top'
-            align='start'
-            basis='1/3'
-          >
-            {billsDue}
-          </Tile>
-          <Tile
-            separator='top'
-            align='start'
-            basis='1/3'
-          >
+          <Tile>
             {billsDue}
           </Tile>
         </Tiles>

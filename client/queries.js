@@ -52,15 +52,25 @@ const DASH_QUERY = gql`
     getAccounts(user_id: $user_id) {
       type
       bank_name
+      current_balance
     }
     getBills(user_id: $user_id) {
+      id
+      user_id
+      bill_category_id
       description
-      bill_category {
-        name
-      }
       amount
       due_date
       paid
+      paid_date
+      alert
+      bill_category {
+        name
+      }
+    }
+    getBillCategories(user_id: $user_id) {
+      id
+      name
     }
   }`
 
