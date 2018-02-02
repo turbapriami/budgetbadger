@@ -14,8 +14,9 @@ const fetchBanks = () => {
   });
 }
 
-const fetchTransactions = async (banks) => {
-  const date = new Date(Date.now() - 864e5)
+const fetchTransactions = async () => {
+  // const date = new Date(Date.now() - 864e5)
+  const date = '1990-10-10'
   const banks = await fetchBanks()
   return await Promise.all(banks.map(async (bank) => {
     let user = await plaid.getAccountsAndTransactions(bank.access_token, date)
@@ -33,16 +34,16 @@ const parseTransactions = async () => {
       let newTransaction = {
         user_id,
         category,
-        plaid_id: transaction.id,
+        plaid_id: transaction.transaction_id,
         date: transaction.date,
         account_id: transaction.account_id,
         amount: transaction.amount,
         name: transaction.name
       }
-      knex('daily_transactions').where({plaid_id: transaction.id})
-      .then(exists => {
-        if (!exists) {
-          knex('daily_transactions').insert(newTransaction);
+      knex('daily_transactions').where({plaid_id: transaction.transaction_id})
+      .then(async exists => {
+        if (!exists.length) {
+          await knex('daily_transactions').insert(newTransaction)
         }
       })
     })
@@ -50,9 +51,9 @@ const parseTransactions = async () => {
 }
 
 const submitToMain = async () => {
-  const endOfDayTransactions = await knex.select('*').from('daily_transactions');
-  knex('transactions').insert(endOfDayTransactions).then(() => {
-    knex.raw(`DELETE * FROM daily_transactions WHERE id > 0`)
+  const endOfDayTransactions = await knex.select('user_id', 'category', 'account_id', 'amount', 'date', 'name').from('daily_transactions');
+  knex('transactions').insert(endOfDayTransactions).then(async () => {
+    await knex.raw(`DELETE FROM daily_transactions WHERE id > 0`)
   });
 }
 
