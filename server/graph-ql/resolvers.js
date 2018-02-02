@@ -3,23 +3,7 @@ const _ = require('lodash')
 const plaid = require('../plaid.js')
 const moment = require('moment')
 const Promise = require('bluebird');
-
-const fetchBanks = () => {
-  return knex.select('*').from('banks').then(res => {
-    return res
-  });
-}
-
-const fetchTransactions = async () => {
-  // const date = new Date(Date.now() - 864e5)
-  const date = '1990-10-10'
-  const banks = await fetchBanks()
-  return await Promise.all(banks.map(async (bank) => {
-    let user = await plaid.getAccountsAndTransactions(bank.access_token, date)
-    user.user_id = bank.user_id;
-    return user;
-  }))
-}
+const knex = require('../database/index.js').knex;
 
 module.exports = {
 
@@ -174,71 +158,75 @@ module.exports = {
     },
 
     getUpdatedTransactions: (parent, { user_id }, { knex, models }) => {
-      let newBank = new models.Bank({user_id: user_id})
-      newBank.fetch()
-      .then(bank => {
-        const today = moment().format('YYYY-MM-DD')
-        const startTime = bank.attributes.last_updated
-        return bank.save({
-          last_updated: today,
-          previous_updated: startTime
-        })
-      })
-      .then(bank => {
-        bank = bank.attributes
-        plaid.getAccountsAndTransactions(bank.access_token, bank.previous_updated)
-        .then(response => {
-          response.accounts.forEach(account => {
-            new models.Account({id: account.account_id}).fetch()
-            .then(fetchedAccount => {
-              if (fetchedAccount) {
-                fetchedAccount.save({
-                  current_balance: account.balances.current_balance
-                })
-              } else {
-                new models.Account({
-                  id: account.account_id,
-                  user_id: bank.user_id,
-                  bank_name: account.name,
-                  limit: account.balances.limit,
-                  current_balance: account.balances.current,
-                  type: account.type,
-                  bank_id: bank.id,
-                })
-                .save(null, {method: 'insert'})
-              }
+      knex.select('*').from('banks').where({user_id: user_id})
+      .then(banks => {
+        banks.forEach(bank => {
+          new models.Bank(bank).fetch()
+          .then(bank => {
+            const today = moment().format('YYYY-MM-DD')
+            const startTime = bank.attributes.last_updated
+            return bank.save({
+              last_updated: today,
+              previous_updated: startTime
             })
           })
-          return response
-        })
-        .then(response => {
-          response.transactions.map(async transaction => {
-            const today = moment().format('YYYY-MM-DD');
-            let category = transaction.category ? transaction.category[0] : 'none';
-            if (transaction.date !== today) {
-              return await new models.Transaction({
-                user_id: bank.user_id,
-                plaid_id: transaction.transaction_id,
-                category: category,
-                date: transaction.date,
-                account_id: transaction.account_id,
-                amount: transaction.amount,
-                name: transaction.name
+          .then(bank => {
+            bank = bank.attributes
+            plaid.getAccountsAndTransactions(bank.access_token, bank.previous_updated)
+            .then(response => {
+              response.accounts.forEach(account => {
+                new models.Account({id: account.account_id}).fetch()
+                .then(fetchedAccount => {
+                  if (fetchedAccount) {
+                    fetchedAccount.save({
+                      current_balance: account.balances.current_balance
+                    })
+                  } else {
+                    new models.Account({
+                      id: account.account_id,
+                      user_id: bank.user_id,
+                      bank_name: account.name,
+                      limit: account.balances.limit,
+                      current_balance: account.balances.current,
+                      type: account.type,
+                      bank_id: bank.id,
+                    })
+                    .save(null, {method: 'insert'})
+                  }
+                })
               })
-              .save(null, {method: 'insert'})
-            } else {
-              return await new models.DailyTransaction({
-                user_id: bank.user_id,
-                plaid_id: transaction.transaction_id,
-                category: category,
-                date: transaction.date,
-                account_id: transaction.account_id,
-                amount: transaction.amount,
-                name: transaction.name
-              })
-              .save()
-            }
-          });
+              return response
+            })
+            .then(response => {
+              response.transactions.map(async transaction => {
+                const today = moment().format('YYYY-MM-DD');
+                let category = transaction.category ? transaction.category[0] : 'none';
+                if (transaction.date !== today) {
+                  return await new models.Transaction({
+                    user_id: bank.user_id,
+                    plaid_id: transaction.transaction_id,
+                    category: category,
+                    date: transaction.date,
+                    account_id: transaction.account_id,
+                    amount: transaction.amount,
+                    name: transaction.name
+                  })
+                  .save(null, {method: 'insert'})
+                } else {
+                  return await new models.DailyTransaction({
+                    user_id: bank.user_id,
+                    plaid_id: transaction.transaction_id,
+                    category: category,
+                    date: transaction.date,
+                    account_id: transaction.account_id,
+                    amount: transaction.amount,
+                    name: transaction.name
+                  })
+                  .save()
+                }
+              });
+            })
+          })
         })
       })
     },

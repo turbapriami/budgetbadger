@@ -18,11 +18,7 @@ const port = process.env.PORT || 1337;
 
 const app = express();
 
-<<<<<<< HEAD
 app.use(cookieParser())
-=======
-
->>>>>>> e13f666cf5868c56a16e863514559b9be3ed0e0b
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -44,14 +40,8 @@ const getToken = async (req) => {
 
 const chooseDirectory = (req, res) => {
   if (req.user) {
-<<<<<<< HEAD
-    console.log("MADE IT PAST FIRST CHECK IN CHOOSE DIRECTORY");
-=======
-    console.log("OOKOKOKKKKKKK", req.user)
->>>>>>> e13f666cf5868c56a16e863514559b9be3ed0e0b
     req.next()
   } else {
-    console.log("didn't make it past first check in choose directory");
     res.redirect('/home')
   }
 }
