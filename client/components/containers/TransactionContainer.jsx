@@ -4,7 +4,7 @@ import Navigation from '../pages/transactions/Navigation.jsx';
 import Search from '../pages/transactions/Search.jsx'
 import PieChart from '../pages/transactions/PieChart.jsx'
 import SearchFilter from '../pages/transactions/SearchFilters.jsx'
-import { Box } from 'grommet'
+import { Box, Split } from 'grommet'
 import Spinner from '../pages/Spinner.jsx';
 import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
@@ -43,12 +43,13 @@ class TransactionContainer extends Component {
       displayModal: false,
       sorting: [false, false, false, false, false],
       sortIdx: 0,
+      showForm: false,
       transactionForm: {
         name: '',
         category:'',
         amount: '',
         type: '',
-        date:'YYYY-M-D',
+        date:'YYYY-MM-DD',
       }
     }
     this.filterTransactions = this.filterTransactions.bind(this);
@@ -172,11 +173,12 @@ class TransactionContainer extends Component {
           <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
           { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
           <h2>{this.state.selected}</h2>
-          <div style={{marginLeft: '270px'}}>
-            <NewTransaction handleForm={this.handleForm} submitForm={this.newTransaction} form={this.state.transactionForm}/>
-          </div>
-          <div style={{ display: "flex"}} >
+
+          <div style={{display: "flex"}}>
             <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
+          </div>
+          <div style={{ marginLeft: '270px'}} >
+            <NewTransaction handleForm={this.handleForm} submitForm={this.newTransaction} form={this.state.transactionForm}/>
             <TransactionList sort={this.sortTransactions} sortIdx={this.state.sortIdx} dir={this.state.sorting[this.state.sortIdx]} transactions={this.state.transactions} />        
           </div>
         </div>
