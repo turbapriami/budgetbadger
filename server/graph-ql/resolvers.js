@@ -2,6 +2,24 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash')
 const plaid = require('../plaid.js')
 const moment = require('moment')
+const Promise = require('bluebird');
+
+const fetchBanks = () => {
+  return knex.select('*').from('banks').then(res => {
+    return res
+  });
+}
+
+const fetchTransactions = async () => {
+  // const date = new Date(Date.now() - 864e5)
+  const date = '1990-10-10'
+  const banks = await fetchBanks()
+  return await Promise.all(banks.map(async (bank) => {
+    let user = await plaid.getAccountsAndTransactions(bank.access_token, date)
+    user.user_id = bank.user_id;
+    return user;
+  }))
+}
 
 module.exports = {
 
@@ -145,66 +163,92 @@ module.exports = {
     },
 
   Mutation: {
-    createBankAccounts: (parent, { user_id, public_key }, { knex, models }) => {
-      let accessToken = plaid.exchangeToken(public_key, (res) => {
-        let newBank = new models.Bank({ user_id, id: res.item_id, access_token: res.access_token})
-        newBank.fetch()
-        .then(async (bank) => {
-          if (bank) {
-            const { access_token, id} = bank.attributes;
-            return {access_token, id}
-          } else {
-            let bank2 = await newBank.save(null, {method: 'insert'}).attributes;
-            return bank2
-          }
+    createBankAccount: (parent, { user_id, public_key }, { knex, models }) => {
+      plaid.exchangeToken(public_key)
+      .then(res => {
+        let newBank = new models.Bank({ 
+          user_id, 
+          id: res.item_id, 
+          access_token: res.access_token,
+          last_updated: '1999-10=10'
         })
-        .then(() => {
-          plaid.getAccounts(res.access_token, (response) => {
-            console.log(response.accounts)
-            let accounts = response.accounts.forEach(account => {
-              let toStore = {};
-              toStore.id = account.account_id;
-              toStore.user_id = user_id;
-              toStore.bank_name = account.name;
-              toStore.access_token = res.access_token;
-              toStore.limit = account.balances.limit;
-              toStore.current_balance = account.balances.current;
-              toStore.bank_id = res.item_id;
-              toStore.type = account.type;
-              let newAccount = new models.Account(toStore);
-              console.log(newAccount);
-              newAccount.save(null, {method:'insert'});
-            })
-          })
-        })
-        .catch(() => {throw Error('Bank has already been added')})
       })
     },
-    getUpdatedTransactions: async (parent, args, { knex, models }) => {
-      let accs = await module.exports.Query.getAccounts(parent, args, { knex });
-      accs.forEach(account => {
-        let date = account.last_update ? account.last_update : '1999-10-10';
-        account.last_update = moment().format('YYYY-MM-DD');
-        new models.Account(account).save();
-        plaid.getAccountsAndTransactions(account.access_token, '1999-10-10', (transactions) => {
-          console.log('TRANSACSASDF', transactions)
-          if (transactions) {
-            transactions.transactions.forEach((transaction) => {
-              let category = transaction.category ? transaction.category[0] : 'none';
-              let newTransaction = {
-                user_id: args.user_id,
-                category,
+
+    getUpdatedTransactions: (parent, { user_id }, { knex, models }) => {
+      let newBank = new models.Bank({user_id: user_id})
+      newBank.fetch()
+      .then(bank => {
+        const today = moment().format('YYYY-MM-DD')
+        const startTime = bank.attributes.last_updated
+        return bank.save({
+          last_updated: today,
+          previous_updated: startTime
+        })
+      })
+      .then(bank => {
+        bank = bank.attributes
+        console.log(bank)
+        plaid.getAccountsAndTransactions(bank.access_token, bank.previous_updated)
+        .then(response => {
+          console.log(response)
+          response.accounts.forEach(account => {
+            new models.Account({id: account.account_id}).fetch()
+            .then(fetchedAccount => {
+              console.log(fetchedAccount, 'is it aliveeeee?')
+              if (fetchedAccount) {
+                console.log('heyoooo')
+                fetchedAccount.save({
+                  current_balance: account.balances.current_balance
+                })
+              } else {
+                new models.Account({
+                  id: account.account_id,
+                  user_id: bank.user_id,
+                  bank_name: account.name,
+                  limit: account.balances.limit,
+                  current_balance: account.balances.current,
+                  type: account.type,
+                  bank_id: bank.id,
+                })
+                .save(null, {method: 'insert'})
+              }
+            })
+          })
+          return response
+        })
+        .then(response => {
+          response.transactions.forEach(transaction => {
+            const today = moment().format('YYYY-MM-DD');
+            let category = transaction.category ? transaction.category[0] : 'none';
+            if (transaction.date !== today) {
+              new models.Transaction({
+                user_id: bank.user_id,
+                plaid_id: transaction.transaction_id,
+                category: category,
                 date: transaction.date,
                 account_id: transaction.account_id,
                 amount: transaction.amount,
-                name: transaction.name              
-              }
-              new models.Transaction(newTransaction).save(null, {method: 'insert'});
-            })
-          }
+                name: transaction.name
+              })
+              .save(null, {method: 'insert'})
+            } else {
+              new models.DailyTransaction({
+                user_id: bank.user_id,
+                plaid_id: transaction.transaction_id,
+                category: category,
+                date: transaction.date,
+                account_id: transaction.account_id,
+                amount: transaction.amount,
+                name: transaction.name
+              })
+              .save()
+            }
+          });
         })
       })
     },
+
     createUser: async (parent, args, { models }) => {
       const { email } = args;
       const user = await new models.User({ email }).fetch();

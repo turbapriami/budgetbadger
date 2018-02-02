@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Header, Title, Box, Image, Menu, Anchor, MenuIcon, UserIcon, LogoutIcon, MoneyIcon} from 'grommet';
+import { NEW_BANK } from '../../queries.js';
 import styles from '../../../public/main/jStyles'
 import ReactPlaidLink from 'react-plaid-link'
 import { graphql } from 'react-apollo'
@@ -84,10 +85,4 @@ class LoginBar extends Component {
   }
 }
 
-const newBankQuery = gql`
-  mutation newBankQuery($user_id: Int!, $public_key: String!) {
-    createBankAccounts(user_id: $user_id, public_key: $public_key)
-  }
-`
-
-export default graphql(newBankQuery)(LoginBar);
+export default graphql(NEW_BANK)(LoginBar);
