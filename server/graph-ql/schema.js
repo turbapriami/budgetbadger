@@ -9,6 +9,7 @@ module.exports = `
     last_name: String
     street: String
     zip_code: String
+    city: String
     state: String
     phone: String
     transactions: [Transaction!]
@@ -144,6 +145,7 @@ module.exports = `
       email: String!
       first_name: String
       last_name: String
+      city: String
       street: String
       zip_code: String
       state: String
