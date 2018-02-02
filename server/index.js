@@ -56,6 +56,8 @@ app.use(cors())
 
 app.use(morgan('dev'))
 
+app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
+app.use(/\/((?!graphql).)*/, bodyParser.json());
 // app.use(bodyParser.text({ type: 'text/plain' }));
 
 const logger = (req, res, next) => {
