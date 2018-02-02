@@ -1,13 +1,12 @@
-import { Columns, Box, Section, Heading, Paragraph} from 'grommet';
+import { Columns, Box, Section, Heading, Paragraph } from 'grommet';
 import React, { Component } from 'react';
 import styles from '../../../public/main/jStyles';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
 import BillsDueTable from '../pages/bills/BillsDueTable.jsx';
 import BillsPaidTable from '../pages/bills/BillsPaidTable.jsx';
-import { graphql, compose, withApollo } from 'react-apollo'
-import gql from 'graphql-tag'
-
-
+import { graphql, compose, withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
+import billSortingFunctions from '../pages/bills/billSortingFunctions.jsx';
 const BILLS_QUERY = gql`
   query BILLS_QUERY($user_id: Int!) {    
     getBills(user_id: $user_id) {
@@ -28,64 +27,118 @@ const BILLS_QUERY = gql`
       id
       name
     }
-  }`
+  }`;
 
 const withBills = graphql(BILLS_QUERY, {
-  options: (props) => ({
+  options: props => ({
     variables: {
-      user_id: 1
+      user_id: 1,
     },
-    name: 'AllUserBills'
-  })
-})
+    name: 'AllUserBills',
+  }),
+});
 
 class BillsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      billsDueThisMonth:[],
-      overdueBills: [],
-      paidBills:[],
-      unpaidBills: []
-    }
+      billsDueThisMonth: [],
+      overdueBills: [1, 2, 3, 4],
+      paidBills: [],
+      unpaidBills: [],
+    };
+    this.sortBills = this.sortBills.bind(this);
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.getBills) {
-      var paidBills = nextProps.data.getBills.sort((a, b) => {
-        return (new Date(b.paid_date) - new Date(a.paid_date))
-      }).filter(bill => bill.paid)
+      var paidBills = nextProps.data.getBills
+        .sort((a, b) => {
+          return new Date(b.paid_date) - new Date(a.paid_date);
+        })
+        .filter(bill => bill.paid);
 
       const unpaidBills = nextProps.data.getBills.sort((a, b) => {
-        return (new Date(a.due_date) - new Date(b.due_date))
-      })
+        return new Date(a.due_date) - new Date(b.due_date);
+      });
 
       var billsDueThisMonth = nextProps.data.getBills.filter(bill => {
         const dueDate = new Date(bill.due_date);
         const currentDate = new Date();
-        return ((currentDate.getMonth() === dueDate.getMonth()) && !bill.paid);
-      })
+        return currentDate.getMonth() === dueDate.getMonth() && !bill.paid;
+      });
 
       const overdueBills = nextProps.data.getBills.filter(bill => {
         const dueDate = new Date(bill.due_date);
         const currentDate = new Date();
-        return ((currentDate > dueDate) && !bill.paid);
-      })
+        return currentDate > dueDate && !bill.paid;
+      });
 
       this.setState({
-        billsDueThisMonth, overdueBills, unpaidBills, paidBills
-      })
+        billsDueThisMonth,
+        overdueBills,
+        unpaidBills,
+        paidBills,
+      });
+    }
+  }
+
+  sortBills(paid, index, ascending) {
+    const paidBillsLabels = [
+      'description',
+      'bill_category',
+      'due_date',
+      'paid_date',
+      'amount',
+    ];
+    const unpaidBillsLabels = [
+      'description',
+      'bill_category',
+      'due_date',
+      'amount',
+    ];
+
+    if (paid) {
+      const label = paidBillsLabels[index];
+      var sortedBills = this.state.paidBills.sort((a, b) => {
+        return billSortingFunctions[label](
+          a[label] || a,
+          b[label] || a,
+          ascending
+        );
+      });
+      this.setState({ paidBills: sortedBills });
+    } else {
+      const label = unpaidBillsLabels[index];
+      var sortedBills = this.state.unpaidBills.sort((a, b) => {
+        return billSortingFunctions[label](
+          a[label] || a,
+          b[label] || a,
+          ascending
+        );
+      });
+      this.setState({ unpaidBills: sortedBills });
     }
   }
 
   render() {
     return (
       <div>
-        <BillsSummary overdueBills={this.state.overdueBills} billsDueThisMonth={this.state.billsDueThisMonth}/>
-        <BillsDueTable bills={this.state.unpaidBills} billCategories={this.props.data.getBillCategories}/>
-        <BillsPaidTable bills={this.state.paidBills}/>
-      </div>)
+        <BillsSummary
+          overdueBills={this.state.overdueBills}
+          billsDueThisMonth={this.state.billsDueThisMonth}
+        />
+        <BillsDueTable
+          bills={this.state.unpaidBills}
+          billCategories={this.props.data.getBillCategories}
+          sortBills={this.sortBills}
+        />
+        <BillsPaidTable
+          bills={this.state.paidBills}
+          sortBills={this.sortBills}
+        />
+      </div>
+    );
   }
 }
 
