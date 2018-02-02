@@ -94,11 +94,9 @@ knex.schema.hasTable('accounts').then(exists => {
       table.integer('user_id');
       table.string('bank_name');
       table.string('type');
-      table.string('access_token');
       table.integer('current_balance');
       table.integer('limit');
       table.string('bank_id');
-      table.string('last_update');
     }).then(() => console.log('created table accounts'))
   }
 })
@@ -118,6 +116,8 @@ knex.schema.hasTable('banks').then(exists => {
       table.string('id').primary();
       table.string('access_token');
       table.integer('user_id');
+      table.string('last_updated');
+      table.string('previous_updated');
     }).then(() => console.log('created table banks'));
   }
 })

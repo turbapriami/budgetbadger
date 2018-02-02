@@ -93,6 +93,7 @@ module.exports = `
     id: String!
     access_token: String!
     last_updated: Date
+    previous_updated: Date
     user_id: Int!
     accounts: [Account!]
   }
@@ -138,7 +139,7 @@ module.exports = `
     createLoanPayment(amount: Int!, date: String!, loan_id: Int!, user_id: Int!): Loan_Payment
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): String!
-    addBank(id: String!, access_token: String!, user_id: Int!): Bank
+    addBank(id: String!, access_token: String!, user_id: Int!, last_updated: String): Bank
     updateUser(    
       email: String!
       first_name: String
@@ -153,7 +154,7 @@ module.exports = `
     createBillCategory(name: String!): BillCategory!
     updateBillCategory(id: Int!, name: String!): BillCategory!
     deleteBillCategory(id: Int!): Int!
-    createBankAccounts(user_id: Int!, public_key: String!): String!
+    createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]
   }
   `

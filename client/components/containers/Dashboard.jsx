@@ -5,39 +5,24 @@ import BillsDueTable from '../pages/bills/BillsDueTable.jsx';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { DASH_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
 import gql from 'graphql-tag'
 
-const DashQuery = gql`
-  query DashQuery($user_id: Int!) {
-    getTransactions(user_id: $user_id) {
-      amount
-      name
-      account {
-        type
-      }
-    }
-    getAccounts(user_id: $user_id) {
-      type
-      bank_name
-    }
-    getBills(user_id: $user_id) {
-      description
-      bill_category {
-        name
-      }
-      amount
-      due_date
-      paid
-    }
-  }`
-
-const WithDashQuery = graphql(DashQuery, {
+const withDashQuery = graphql(DASH_QUERY, {
   options: (props) => ({
     variables: {
       user_id: 1
     },
     name: 'Dashboard Data'
   })
+})
+
+const withUpdateTransactions = graphql(UPDATE_TRANSACTIONS, {
+  options: {
+    refetchQueries: [{
+      query: DASH_QUERY
+    }]
+  }
 })
 
 class DashBoard extends React.Component {
@@ -49,7 +34,9 @@ class DashBoard extends React.Component {
   }
 
   componentDidUpdate() {
-    // console.log(this.props.data)
+    this.props.mutate({
+      variables: {user_id: 1}
+    })
   }
 
   render(){
@@ -100,4 +87,4 @@ class DashBoard extends React.Component {
   }
 };
 
-export default compose(withApollo, WithDashQuery)(DashBoard);
+export default compose(withApollo, withDashQuery, withUpdateTransactions)(DashBoard);
