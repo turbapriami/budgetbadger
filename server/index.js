@@ -12,6 +12,7 @@ const typeDefs = require('./graph-ql/Schema.js');
 const resolvers = require('./graph-ql/resolvers.js');
 const db = require('./database/index.js');
 const APP_SECRET = process.env.APP_SECRET;
+console.log(APP_SECRET)
 const models = require('./database/models/index.js');
 
 const port = process.env.PORT || 1337;
@@ -27,14 +28,12 @@ const schema = makeExecutableSchema({
 })
 
 const getToken = async (req) => {
-  console.log('TOKEN?????', req.cookies['TOKEN'])
   try {
-    const { user } = await jwt.verify(req.cookies['TOKEN'], APP_SECRET);
-    req.user = user;
+    const { user_id, token } = JSON.parse(req.cookies.user)
+    req.user = { user } = await jwt.verify(token, APP_SECRET);
   } catch (err) {
     console.log(err);
   }
-  req.user = 'user' // <= uncomment to dummy authenticate
   req.next()
 }
 
@@ -46,23 +45,10 @@ const chooseDirectory = (req, res) => {
   }
 }
 
-// const homeCheck = (req, res) => {
-//   if (req.user) {
-//     res.redirect('/')
-//   } else {
-//     req.next()
-//   }
-// }
-
-
-// change to req.user to load splash
-
 const homeCheck = (req, res) => {
   if (req.user) {
-    console.log("MADE IT PAST FIRST CHECK IN HOME CHECK");
     res.redirect('/')
   } else {
-    console.log("didn't make it past first check in home check")
     req.next()
   }
 }
@@ -71,8 +57,6 @@ app.use(cors())
 
 app.use(morgan('dev'))
 
-app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
-app.use(/\/((?!graphql).)*/, bodyParser.json());
 // app.use(bodyParser.text({ type: 'text/plain' }));
 
 const logger = (req, res, next) => {
