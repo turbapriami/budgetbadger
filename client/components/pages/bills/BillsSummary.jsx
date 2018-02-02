@@ -33,11 +33,11 @@ class BillsSummary extends Component {
                 style={{width: '180px'}}
               >
               <Heading  
-                  align = 'center'
-                  margin = 'none'
-                  strong = 'true'
-                  style = {{fontSize:'20px', textAlign:'center'}}
-                >
+                align = 'center'
+                margin = 'none'
+                strong = 'true'
+                style = {{fontSize:'20px', textAlign:'center'}}
+              >
                   Bills Due
                 </Heading>
                 <Paragraph
@@ -107,8 +107,8 @@ class BillsSummary extends Component {
                     Credit Available
                   </Heading>
                   <Paragraph size='xlarge'
-                  style = {{textAlign:'center'}}>
-                    Need Data
+                    style = {{textAlign:'center'}}>
+                      Need Data
                   </Paragraph>
                 </Box>
               </Columns>

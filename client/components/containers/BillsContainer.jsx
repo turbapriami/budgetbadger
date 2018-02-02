@@ -53,7 +53,7 @@ class BillsContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.getBills) {
-      const paidBills = nextProps.data.getBills.sort((a, b) => {
+      var paidBills = nextProps.data.getBills.sort((a, b) => {
         return (new Date(b.paid_date) - new Date(a.paid_date))
       }).filter(bill => bill.paid)
 
@@ -61,11 +61,10 @@ class BillsContainer extends Component {
         return (new Date(a.due_date) - new Date(b.due_date))
       })
 
-      const billsDueThisMonth = nextProps.data.getBills.filter(bill => {
+      var billsDueThisMonth = nextProps.data.getBills.filter(bill => {
         const dueDate = new Date(bill.due_date);
         const currentDate = new Date();
         return ((currentDate.getMonth() === dueDate.getMonth()) && !bill.paid);
-        return bill;
       })
 
       const overdueBills = nextProps.data.getBills.filter(bill => {
