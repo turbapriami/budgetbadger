@@ -138,7 +138,7 @@ module.exports = `
     createLoan(name: String!, amount: Int!, interest_rate: Int!, inception_date: String!, end_date: String!, user_id: Int!, recurrence: String!): Loan
     createLoanPayment(amount: Int!, date: String!, loan_id: Int!, user_id: Int!): Loan_Payment
     deleteUser(email: String!): Int!
-    loginUser(email: String!, password: String!): String!
+    loginUser(email: String!, password: String!): [String!]
     addBank(id: String!, access_token: String!, user_id: Int!, last_updated: String): Bank
     updateUser(    
       email: String!
