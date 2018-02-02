@@ -7,33 +7,65 @@ import ProfileEdit from './ProfileEdit.jsx';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import { App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, Card } from 'grommet';
 
+const Get_User = gql`
+  query GETUSER($id: Int!) {
+    getUser(id: $id) {
+      first_name
+      last_name
+      email
+      street
+      state
+      city
+      zip_code
+      phone
+    }
+  }
+`
+
+const currentUser = graphql(Get_User, {
+  options: props => ({
+    variables: {
+      id: 27
+    },
+    name: 'currentUser',
+  })
+})
+
 class Profile extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-      first_name: "User",
-      last_name: "Name",
-      street: "782 West 44th St.",
-      city: "New York",
-      state: "New York",
-      zip_code: "13281",
-      phone: "(123)456-7890",
-      email: "someuser4@email.com",
+      first_name: '',
+      last_name: '',
+      street: '',
+      city: '',
+      state: '',
+      zip_code: '',
+      phone: '',
+      email: '',
       banks: ["J.P. Morgan and Chase", "TD Bank", "Citi Bank", "Bank of America", "Wells Fargo"],
       edit: false
     }
-    this.editUserInfo = this.editUserInfo.bind(this);
+    this.editing = this.editing.bind(this);
   }
 
-  componentDidMount() {
-    const GET_USER = gql`
-      query getUser($user_email: String) {
-        up(email: $user_email, password: $password)
-      }
-    `
+  componentWillReceiveProps(nextProps) {
+    console.log("NEXT PROPS!!!!!!!!", nextProps.data);
+    if (nextProps.data.getUser) {
+      this.setState({
+        first_name: nextProps.data.getUser[0].first_name,
+        last_name: nextProps.data.getUser[0].last_name,
+        street: nextProps.data.getUser[0].street,
+        city: nextProps.data.getUser[0].city,
+        state: nextProps.data.getUser[0].state,
+        zip_code: nextProps.data.getUser[0].zip_code,
+        phone: nextProps.data.getUser[0].phone,
+        email: nextProps.data.getUser[0].email
+      })
+    }
   }
 
-  editUserInfo() {
+  editing() {
     this.setState({
       edit: true
     })
@@ -42,11 +74,11 @@ class Profile extends Component {
   render() {
     return (
       <div>
-        return (this.state.edit === true ? <button onClick={this.editUserInfo}>Submit</button> : <button onClick={this.editUserInfo}>Make Edits</button>
-        return (this.state.edit === true ? <ProfileEdit userInfo={this.state}/> : <ProfileCard state={this.state}/>)
+        <button onClick={this.editing} >Edit your profile</button>
+        {this.state.edit ? <ProfileEdit userInfo={this.state}/> : <ProfileCard userInfo={this.state} />}
       </div>
     )
   }
 }
 
-export default Profile;
+export default compose(withApollo, currentUser)(Profile);

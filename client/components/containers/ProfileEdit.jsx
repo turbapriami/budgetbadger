@@ -18,53 +18,8 @@ class ProfileEdit extends Component {
       email: userInfo.email,
       banks: userInfo.banks
     }
-    this.updateFirstName = this.updateFirstName.bind(this);
-    this.updateLastName = this.updateLastName.bind(this);
-    this.updateStreet = this.updateStreet.bind(this);
-    this.updateCity = this.updateCity.bind(this);
-    this.updateZipCode = this.updateZipCode.bind(this);
-    this.updateEmail = this.updateEmail.bind(this);
-    this.updatePhone = this.updatePhone.bind(this);
-    this.submitChanges = this.submitChanges.bind(this);
   }
 
-updateFirstName(e) {
-  this.setState({
-    first_name: e.target.value
-  });
-}
-
-updateLastName(e) {
-  last_name: e.target.value
-}
-
-updateStreet(e) {
-  street: e.target.value
-}
-
-updateCity(e) {
-  city: e.target.value
-}
-
-updateState(e) {
-  state: e.target.value
-}
-
-updateZipCode(e) {
-  zip_code: e.target.value
-}
-
-updateEmail(e) {
-  email: e.target.value
-}
-
-updatePhone(e) {
-  phone: e.target.value
-}
-
-submitChanges() {
-
-}
 
   render() {
     return (
@@ -77,27 +32,27 @@ submitChanges() {
                 
                 <Box pad={{ between: "small" }}>
                   <FormField>
-                      <input onDOMChange={this.updateFirstName} defaultValue={this.state.first_name}/>
-                      <input onDOMChange={this.updateLastName} defaultValue={this.state.last_name}/>
+                      <input onDOMChange={e => this.setState({ first_name: e.target.value })} defaultValue={this.state.first_name}/>
+                      <input onDOMChange={e => this.setState({ last_name: e.target.value })} defaultValue={this.state.last_name}/>
                   </FormField>
                 </Box>
               </Card>
               <Card label="Address" size={{ height: "medium", width: "medium" }} style={{ display: "inline-block" }} colorIndex="light-2" margin={{ horizontal: "small" }}>
               
                 <FormField>
-                  <input onDOMChange={this.updateStreet} defaultValue={this.state.street}/>
-                  <input onDOMChange={this.updateCity} defaultValue={`${this.state.city},`}/>
-                  <input onDOMChange={this.updateState} defaultValue={this.state.state}/>
-                  <input onDOMChange={this.updateZipCode} defaultValue={this.state.zip_code}/>
+                  <input onDOMChange={e => this.setState({ street: e.target.value })} defaultValue={this.state.street}/>
+                  <input onDOMChange={e => this.setState({ city: e.target.value })} defaultValue={`${this.state.city},`}/>
+                  <input onDOMChange={e => this.setState({ state: e.target.value })} defaultValue={this.state.state}/>
+                  <input onDOMChange={e => this.setState({ zip_code: e.target.value })} defaultValue={this.state.zip_code}/>
                 </FormField>
               </Card>
               <Card wrap={true} label="Email" size={{ height: "medium", width: "medium" }} style={{ display: "inline-block" }} colorIndex="light-2" margin={{ horizontal: "small" }}> 
                      
-                <input onDOMChange={this.updateEmail} defaultValue={this.state.email}/>
+                <input onDOMChange={e => this.setState({ email: e.target.value })} defaultValue={this.state.email}/>
               </Card>
               <Card label="Phone" size={{ height: "medium", width: "medium" }} style={{ display: "inline-block" }} colorIndex="light-2" margin={{ horizontal: "small" }}>
               
-                <input onDOMChange={this.updatePhone} defaultValue={this.state.phone}/>
+                <input onDOMChange={e => this.setState({ phone: e.target.value })} defaultValue={this.state.phone}/>
               </Card>
             </Box>
             <Card label="Accounts" size={{ height: "medium", width: "medium" }} style={{ display: "inline" }} colorIndex="light-2" margin={{ vertical: "small", horizontal: "small" }}>
@@ -108,16 +63,10 @@ submitChanges() {
             </Card>
           </Box>
         </Card>
-        <button onClick={this.submitChanges} >Submit Changes</button>
+        <button onClick={e => this.getChanges(this.state)} >Submit Changes</button>
       </Box>
     )
   }
 }
 
-const UPDATE_USER = gql`
-mutation updateUser($user_email: String) {
-  updateUser(email: $user_email, password: $password)
-}
-`
-
-export default graphql(UPDATE_USER)(ProfileEdit);
+export default ProfileEdit;
