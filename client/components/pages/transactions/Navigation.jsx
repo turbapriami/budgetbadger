@@ -3,7 +3,7 @@ import SideBar from 'grommet/components/SideBar';
 import { Box, Anchor, Menu, Header, Title } from 'grommet';
 
 const Navigation = ({ accounts, filter }) => (
-    <SideBar>
+    <SideBar size="small">
       <Header><Title>Types</Title></Header>
       <Box flex='grow' justify='start'>
         <Menu primary={true}>

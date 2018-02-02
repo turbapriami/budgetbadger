@@ -50,6 +50,7 @@ class TransactionContainer extends Component {
         amount: '',
         type: '',
         date:'YYYY-MM-DD',
+        account: ''
       }
     }
     this.filterTransactions = this.filterTransactions.bind(this);
@@ -156,31 +157,54 @@ class TransactionContainer extends Component {
     e.preventDefault()
     const variables = this.state.transactionForm;
     variables.user_id = 1;
-    variables.account_id = 'ejRmkzJkD4I9lMKy3AEqUw5kjD59Wmty39BML'
+    variables.account_id = this.props.data.getAccounts[variables.account.slice(0, variables.account.indexOf('.'))].id
     variables.amount = Number(variables.amount);
-    const { user_id, account_id, name, type, amount, date} = variables;
     const transaction = await this.props.mutate({variables});
-
-    console.log('trans', transaction)
+    const { transactions } = this.state
+    transactions.unshift(variables);
+    this.setState({
+      transactionForm: {
+        name: '',
+        category:'',
+        amount: '',
+        type: '',
+        date:'YYYY-MM-DD',
+        account: ''
+      }
+    })
   }
+
+
 
   render() {
     const { displayModal } = this.state;
-    // console.log(this.props)
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <Search style={{float: 'right'}} transactions={this.state.transactions} search={this.handleSearch}/>
           { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
-          <h2>{this.state.selected}</h2>
-
-          <div style={{display: "flex"}}>
-            <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
-          </div>
-          <div style={{ marginLeft: '270px'}} >
-            <NewTransaction handleForm={this.handleForm} submitForm={this.newTransaction} form={this.state.transactionForm}/>
-            <TransactionList sort={this.sortTransactions} sortIdx={this.state.sortIdx} dir={this.state.sorting[this.state.sortIdx]} transactions={this.state.transactions} />        
-          </div>
+          <Split 
+            fixed={false}
+            separator={false}
+            showOnResponsive='both'
+            flex="right"
+            priority="right">
+            <Box>
+              <h2>{this.state.selected}</h2>
+              <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
+            </Box>  
+            <Box align="left">
+              <Box align='end' alignContent='end'>
+                <Search transactions={this.state.transactions} search={this.handleSearch}/>
+              </Box>
+              <NewTransaction handleForm={this.handleForm} accounts={this.props.data.getAccounts} submitForm={this.newTransaction} form={this.state.transactionForm}/>
+              <TransactionList 
+                sort={this.sortTransactions} 
+                sortIdx={this.state.sortIdx} 
+                dir={this.state.sorting[this.state.sortIdx]} 
+                transactions={this.state.transactions} 
+              />        
+            </Box>
+          </Split>
         </div>
       )
     } else {
