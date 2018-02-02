@@ -170,7 +170,7 @@ module.exports = {
           user_id, 
           id: res.item_id, 
           access_token: res.access_token,
-          last_updated: '1999-10=10'
+          last_updated: '1999-10-10'
         }).save(null, {method: 'insert'});
       })
     },
@@ -218,7 +218,6 @@ module.exports = {
             const today = moment().format('YYYY-MM-DD');
             let category = transaction.category ? transaction.category[0] : 'none';
             if (transaction.date !== today) {
-              console.log(today)
               return await new models.Transaction({
                 user_id: bank.user_id,
                 plaid_id: transaction.transaction_id,
