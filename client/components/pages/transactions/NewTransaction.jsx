@@ -7,7 +7,7 @@ import AccordionPanel from 'grommet/components/AccordionPanel';
 // import DateTime from 'grommet/components/DateTime';
 // import Button from 'grommet/components/Button';
 import styles from '../../../../public/main/jStyles.js';
-import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
+import {Split, Box, Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
 
 class NewTransaction extends Component {
   constructor() {
@@ -23,50 +23,69 @@ class NewTransaction extends Component {
     return (
       <Accordion>
         <AccordionPanel heading="Add a transaction">
-          <Form style={{padding:'10%'}}>
+          <Split
+            fixed={false}
+            separator={false}
+            showOnResponsive='both'
+            flex="both"
+            >
+          <Form style={{paddingLeft:'5%', paddingRight:'5%'}}>
           <Header>
             <Heading tag='h3' strong='true'>Enter Transaction Details:</Heading>
           </Header>
-          <Heading tag='h4' margin='small'>Transaction Category:
-            <TextInput
-              placeHolder="Category"
-              name='category'
-              value={this.props.form.category}
-              onDOMChange={this.props.handleForm}
-            />
-          </Heading>
-          <Heading tag='h4' margin='medium'>Transaction Description:
+          <Box align="left">
+            <Heading tag='h4' margin='small'>Transaction Category:
+              <TextInput
+                placeHolder="Category"
+                name='category'
+                value={this.props.form.category}
+                onDOMChange={this.props.handleForm}
+              />
+            </Heading>
+            <Heading tag='h4' margin='medium'>Transaction Description:
+              <div>
+                  <TextInput
+                    placeHolder="Description"
+                    name='name'
+                    value={this.props.form.name}
+                    onDOMChange={this.props.handleForm}
+                  />
+                </div>
+            </Heading>
+          </Box>
+          <Box align="right">
+            <Heading tag='h4' margin='small'>Bill Amount:
+              <div>
+              <NumberInput 
+                placeHolder='Enter Amount'
+                name='amount'
+                value = {this.props.form.amount} 
+                onChange = {this.props.handleForm}
+                min = {0.00}
+              />
+                </div>
+            </Heading>
+            <Heading tag='h4'  margin='small'>Transaction Date:
             <div>
-                <TextInput
-                  placeHolder="Description"
-                  name='name'
-                  value={this.props.form.name}
-                  onDOMChange={this.props.handleForm}
-                />
+              <DateTime id='id'
+                  name='date'
+                  format='YYYY-MM-DD'
+                  step={5}
+                  onChange={(value) => this.props.handleForm('date', value)}
+                  value={this.props.form.date} 
+              />
               </div>
-          </Heading>
-          <Heading tag='h4' margin='small'>Bill Amount:
+            </Heading>
+            <Heading tag='h4'  margin='small'>Transaction Category:
             <div>
-            <NumberInput 
-              placeHolder='Enter Amount'
-              name='amount'
-              value = {this.props.form.amount} 
-              onChange = {this.props.handleForm}
-              min = {0.00}
-            />
+              <Select placeHolder='Account'
+                name='account'
+                options={this.props.accounts.map((a, i) => i + '. ' + a.bank_name)}
+                value={this.props.form.account}
+                onChange={({value}) => this.props.handleForm('account', value)} />
               </div>
-          </Heading>
-          <Heading tag='h4'  margin='small'>Transaction Date:
-          <div>
-            <DateTime id='id'
-                name='date'
-                format='YYYY-MM-DD'
-                step={5}
-                onChange={(value) => this.props.handleForm('date', value)}
-                value={this.props.form.date} 
-            />
-            </div>
-          </Heading>
+            </Heading>
+          </Box>
           <Footer pad={{"vertical": "medium"}}>
             <Button label='Submit'
               type='submit'
@@ -76,6 +95,7 @@ class NewTransaction extends Component {
             />
           </Footer>
         </Form>
+        </Split>
         </AccordionPanel>
       </Accordion>
     )
