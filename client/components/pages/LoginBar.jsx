@@ -23,8 +23,6 @@ class LoginBar extends Component {
   handleOnSuccess(token, metadata) {
     this.props.mutate({
       variables: {user_id: 1, public_key: token}
-    }).then((response) => {
-      // console.log(response);
     })
   }
   handleOnExit() {

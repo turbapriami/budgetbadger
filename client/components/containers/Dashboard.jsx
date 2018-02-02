@@ -33,7 +33,7 @@ class DashBoard extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     this.props.mutate({
       variables: {user_id: 1}
     })

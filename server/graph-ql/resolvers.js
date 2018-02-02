@@ -166,12 +166,12 @@ module.exports = {
     createBankAccount: (parent, { user_id, public_key }, { knex, models }) => {
       plaid.exchangeToken(public_key)
       .then(res => {
-        let newBank = new models.Bank({ 
+        new models.Bank({ 
           user_id, 
           id: res.item_id, 
           access_token: res.access_token,
           last_updated: '1999-10=10'
-        })
+        }).save(null, {method: 'insert'});
       })
     },
 
@@ -188,16 +188,12 @@ module.exports = {
       })
       .then(bank => {
         bank = bank.attributes
-        console.log(bank)
         plaid.getAccountsAndTransactions(bank.access_token, bank.previous_updated)
         .then(response => {
-          console.log(response)
           response.accounts.forEach(account => {
             new models.Account({id: account.account_id}).fetch()
             .then(fetchedAccount => {
-              console.log(fetchedAccount, 'is it aliveeeee?')
               if (fetchedAccount) {
-                console.log('heyoooo')
                 fetchedAccount.save({
                   current_balance: account.balances.current_balance
                 })
@@ -218,11 +214,12 @@ module.exports = {
           return response
         })
         .then(response => {
-          response.transactions.forEach(transaction => {
+          response.transactions.map(async transaction => {
             const today = moment().format('YYYY-MM-DD');
             let category = transaction.category ? transaction.category[0] : 'none';
             if (transaction.date !== today) {
-              new models.Transaction({
+              console.log(today)
+              return await new models.Transaction({
                 user_id: bank.user_id,
                 plaid_id: transaction.transaction_id,
                 category: category,
@@ -233,7 +230,7 @@ module.exports = {
               })
               .save(null, {method: 'insert'})
             } else {
-              new models.DailyTransaction({
+              return await new models.DailyTransaction({
                 user_id: bank.user_id,
                 plaid_id: transaction.transaction_id,
                 category: category,
