@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Box, Button,Form, Heading, Header, Layer, Columns} from 'grommet';
 import EditBillForm from '../bills/EditBillForm.jsx';
 import { gql, graphql } from 'react-apollo';
+import {DELETE_BILL} from '../../../queries.js';
 
 class DeleteBillForm extends Component {
   constructor(props) {
@@ -80,12 +81,7 @@ class DeleteBillForm extends Component {
   }
 }
 
-const deleteBill = gql`
-  mutation deleteBill($id: Int!) {
-    deleteBill(id: $id)
-  }`;
-
-export default graphql(deleteBill, {
+export default graphql(DELETE_BILL, {
   options: {
     refetchQueries: ['BILLS_QUERY'],
   },

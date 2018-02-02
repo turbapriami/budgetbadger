@@ -36,7 +36,7 @@ class BillsSummary extends Component {
             >
               Bills Due
             </Heading>
-            <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
+            <Paragraph size="xlarge" style={{ textAlign: 'center'}}>
               ${this.props.billsDueThisMonth
                 ? this.props.billsDueThisMonth
                     .reduce((total, bill) => (total += bill.amount), 0)
@@ -59,7 +59,7 @@ class BillsSummary extends Component {
             >
               Bills Overdue
             </Heading>
-            <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
+            <Paragraph size="xlarge" style={{ textAlign: 'center'}}>
               ${this.props.overdueBills
                 ? this.props.overdueBills
                     .reduce((total, bill) => (total += bill.amount), 0)
@@ -97,7 +97,7 @@ class BillsSummary extends Component {
               align="left"
               margin="none"
               strong="true"
-              style={{ fontSize: '20px', textAlign: 'center' }}
+              style={{ fontSize: '20px', textAlign: 'center'}}
             >
               Credit Available
             </Heading>

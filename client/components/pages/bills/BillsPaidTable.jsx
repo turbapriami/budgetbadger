@@ -11,29 +11,31 @@ class BillsPaidTable extends Component {
     this.state = {
       billFormToggle: false,
       sortIndex: 0,
-      sortAscending: true,
+      sortAscending: false,
     };
     this.handleSortClick = this.handleSortClick.bind(this);
   }
 
   handleSortClick(e) {
     let sortIdx = e;
-    if (sortIdx === this.state.sortIndex) {
-      this.setState({ sortAscending: !this.state.sortAscending }, () => {
-        this.props.sortBills(
-          true,
-          this.state.sortIndex,
-          this.state.sortAscending
-        );
-      });
-    } else {
-      this.setState({ sortIndex: sortIdx }, () => {
-        this.props.sortBills(
-          true,
-          this.state.sortIndex,
-          this.state.sortAscending
-        );
-      });
+    if (sortIdx < 5) {
+      if (sortIdx === this.state.sortIndex) {
+        this.setState({ sortAscending: !this.state.sortAscending }, () => {
+          this.props.sortBills(
+            true,
+            this.state.sortIndex,
+            !this.state.sortAscending
+          );
+        });
+      } else {
+        this.setState({ sortIndex: sortIdx }, () => {
+          this.props.sortBills(
+            true,
+            this.state.sortIndex,
+            !this.state.sortAscending
+          );
+        });
+      }
     }
   }
 
