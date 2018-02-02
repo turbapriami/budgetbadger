@@ -33,7 +33,7 @@ const CREATE_TRANSACTION = gql`
       id
     }
   }
-  `;
+  `
 
 const NEW_BANK = gql`
   mutation NEW_BANK($user_id: Int!, $public_key: String!) {
