@@ -8,7 +8,7 @@ const PLAID_ENV = process.env.PLAID_ENV || plaid.environments.sandbox;
 
 const plaidClient = new plaid.Client(PLAID_CLIENT_ID, PLAID_SECRET, PLAID_PUBLIC_KEY, plaid.environments.sandbox);
 
-const exchangeToken = (public_token, callback) => {
+const exchangeToken = (public_token) => {
   return new Promise((resolve, reject) => {
     plaidClient.exchangePublicToken(public_token || 'public-sandbox-e19fb01e-7942-40a7-81fd-ba9af519aecb', (err, res) => {
       if (res) resolve(res);
@@ -17,7 +17,7 @@ const exchangeToken = (public_token, callback) => {
   });
 }
 
-const getAccounts = (access_token, callback) => {
+const getAccounts = (access_token) => {
   return new Promise((resolve, reject) => {
     plaidClient.getAccounts(access_token, async(err, res) => {
       if (res) resolve(res);
@@ -26,7 +26,7 @@ const getAccounts = (access_token, callback) => {
   });
 }
 
-const getAccountsAndTransactions = (access_token, startDate, callback) => {
+const getAccountsAndTransactions = (access_token, startDate) => {
   const currentDateTime = moment().format('YYYY-MM-DD');
   return new Promise((resolve, reject) => {
     plaidClient.getTransactions(access_token, startDate, currentDateTime, (err, res) => {
@@ -35,23 +35,6 @@ const getAccountsAndTransactions = (access_token, startDate, callback) => {
     })
   })
 }
-
-// exchangeToken(public_token, (data) => {
-  // console.log(data)
-  // console.log(data.item_id)
-  // console.log(data.access_token)
-// })
-
-// getAccounts(access_token, (data) => {
-//   console.log(data)
-// })
-
-// getAccountsAndTransactions(access_token, startDate, (data) => {
-//   console.log(data)
-//   console.log(data.accounts)
-//   console.log(data.transactions)
-// })
-
 
 module.exports = {
   exchangeToken,
