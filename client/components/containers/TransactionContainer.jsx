@@ -159,8 +159,7 @@ class TransactionContainer extends Component {
     variables.user_id = 1;
     variables.account_id = this.props.data.getAccounts[variables.account.slice(0, variables.account.indexOf('.'))].id
     variables.amount = Number(variables.amount);
-    variables.type = 'd'
-    // const transaction = await this.props.createNewTransaction({variables});
+    const transaction = await this.props.mutate({variables});
     const { transactions } = this.state
     transactions.unshift(variables);
     this.setState({
@@ -209,9 +208,7 @@ class TransactionContainer extends Component {
         </div>
       )
     } else {
-      return (
-        <Spinner />
-      )
+      return <Spinner />
     }
   }
 }
