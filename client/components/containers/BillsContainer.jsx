@@ -51,7 +51,7 @@ class BillsContainer extends Component {
       const overdueBills = nextProps.data.getBills.filter(bill => {
         const dueDate = new Date(bill.due_date);
         const currentDate = new Date();
-        return currentDate > dueDate && !bill.paid;
+        return (currentDate > dueDate) && !bill.paid;
       });
 
       this.setState({

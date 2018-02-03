@@ -3,7 +3,15 @@ import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
 import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
+import {CREATE_BILL, CREATE_BILL_CATEGORY} from '../../../queries.js';
 import gql from 'graphql-tag';
+
+
+var getInputCategoryID = (value, billCategoryObjs) => {
+  let filteredCategories = billCategoryObjs.filter(billCategoryObj => billCategoryObj.name.toLowerCase() === value.toLowerCase());
+  return filteredCategories.length > 0 ? filteredCategories[0].id : 0;
+}
+
 
 class AddBillForm extends React.Component {
   constructor(props) {
@@ -19,7 +27,9 @@ class AddBillForm extends React.Component {
       paid_date:'',
       alert:false
     }
-    this.handleBillCategoryChange = this.handleBillCategoryChange.bind(this);
+
+    this.handleBillCategoryType = this.handleBillCategoryType.bind(this);
+    this.handleBillCategorySelect = this.handleBillCategorySelect.bind(this);
     this.handleBillAmountChange = this.handleBillAmountChange.bind(this);
     this.handleDueDateChange = this.handleDueDateChange.bind(this);
     this.handleDescriptionType = this.handleDescriptionType.bind(this);
@@ -27,11 +37,18 @@ class AddBillForm extends React.Component {
     this.handleAlertChange = this.handleAlertChange.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
   }
-  
-  handleBillCategoryChange(e) {
-    let categoryID = this.props.billCategories.filter(categoryObj => categoryObj.name === e.value)[0].id;
-    this.setState({bill_category_description:e.value});
-    this.setState({bill_category_id:categoryID});
+
+  handleBillCategoryType(e) {
+    console.log('ADDBILLFORM CATEGORY TYPE', e);
+    this.setState({bill_category_description:e.target.value});
+    this.setState({bill_category_id:getInputCategoryID(e.target.value,this.props.billCategories)});
+  }
+
+  handleBillCategorySelect(e) {
+    console.log('ADDBILLFORM CATEGORY SELECT', e);
+    let category = this.props.billCategories.filter(categoryObj => categoryObj.name.toLowerCase() === e.suggestion.toLowerCase())
+    this.setState({bill_category_description:e.suggestion})
+    this.setState({bill_category_id:category[0].id});
   }
 
   handleDescriptionType(e) {
@@ -54,35 +71,71 @@ class AddBillForm extends React.Component {
     this.setState({alert: !this.state.alert});
   }
   
-  handleAddClick() {
-    this.props.handleFormToggle();
-    let variables = {
-      user_id:this.state.user_id,
-      bill_category_id:this.state.bill_category_id,
-      description:this.state.description,
-      amount:this.state.amount,
-      due_date: new Date(this.state.due_date),
-      paid:this.state.paid,
-      paid_date:new Date(this.state.paid_date),
-      alert:this.state.alert
-    }
-    this.props.mutate({
-      variables: variables
-    }).then(({ data }) => {
+  handleAddClick(e) {
+    if (this.state.bill_category_id) {
+      let variables = {
+        user_id: this.state.user_id,
+        bill_category_id: this.state.bill_category_id,
+        description: this.state.description,
+        amount: this.state.amount,
+        due_date: new Date(this.state.due_date),
+        paid: this.state.paid,
+        paid_date: new Date(this.state.paid_date),
+        alert: this.state.alert,
+      };
+      this.props.CREATE_BILL({variables: variables})
+      .then(({ data }) => {
         this.setState({
           user_id:1,
           bill_category_id:'',
           bill_category_description:'',
           description:'',
           paid: false,
-          amount:'$0.00',
+          amount:'',
           due_date:'',
         });
-      }).catch((error) => {
-        console.log('there was an error sending the query', error);
+      })
+      .catch(error => {
+        console.log('error saving new bill after saving new bill category', error);
       });
+    } else {
+      this.props.CREATE_BILL_CATEGORY({
+        variables: { name: this.state.bill_category_description },
+      })
+      .then(({ data }) => {
+        let newBillVariables = {
+          user_id: this.state.user_id,
+          bill_category_id: data.createBillCategory.id,
+          description: this.state.description,
+          amount: this.state.amount,
+          due_date: new Date(this.state.due_date),
+          paid: this.state.paid,
+          paid_date: new Date(this.state.paid_date),
+          alert: this.state.alert,
+        };
+        this.props.CREATE_BILL({variables: newBillVariables})
+          .then(({ data }) => {
+            this.setState({
+              user_id:1,
+              bill_category_id:'',
+              bill_category_description:'',
+              description:'',
+              paid: false,
+              amount:'',
+              due_date:'',
+            });
+          })
+          .catch(error => {
+            console.log('error saving new bill after saving new bill category', error);
+          });
+      })
+      .catch(error => {
+        console.log('error saving new bill category', error);
+      });
+    }
+    this.props.handleFormToggle();
   }
-
+  
   render() {
     if (this.props.billFormToggle) {
       return (
@@ -97,14 +150,15 @@ class AddBillForm extends React.Component {
             <Heading tag='h3' strong='true'>Enter bill details:</Heading>
           </Header>
           <Heading tag='h4' margin='small'>Bill Category:
-            <Select 
-              placeHolder='Select Category'
-              inline={false}
-              multiple={false}
-              options={this.props.billCategories ?  this.props.billCategories.map(category => category.name): null}
-              value={this.state.bill_category_description}
-              onChange={this.handleBillCategoryChange}
-            />
+            <div>
+              <SearchInput
+                value = {this.state.bill_category_description}
+                placeHolder='Enter Description'
+                suggestions={this.props.billCategories ?  this.props.billCategories.map(category => category.name): null}
+                onSelect = {this.handleBillCategorySelect}
+                onDOMChange = {this.handleBillCategoryType}
+              />
+            </div>
           </Heading>
           <Heading tag='h4' margin='medium'>Bill Description:
             <div>
@@ -154,18 +208,13 @@ class AddBillForm extends React.Component {
   }
 }
 
-const createBill = gql`
-  mutation createBill($user_id: Int!, $bill_category_id: Int!, $description: String!, $amount: Float!, $due_date: Date!, $paid: Boolean) {
-    createBill(user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, due_date: $due_date, paid:$paid) {
-      id
+export default compose(
+  graphql(CREATE_BILL_CATEGORY, { name: 'CREATE_BILL_CATEGORY' }), 
+  graphql(CREATE_BILL, {name: 'CREATE_BILL', 
+    options: {
+      refetchQueries: [
+        'BILLS_QUERY'
+      ],
     }
-  }`;
-
-
-export default graphql(createBill, {
-  options: {
-    refetchQueries: [
-      'BILLS_QUERY'
-    ],
-  }
-})(AddBillForm);
+  })
+)(AddBillForm);

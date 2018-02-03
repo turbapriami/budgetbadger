@@ -15,9 +15,7 @@ class BillsDueTableItem extends Component {
     };
     this.onMarkPaidClick = this.onMarkPaidClick.bind(this);
     this.handleEditFormToggle = this.handleEditFormToggle.bind(this);
-    this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(
-      this
-    );
+    this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(this);
   }
 
   onMarkPaidClick(bill) {

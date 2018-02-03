@@ -8,15 +8,8 @@ import {UPDATE_BILL} from '../../../queries.js';
 import gql from 'graphql-tag';
 
 var convertDateFormat = date => {
-  if (date.split('/').length !== 3) {
-    let temp = date.split('-');
-    let year = temp[0];
-    let month = temp[1];
-    let day = temp[2].slice(0, 2);
-    let formattedDate = `${month}/${day}/${year}`;
-    return formattedDate;
-  }
-  return date;
+  let formattedDate = new Date(date);
+  return (formattedDate.getMonth() + 1) + '/' + formattedDate.getDate() + '/' +  formattedDate.getFullYear();
 };
 
 class EditBillForm extends React.Component {
@@ -49,14 +42,10 @@ class EditBillForm extends React.Component {
       id: this.props.selectedBill.id,
       user_id: this.props.selectedBill.user_id,
       bill_category_id: this.props.selectedBill.bill_category_id,
-      bill_category_description: this.props.selectedBill.bill_category
-        ? this.props.selectedBill.bill_category[0].name
-        : '',
+      bill_category_description: this.props.selectedBill.bill_category ? this.props.selectedBill.bill_category[0].name : '',
       description: this.props.selectedBill.description,
       amount: this.props.selectedBill.amount,
-      due_date: this.props.selectedBill.due_date
-        ? convertDateFormat(this.props.selectedBill.due_date)
-        : '',
+      due_date: this.props.selectedBill.due_date ? convertDateFormat(this.props.selectedBill.due_date) : '',
       paid: this.props.selectedBill.paid,
       paid_date: this.props.selectedBill.paid_date,
       alert: this.props.selectedBill.alert,
@@ -64,10 +53,7 @@ class EditBillForm extends React.Component {
   }
 
   handleBillCategoryChange(e) {
-    console.log('state', this.state);
-    let categoryID = this.props.billCategories.filter(
-      categoryObj => categoryObj.name === e.value
-    )[0].id;
+    let categoryID = this.props.billCategories.filter(categoryObj => categoryObj.name === e.value)[0].id;
     this.setState({ bill_category_description: e.value });
     this.setState({ bill_category_id: categoryID });
   }

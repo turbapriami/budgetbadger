@@ -96,6 +96,14 @@ const BILLS_QUERY = gql`
     }
   }`;
 
+const CREATE_BILL = gql`
+  mutation createBill($user_id: Int!, $bill_category_id: Int!, $description: String!, $amount: Float!, $due_date: Date!, $paid: Boolean) {
+    createBill(user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, due_date: $due_date, paid:$paid) {
+      id
+    }
+  }`;
+
+
 const UPDATE_BILL = gql`
   mutation updateBill($id: Int!, $user_id: Int!, $bill_category_id: Int, $description: String, $amount: Float, $due_date: Date, $paid: Boolean, $paid_date: Date, $alert: Boolean) {
     updateBill(id: $id, user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, due_date: $due_date, paid: $paid, paid_date: $paid_date, alert: $alert) {
@@ -111,6 +119,13 @@ const DELETE_BILL = gql`
     deleteBill(id: $id)
   }`;
 
+const CREATE_BILL_CATEGORY = gql`
+  mutation createBillCategory($name: String!) {
+    createBillCategory(name: $name) {
+      id
+    }
+  }`;
+
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,
@@ -120,4 +135,6 @@ export {
   BILLS_QUERY,
   UPDATE_BILL,
   DELETE_BILL,
+  CREATE_BILL,
+  CREATE_BILL_CATEGORY
 };
