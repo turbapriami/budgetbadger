@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import Accordion from 'grommet/components/Accordion';
 import AccordionPanel from 'grommet/components/AccordionPanel';
-// import TextInput from 'grommet/components/TextInput';
-// import FormField from 'grommet/components/FormField';
-// import Select from 'grommet/components/Select';
-// import DateTime from 'grommet/components/DateTime';
-// import Button from 'grommet/components/Button';
 import styles from '../../../../public/main/jStyles.js';
 import {Split, Box, Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
 
@@ -17,7 +12,6 @@ class NewTransaction extends Component {
 
       }
     }
-    // this.handleChange = this.handleChange.bind(this);
   }
   render() {
     return (
