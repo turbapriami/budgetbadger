@@ -1,9 +1,4 @@
-// const banks = [ {
-//     id: 'x36QeJXemLs6GMAjq5DvT16bJDo4NVsyaZXwN',
-//     access_token: 'access-sandbox-d6993e81-16d3-4b11-aee4-fedf8bb9670a',
-//     user_id: 1 } ]
-
-const knex = require('../database/index.js').knex;
+]const knex = require('../database/index.js').knex;
 const models = require('../database/index.js');
 const Promise = require('bluebird');
 const plaid = require('../plaid.js');

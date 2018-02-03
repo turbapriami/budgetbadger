@@ -5,8 +5,13 @@ import Profile from '../containers/Profile.jsx';
 import {App, Tab, Tabs, Paragraph, Footer, Title, Box, Menu, Anchor} from 'grommet';
 import { Route } from 'react-router-dom';
 import styles from '../../../public/main/jStyles';
+import Cookies from 'universal-cookie'
 
 export default class extends Component {
+  componentWillMount() {
+    const id = new Cookies().get('user').user_id
+    window.localStorage.setItem('user_id', id)
+  }
   render() {
     return (
       <div>

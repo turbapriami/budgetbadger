@@ -12,7 +12,7 @@ import {BILLS_QUERY} from '../../queries.js';
 const withBills = graphql(BILLS_QUERY, {
   options: props => ({
     variables: {
-      user_id: 1,
+      user_id: window.localStorage.getItem('user_id'),
     },
     name: 'AllUserBills',
   }),
