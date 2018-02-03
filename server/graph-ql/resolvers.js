@@ -8,7 +8,7 @@ const knex = require('../database/index.js').knex;
 module.exports = {
 
   User: {
-    transactions: ({ id }, args, { knex }) => 
+    transactions: ({ id }, args, { knex, user }) => 
       knex('transactions').where({
         user_id: id
       }),
@@ -91,19 +91,21 @@ module.exports = {
 
 
   Query: {
-    getUser: (parent, args, { knex, user }) => 
+    getUser: (parent, args, { knex, user }) => { 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
-      // if (user) {
-        knex('users').where(args),
-      // } else {
-        // throw new Error('Not authenticated')
-      // }
-    // },
+      if (user) {
+        console.log('user', user)
+        return knex('users').where(args)
+      } else {
+        throw new Error('Not authenticated')
+      }
+    },
 
-    getTransactions: (parent, { user_id }, { knex }) => 
-      knex('transactions').where({
+    getTransactions: (parent, { user_id }, {knex, user}) => {  
+      console.log('in resolver', user)
+      return knex('transactions').where({
         user_id
-      }),
+      })}, 
 
     getAccounts: (parent, { user_id }, { knex }) => 
       knex('accounts').where({
