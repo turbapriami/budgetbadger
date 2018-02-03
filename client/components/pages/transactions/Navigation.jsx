@@ -1,5 +1,5 @@
 import React from 'react'
-import SideBar from 'grommet/components/SideBar';
+import SideBar from 'grommet/components/Sidebar'
 import { Box, Anchor, Menu, Header, Title } from 'grommet';
 
 const Navigation = ({ accounts, filter }) => (
