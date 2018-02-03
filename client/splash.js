@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 splash={false}
                 style={{ background: "#FFF" }} >
                 <div className="grommetux-box grommetux-box--direction-row grommetux-box--justify-start grommetux-box--align-center grommetux-box--flex-grow grommetux-box--pad-horizontal-medium grommetux-box--width-max-xxlarge grommetux-box--width-max">
-                  <img width="80" height="80" src="https://lh3.googleusercontent.com/4e2brTXTKqTVQ4GN5uFdBrPWfyxeP6_d-5wP2gXLhBHuyQyDjyT2qQC7qCUpTgjhnnjHb3D6G8EVRbgcBfrCOxUhe9GFqni-jfgJhsWCLW0AGAJKcb1F04ZvpwiPNkBRMDS_8ymcjbSLMlZMZgD3l14r616OKDQKkp7qf3aD9rvEY_wMN6OkFPawwP8DuFwKZA5THYVDkRtVcSYXdwcxkMMJD9J6J5jx5wFM-FRr0EJrxW5r3DJqpXCVmbre1TWlQg7NXklgs6aKipIkmXRJZ7BwKzJWwS91TWEYhmXDgieKULMgzik0xV7yY070GNCquebFPUcfgidIPdJhSeRXclwTsoRKjM0hhd0874BJ7dLHUnexti8Vc4ce1SJL1q1EX-KsGKtkKRCX2GvHTTphfPT29F4UxCGMcnPHIRLXSdwbmJMn0XXuDeLf81UtR2_KGaqmO-ow0WDsYA4gAbxIY3BFbJg-2_eJV8YtG3RVFrWCAE_sPUQ3eEnUIYww7049TRrsYAt7uqjsrXIO7bd_y8c4wheXoXvPm6_DnG3GXk7Se7MVXohO_g8A1sbiftZmpyQXdxHjqKn2_huxBxkdLbV4S4kFRU651mfw5e4=s600-no"/>
+                  <img width="80" height="80" src="https://visualpharm.com/assets/2/Badger-595b40b75ba036ed117d8786.svg"/>
                   <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-small"></div>
                   <nav className="grommetux-box grommetux-box--direction-row grommetux-box--responsive grommetux-box--flex-grow grommetux-box--pad-none grommetux-menu grommetux-menu--row grommetux-menu--inline">
                     <Link to={'/home'}>
