@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LoansContainer from '../containers/LoansContainer.jsx';
-import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput, Columns, Value, CurrencyIcon, LinkUpIcon, Split } from 'grommet';
+import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput, Columns, Value, CurrencyIcon, LinkUpIcon, Split, Layer, Form, Header, FormFields, EditIcon, Button, FormField, TextInput, DateTime } from 'grommet';
 import Chart, { Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots } from 'grommet/components/chart/Chart';
 import { amortizationSchedule } from 'amortization';
 
@@ -28,11 +28,13 @@ class Loans extends React.Component {
       inception: 2017,
       totalInterestPaid: 0,
       totalPayment: 0,
-      name: ''
+      name: '',
+      modalToggle: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleAmort = this.handleAmort.bind(this);
     this.handleLoan = this.handleLoan.bind(this);
+    this.handleModal = this.handleModal.bind(this);
   };
 
 
@@ -79,17 +81,36 @@ class Loans extends React.Component {
 
   handleLoan(e){
     e.preventDefault();
+    // console.log(this.props.loans);
+    var currLoan = {};
+    this.props.loans.forEach((loan) => {
+      if(loan.id === parseInt(e.target.name)) {
+        currLoan = loan;
+      }
+    });
     this.setState({
-    })
-    console.log('clicked', e.target.name)
-  }
+      name: currLoan.name,
+      principal: currLoan.amount,
+      interestRate: currLoan.interest_rate,
+      term: (new Date(currLoan.end_date).getFullYear() - new Date(currLoan.inception_date).getFullYear()),
+      inception: new Date(currLoan.inception_date).getFullYear()
+    }, () => {
+      this.handleAmort();
+    });
+  };
 
   componentWillMount(){
-    this.handleAmort()
+    this.handleAmort();
+  };
+
+  handleModal(e){
+    e.preventDefault();
+    this.setState({
+      modalToggle: !this.state.modalToggle
+    });
   };
 
   render(){
-    console.log('props', this.props)
     return(
       <div>
         <Hero background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}
@@ -113,27 +134,101 @@ class Loans extends React.Component {
         </Hero>
         <Section pad='large' justify='center' align='center' colorIndex='light-2' >
           <Headline margin='none'>
-            <Menu responsive={false}
-              label='Select Loan'
-              inline={false}
-              primary={true}
-              closeOnClick={true}
-              direction='row'
-              size='small'>
-                {this.props.loans ? this.props.loans.map((loan) => {
-                  return(
-                    <Anchor name={loan} value={loan.amount} onClick={this.handleLoan}>
-                    {loan.name}
-                  </Anchor>
-                  )
-                }) : ''}
-            </Menu>
+            <Headline margin='none' style={{fontSize: "40px"}} align='center'>
+              {this.state.name}
+            </Headline>
+            <Box direction='row'
+              justify='start'
+              align='center'
+              wrap={true}
+              pad='none'
+              margin='small'>
+              <Box direction='row'
+                justify='start'
+                align='left'
+                wrap={true}
+                pad='none'
+                margin='small'>
+                <Menu responsive={false}
+                  label='Select Loan'
+                  inline={false}
+                  primary={true}
+                  closeOnClick={true}
+                  direction='row'
+                  size='small'
+                  align='left'>
+                    {this.props.loans ? this.props.loans.map((loan) => {
+                      return(
+                        <Anchor name={loan.id} onClick={this.handleLoan}>
+                        {loan.name}
+                      </Anchor>
+                      )
+                    }) : ''}
+                </Menu>
+              </Box>
+              <Box direction='row'
+                justify='start'
+                align='right'
+                wrap={true}
+                pad='none'
+                margin='small'>
+              <Button icon={<EditIcon />}
+                onClick={this.handleModal}
+                href='#' 
+                align='right'/>
+                </Box>
+                { this.state.modalToggle &&
+                  <Layer closer={true} overlayClose={false} onClose={this.handleModal}>
+                    <Form style={{padding:'10%'}}>
+                      <Header>
+                        <Heading>
+                          Add New Loans
+                        </Heading>
+                      </Header>
+                      <FormFields>
+                        <FormField label='Loan Name'>
+                          <TextInput />
+                        </FormField>
+                        <p />
+                        <FormField label='Prinicipal Amount ($)'>
+                          <TextInput />
+                        </FormField>
+                        <p />
+                        <FormField label='Interest Rate (%)'>
+                          <TextInput />
+                        </FormField>
+                        <p />
+                      <FormField label='Inception Date'>
+                        <DateTime id='id'
+                          name='inception'
+                          format='M/YYYY'
+                          step={5}
+                          value='5/2015' />
+                      </FormField>
+                      <FormField label='End Date'>
+                        <DateTime id='id'
+                          name='end'
+                          format='M/YYYY'
+                          step={5}
+                          value='5/2015' />
+                      </FormField>
+                      </FormFields>
+                      <Footer pad={{"vertical": "medium"}}>
+                        <Button label='Submit'
+                          type='submit'
+                          primary={true}
+                          onClick={this.handleModal} />
+                      </Footer>
+                    </Form>
+                  </Layer>
+                }
+            </Box>
             <p />
-            <Chart style={{fontSize: "20px"}}>
+            <Chart style={{fontSize: "20px"}} full={true}>
               <Axis count={5}
                 labels={[{"index": 2, "label": "$" + this.state.principal/2}, {"index": 4, "label": "$" + this.state.principal}]}
                 vertical={true} />
-              <Chart vertical={true}>
+              <Chart vertical={true} full={true}>
                 <Base height='small'
                   width='large' />
                 <Layers>
@@ -163,7 +258,6 @@ class Loans extends React.Component {
             pad='large'>
             <p />
             <Headline margin='none' style={{fontSize: "20px"}}>
-              {this.state.name}
               Loan Amount ($)
               <p />
               <NumberInput align='left' name='principal' value={this.state.principal} onChange={this.handleChange} step={1000}/>
@@ -213,14 +307,3 @@ class Loans extends React.Component {
 
 
 module.exports = Loans;
-
-
-
-// Monthly Payments input field to be put back when it is dynamic
-
-// <p />
-// <Headline margin='none' style={{fontSize: "20px"}}>
-//   Monthly Payment ($)
-//   <p />
-//   <NumberInput align='left' name='payLevel' value={this.state.payLevel} onChange={this.handleChange} />
-// </Headline>
