@@ -22,8 +22,8 @@ module.exports = `
   type Loan {
     id: Int!
     name: String!
-    amount: Int!
-    interest_rate: Int!
+    amount: Float!
+    interest_rate: Float!
     inception_date: String!
     end_date: String!
     recurrence: String!
@@ -34,7 +34,7 @@ module.exports = `
 
   type Loan_Payment {
     id: Int!
-    amount: Int!
+    amount: Float!
     date: String!
     loan_id: Int!
     user_id: Int!
@@ -132,11 +132,11 @@ module.exports = `
   }
 
   type Mutation {
-    createTransaction(user_id: Int!, amount: Float!, category_id: String!, name: String!, street: String, zip_code: String, state: String, account_id: String, ): Transaction
+    createTransaction(user_id: Int!, amount: Float!, date: String!, category: String!, name: String!, account_id: String!, street: String, zip_code: String, state: String ): Transaction
     createUser(email: String!, password: String!): [String!]
     createAccount(id: String!, user_id: Int!, bank_name: String!, bank_id: String!, type: String!, current_balance: Int!): Account!
     createSchool(name: String!): School!
-    createLoan(name: String!, amount: Int!, interest_rate: Int!, inception_date: String!, end_date: String!, user_id: Int!, recurrence: String!): Loan
+    createLoan(name: String!, amount: Float!, interest_rate: Float!, inception_date: String!, end_date: String!, user_id: Int!): Loan
     createLoanPayment(amount: Int!, date: String!, loan_id: Int!, user_id: Int!): Loan_Payment
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): [String!]

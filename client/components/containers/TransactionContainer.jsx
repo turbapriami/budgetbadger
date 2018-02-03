@@ -208,11 +208,9 @@ class TransactionContainer extends Component {
         </div>
       )
     } else {
-      return (
-        <Spinner />
-      )
+      return <Spinner />
     }
   }
 }
 
-export default compose(withApollo, graphql(CREATE_TRANSACTION), withTransactionsAndAccounts)(TransactionContainer);
+export default compose(withApollo, graphql(CREATE_TRANSACTION, {name: 'createNewTransaction'}), withTransactionsAndAccounts)(TransactionContainer);

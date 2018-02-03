@@ -1,10 +1,10 @@
 const knex = require('knex')({
   client: 'pg',
   connection: {
-    host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    port: process.env.DB_PORT,
     password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     database: 'bbadger',
     charset: 'utf8',
   }
@@ -31,7 +31,7 @@ knex.schema.hasTable('loan_payments').then(exists => {
   if (!exists) {
     knex.schema.createTable('loan_payments', table => {
       table.increments('id').primary();
-      table.integer('amount');
+      table.decimal('amount', 14, 2);
       table.string('date');
       table.integer('loan_id');
       table.integer('user_id');
@@ -44,8 +44,8 @@ knex.schema.hasTable('loans').then(exists => {
     knex.schema.createTable('loans', table => {
       table.increments('id').primary();
       table.string('name');
-      table.integer('amount');
-      table.integer('interest_rate');
+      table.decimal('amount', 14, 2);
+      table.decimal('interest_rate', 14, 2);
       table.string('recurrence');
       table.string('inception_date');
       table.string('end_date');

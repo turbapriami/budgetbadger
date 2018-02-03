@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import Splash from './components/pages/Splash.jsx';
-import SplashSignIn from './Components/pages/SplashSignIn.jsx';
-import SplashSignUp from './Components/pages/SplashSignUp.jsx';
+import SplashSignIn from './components/pages/SplashSignIn.jsx';
+import SplashSignUp from './components/pages/SplashSignUp.jsx';
 import { App, Header, Box } from 'grommet';
 import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 
-const httpLink = new HttpLink({ uri: 'http://localhost:1337/graphql' });
+const httpLink = new HttpLink();
 
 const client = new ApolloClient({
   link: httpLink,
