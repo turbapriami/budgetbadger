@@ -111,6 +111,10 @@ const DELETE_BILL = gql`
     deleteBill(id: $id)
   }`;
 
+// const GET_USER = gql`
+//   query GET_USER()
+// `
+
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,
