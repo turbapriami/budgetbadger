@@ -208,9 +208,7 @@ class TransactionContainer extends Component {
         </div>
       )
     } else {
-      return (
-        <Spinner />
-      )
+      return <Spinner />
     }
   }
 }
