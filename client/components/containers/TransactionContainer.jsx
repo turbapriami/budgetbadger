@@ -16,7 +16,7 @@ import gql from 'graphql-tag'
 const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   options: (props) => ({
     variables: {
-      user_id: 1
+      user_id: window.localStorage.getItem('user_id')
     },
     name: 'TransactionsAndAccounts'
   })
@@ -25,7 +25,7 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
 // const createNewTransaction = graphql(UPDATE_TRANSACTIONS, {
 //   options: (props) => ({
 //     variables: {
-//      user_id: 1 
+//      user_id: window.localStorage.getItem('user_id')
 //     },
 //     name: 'createNewTransaction'
 //   })
