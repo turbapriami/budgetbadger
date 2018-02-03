@@ -39,7 +39,7 @@ const accountsQuery = gql`
 const withAccountsQuery = graphql(accountsQuery, {
   options: (props) => ({
     variables: {
-      user_id: 1
+      user_id: window.localStorage.getItem('user_id')
     },
     name: 'Accounts Data'
   })

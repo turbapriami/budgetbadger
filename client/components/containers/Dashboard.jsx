@@ -13,7 +13,7 @@ import gql from 'graphql-tag'
 const withDashQuery = graphql(DASH_QUERY, {
   options: (props) => ({
     variables: {
-      user_id: 1
+      user_id: window.localStorage.getItem('user_id')
     },
     name: 'Dashboard Data'
   })
@@ -37,7 +37,7 @@ class DashBoard extends React.Component {
 
   componentWillMount() {
     this.props.mutate({
-      variables: {user_id: 1}
+      variables: {user_id: window.localStorage.getItem('user_id')}
     })
   }
 

@@ -21,7 +21,7 @@ const LOANS_QUERY = gql`
 const withLoans = graphql(LOANS_QUERY, {
   options: (props) => ({
     variables: {
-      user_id: 1
+      user_id: window.localStorage.getItem('user_id')
     },
     name: 'AllUserLoans'
   })

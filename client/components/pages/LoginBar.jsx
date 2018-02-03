@@ -22,7 +22,7 @@ class LoginBar extends Component {
   }
   handleOnSuccess(token, metadata) {
     this.props.mutate({
-      variables: {user_id: 1, public_key: token}
+      variables: {user_id: window.localStorage.getItem('user_id'), public_key: token}
     })
   }
   handleOnExit() {
