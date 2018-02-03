@@ -12,10 +12,13 @@ import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTION
 import NewTransaction from '../pages/transactions/NewTransaction.jsx'
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag'
+import Cookies from 'universal-cookie';
+const { user_id } = new Cookies().get('user')
 
 const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   options: (props) => ({
     variables: {
+
       user_id: window.localStorage.getItem('user_id')
     },
     name: 'TransactionsAndAccounts'
@@ -159,7 +162,7 @@ class TransactionContainer extends Component {
     variables.user_id = 1;
     variables.account_id = this.props.data.getAccounts[variables.account.slice(0, variables.account.indexOf('.'))].id
     variables.amount = Number(variables.amount);
-    const transaction = await this.props.mutate({variables});
+    const transaction = await this.props.createNewTransaction({variables});
     const { transactions } = this.state
     transactions.unshift(variables);
     this.setState({

@@ -61,7 +61,6 @@ app.use(/\/((?!graphql).)*/, bodyParser.json());
 // app.use(bodyParser.text({ type: 'text/plain' }));
 
 const logger = (req, res, next) => {
-  console.log("SERVER", req.body)
   next();
 }
 app.use('/graphiql', graphiqlExpress({
