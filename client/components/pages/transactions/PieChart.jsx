@@ -1,4 +1,4 @@
-import React, { Compoennt } from 'react';
+import React, { Component } from 'react';
 import Layer from 'grommet/components/Layer';
 import forEach from 'lodash';
 import c3 from 'c3'

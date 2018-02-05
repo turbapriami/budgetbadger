@@ -1,7 +1,8 @@
-import { Value, CurrencyIcon, Headline, Section, Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
+import { Split, Value, CurrencyIcon, Headline, Section, Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
 import React from 'react';
 import identity from 'lodash'
 import moment from 'moment';
+import SummaryChart from './SummaryChart.jsx';
 
 const TransactionSummary = (props) => {
 
@@ -27,7 +28,10 @@ const TransactionSummary = (props) => {
     flush="true"
     overlayClose="true"
     >
-    <Section>
+    <Split>
+      <Box>
+        <SummaryChart transactions={props.transactions}/>
+      </Box>
       <Box align='center'
         justify='center'
         pad='large'
@@ -68,8 +72,7 @@ const TransactionSummary = (props) => {
           label='Last 12 Months'
           units='$' />
       </Box>
-    </Section>
-
+    </Split>
     </Layer>
   )
 
