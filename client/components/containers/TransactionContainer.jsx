@@ -10,6 +10,7 @@ import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
 import NewTransaction from '../pages/transactions/NewTransaction.jsx'
+import TransactionSummary from '../pages/transactions/TransactionSummary.jsx'
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag'
 
@@ -44,6 +45,7 @@ class TransactionContainer extends Component {
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
+      summary: true,
       transactionForm: {
         name: '',
         category:'',
@@ -182,7 +184,8 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
+          <TransactionSummary transactions={this.state.transactions}/>
+          <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} displayModal={displayModal} />
           <Split 
             fixed={false}
             separator={false}
