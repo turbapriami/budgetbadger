@@ -4,6 +4,12 @@ import gql from 'graphql-tag';
 import Bank from './BankContainer.jsx';
 import { App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, Card, TextInput, FormField } from 'grommet';
 
+const UPDATE = gql`mutation UPDATE($email: String!, $first_name: String, $last_name: String, $city: String, $street: String, $zip_code: String, $state: String, $phone: String) {
+  updateUser(email: $email, first_name: $first_name, last_name: $last_name, city: $city, street: $street, zip_code: $zip_code, state: $state, phone: $phone) {
+    email
+  }
+}`
+
 class ProfileEdit extends Component {
   constructor({userInfo}) {
     super({userInfo})
@@ -108,16 +114,21 @@ submitChanges() {
             </Card>
           </Box>
         </Card>
-        <button onClick={this.submitChanges} >Submit Changes</button>
+        <button onClick={() => this.props.sendUpdate({
+          variables: {
+            email: "gustaf.brostedt@gmail.com",
+            first_name: "gurraB"
+          }
+        })} >Submit Changes</button>
       </Box>
     )
   }
 }
 
-const UPDATE_USER = gql`
-mutation updateUser($user_email: String) {
-  updateUser(email: $user_email, password: $password)
-}
-`
+// const UPDATE_USER = gql`
+// mutation updateUser($user_email: String) {
+//   updateUser(email: $user_email, password: $password)
+// }
+// `
 
-export default graphql(UPDATE_USER)(ProfileEdit);
+export default graphql(UPDATE, {name: 'sendUpdate'})(ProfileEdit);

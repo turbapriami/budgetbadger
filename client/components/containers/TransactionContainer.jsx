@@ -45,7 +45,8 @@ class TransactionContainer extends Component {
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
-      summary: true,
+      displaySummary: true,
+      summaryName: '',
       transactionForm: {
         name: '',
         category:'',
@@ -162,7 +163,7 @@ class TransactionContainer extends Component {
     variables.account_id = this.props.data.getAccounts[variables.account.slice(0, variables.account.indexOf('.'))].id
     variables.amount = Number(variables.amount);
     variables.type = 'd'
-    // const transaction = await this.props.createNewTransaction({variables});
+    const transaction = await this.props.createNewTransaction({variables});
     const { transactions } = this.state
     transactions.unshift(variables);
     this.setState({
@@ -184,7 +185,7 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <TransactionSummary transactions={this.state.transactions}/>
+          <TransactionSummary transactions={this.state.transactions} summaryName={this.state.summaryName}/>
           <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} displayModal={displayModal} />
           <Split 
             fixed={false}
