@@ -117,7 +117,8 @@ submitChanges() {
         <button onClick={() => this.props.sendUpdate({
           variables: {
             email: "gustaf.brostedt@gmail.com",
-            first_name: "gurraB"
+            first_name: "gurraB",
+            last_name: "hello world"
           }
         })} >Submit Changes</button>
       </Box>

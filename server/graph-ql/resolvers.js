@@ -287,7 +287,8 @@ module.exports = {
           user.attributes[field] = args[field]
         }
       }
-      return knex('users').where({ id }).update(user.attributes);
+      let updated = await new models.User(user.attributes).save();
+      return updated.attributes
     },
 
     createSchool: async (parent, args, { models }) => {
