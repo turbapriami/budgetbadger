@@ -146,6 +146,7 @@ knex.schema.hasTable('bill_categories').then(exists => {
     knex.schema.createTable('bill_categories', table => {
       table.increments('id').primary();
       table.string('name');
+      table.integer('user_id').references('users.id');
     }).then(() => console.log('created table bill_categories'))
   }
 })
