@@ -11,7 +11,7 @@ import moment from 'moment'
 class SummaryChart extends React.Component {
   constructor() {
     super();
-    this.state = {chart:{}, begDate:null, endDate:null}
+    this.state = {chartData:[], begDate:null, endDate:null}
     this.getTransactionsFromTo = this.getTransactionsFromTo.bind(this);
     this.assignToDate = this.assignToDate.bind(this);
     this.generateChartInput = this.generateChartInput.bind(this);
@@ -47,6 +47,7 @@ class SummaryChart extends React.Component {
         return filter(b) ? a += Math.abs(b.amount):  a;
       }, 0)
     })
+    console.log(input[0])
     return input;
   }
 
@@ -69,25 +70,35 @@ class SummaryChart extends React.Component {
   }
 
   renderChart(value, callback) {
-    let transactions = this.getTransactionsFromTo();
-    let output = this.generateChartInput(transactions, (transaction) => transaction.category === value)
-    this.state.chart.unload();
-    this.state.chart.load({
-      colums: [
-        [value, ...output[0]],
-        ['x', ...output[1]]
-      ]
-    })
+    // let transactions = this.getTransactionsFromTo();
+    // let output = this.generateChartInput(transactions, (transaction) => transaction.category === value)
+    // console.log(output[0])
+    // this.state.chart.unload();
+    // this.state.chart.load({
+    //   colums: [
+    //     [value, ...output[0]],
+    //     ['x', ...output[1]]
+    //   ]
+    // })
+    // this.setState({chart})
   }
 
   componentDidMount() {
-    let foodNDrink = this.generateChartInput(this.props.transactions);
-    const food = ['bot', ...foodNDrink[0].slice(1)];
-    const dates = ['x', ...foodNDrink[1]];
-    this.lineChart(food, dates);
+    // let { name } = this.props;
+    const name = 'Tectra Inc'
+    let range = this.getTransactionsFromTo();
+    console.log(range[0])
+    let transactions = this.generateChartInput(range, (transaction) => transaction.name === name);
+    transactions[0].unshift(name);
+    transactions[1].unshift('x')
+    this.setState({
+      chartData: transactions
+    }, () => this.lineChart(transactions[0], transactions[1]))
+    // let chart = 
   }
 
   render() {
+    // const { chartData } = this.state;
     return (
       <div>
       <div style={{width: '600px'}} id="chart">
@@ -96,21 +107,23 @@ class SummaryChart extends React.Component {
           placeholder="Select a category"
           options={this.props.categories.map(a => a[0])}
           onChange={({value}) => {
-            this.renderChart(value, (transaction) => {
-              return transaction.category === value
+            // this.renderChart(value, (transaction) => {
+            //   return transaction.category === value
+            // })
+            let data = this.generateChartInput(this.props.transactions, (transaction) => {
+              console.log('cat', transaction.category)
+              console.log('val', value)
+              return transaction.category === value;
             })
-            // let data = this.generateChartInput(this.props.transactions, (transaction) => {
-            //   return transaction.category === value;
-            // })
-            // this.state.chart
-            // .unload();
-            // this.state.chart
-            // .load({
-            //   columns: [
-            //     [value.value,...data[0]],
-            //     ['x', ...data[1]]
-            //   ]
-            // })
+            this.state.chart
+            .unload();
+            this.state.chart
+            .load({
+              columns: [
+                [value,...data[0]],
+                // ['x', ...data[1]]
+              ]
+            })
           }}
         />
       </div>

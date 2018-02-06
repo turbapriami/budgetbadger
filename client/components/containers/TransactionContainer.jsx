@@ -45,7 +45,8 @@ class TransactionContainer extends Component {
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
-      displaySummary: true,
+      displaySummary: false,
+      summaryTransaction: {},
       summaryName: '',
       transactionForm: {
         name: '',
@@ -56,6 +57,7 @@ class TransactionContainer extends Component {
         account: ''
       }
     }
+    this.handleSummary = this.handleSummary.bind(this);
     this.filterTransactions = this.filterTransactions.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.generateCategories = this.generateCategories.bind(this);
@@ -99,6 +101,13 @@ class TransactionContainer extends Component {
     this.setState({
       transactions: searchResult
     });
+  }
+
+  handleSummary(transaction) {
+    this.setState({
+      displaySummary: !this.state.displaySummary,
+      summaryTransaction: transaction
+    })
   }
 
   handleModal(e) {
@@ -185,7 +194,7 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <TransactionSummary transactions={this.state.transactions} summaryName={this.state.summaryName}/>
+          <TransactionSummary transactions={this.state.transactions} summaryTransaction={this.state.summaryTransaction} categories={this.state.categoryBreakdown} display={this.state.displaySummary} summaryName={this.state.summaryName}/>
           <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} displayModal={displayModal} />
           <Split 
             fixed={false}
@@ -202,7 +211,8 @@ class TransactionContainer extends Component {
                 <Search transactions={this.state.transactions} search={this.handleSearch}/>
               </Box>
               <NewTransaction handleForm={this.handleForm} accounts={this.props.data.getAccounts} submitForm={this.newTransaction} form={this.state.transactionForm}/>
-              <TransactionList 
+              <TransactionList
+                displaySummary={this.handleSummary} 
                 sort={this.sortTransactions} 
                 sortIdx={this.state.sortIdx} 
                 dir={this.state.sorting[this.state.sortIdx]} 
