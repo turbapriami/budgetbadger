@@ -11,9 +11,16 @@ class BillsDueTable extends Component {
       billFormToggle: false,
       sortIndex: 0,
       sortAscending: false,
+      selectedBill: {},
     };
     this.handleFormToggle = this.handleFormToggle.bind(this);
     this.handleSortClick = this.handleSortClick.bind(this);
+    this.handleBillSelect = this.handleBillSelect.bind(this);
+
+  }
+  
+  handleBillSelect(bill) {
+    this.setState({selectedBill: bill});
   }
 
   handleSortClick(e) {
@@ -21,19 +28,12 @@ class BillsDueTable extends Component {
     if (e < 4) {
       if (sortIdx === this.state.sortIndex) {
         this.setState({ sortAscending: !this.state.sortAscending }, () => {
-          this.props.sortBills(
-            false,
-            this.state.sortIndex,
-            !this.state.sortAscending
+          this.props.sortBills(false, this.state.sortIndex, !this.state.sortAscending
           );
         });
       } else {
         this.setState({ sortIndex: sortIdx }, () => {
-          this.props.sortBills(
-            false,
-            this.state.sortIndex,
-            !this.state.sortAscending
-          );
+          this.props.sortBills(false, this.state.sortIndex, !this.state.sortAscending);
         }); 
       }
     }
@@ -76,7 +76,7 @@ class BillsDueTable extends Component {
               strong="true"
               style={{ fontSize: '30px' }}
             >
-              Due{' '}
+              Due
             </Heading>
           </Section>
           <Table responsive="true">
@@ -99,8 +99,10 @@ class BillsDueTable extends Component {
                     .filter(bill => bill.paid === false)
                     .map((bill, i) =>
                       <BillsDueTableItem
+                        handleBillSelect = {this.handleBillSelect}
                         key={i}
                         bill={bill}
+                        selectedBill = {this.state.selectedBill}
                         bills={this.props.bills}
                         billCategories={this.props.billCategories}
                       />
