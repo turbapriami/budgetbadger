@@ -30,7 +30,7 @@ const TransactionSummary = (props) => {
     >
     <Split>
       <Box>
-        <SummaryChart transactions={props.transactions}/>
+        <SummaryChart transactions={props.transactions} categories={props.categories} />
       </Box>
       <Box align='center'
         justify='center'
