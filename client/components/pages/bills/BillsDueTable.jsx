@@ -11,9 +11,16 @@ class BillsDueTable extends Component {
       billFormToggle: false,
       sortIndex: 0,
       sortAscending: false,
+      selectedBill: {},
     };
     this.handleFormToggle = this.handleFormToggle.bind(this);
     this.handleSortClick = this.handleSortClick.bind(this);
+    this.handleBillSelect = this.handleBillSelect.bind(this);
+
+  }
+  
+  handleBillSelect(bill) {
+    this.setState({selectedBill: bill});
   }
 
   handleSortClick(e) {
@@ -92,8 +99,10 @@ class BillsDueTable extends Component {
                     .filter(bill => bill.paid === false)
                     .map((bill, i) =>
                       <BillsDueTableItem
+                        handleBillSelect = {this.handleBillSelect}
                         key={i}
                         bill={bill}
+                        selectedBill = {this.state.selectedBill}
                         bills={this.props.bills}
                         billCategories={this.props.billCategories}
                       />

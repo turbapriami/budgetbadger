@@ -108,9 +108,6 @@ const UPDATE_BILL = gql`
   mutation updateBill($id: Int!, $user_id: Int!, $bill_category_id: Int, $description: String, $amount: Float, $due_date: Date, $paid: Boolean, $paid_date: Date, $alert: Boolean) {
     updateBill(id: $id, user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, due_date: $due_date, paid: $paid, paid_date: $paid_date, alert: $alert) {
       id
-      user_id
-      paid
-      paid_date
     }
   }`;
 
@@ -120,8 +117,8 @@ const DELETE_BILL = gql`
   }`;
 
 const CREATE_BILL_CATEGORY = gql`
-  mutation createBillCategory($name: String!) {
-    createBillCategory(name: $name) {
+  mutation createBillCategory($name: String!, $user_id: Int!) {
+    createBillCategory(name: $name, user_id: $user_id) {
       id
     }
   }`;

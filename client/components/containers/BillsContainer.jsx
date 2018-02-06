@@ -45,13 +45,13 @@ class BillsContainer extends Component {
       var billsDueThisMonth = nextProps.data.getBills.filter(bill => {
         const dueDate = new Date(bill.due_date);
         const currentDate = new Date();
-        return currentDate.getMonth() === dueDate.getMonth() && !bill.paid;
+        return (currentDate.getMonth() === dueDate.getMonth()) && !bill.paid;
       });
 
-      const overdueBills = nextProps.data.getBills.filter(bill => {
-        const dueDate = new Date(bill.due_date);
-        const currentDate = new Date();
-        return (currentDate > dueDate) && !bill.paid;
+      const overdueBills = nextProps.data.getBills.filter(bill => { 
+        let currentDate = new Date();
+        let dueDate = new Date(bill.due_date);
+        return !bill.paid && (currentDate.setHours(0,0,0) > dueDate.setHours(0,0,0)+ 86400000);
       });
 
       this.setState({

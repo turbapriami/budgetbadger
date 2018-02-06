@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
-import {Button, CheckBox, CloseIcon, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet';
+import {Box, Button, CheckBox, CloseIcon,Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import {CREATE_BILL, CREATE_BILL_CATEGORY} from '../../../queries.js';
 import gql from 'graphql-tag';
@@ -25,7 +25,9 @@ class AddBillForm extends React.Component {
       due_date:'',
       paid:false,
       paid_date:'',
-      alert:false
+      alert:false,
+      bill_categories: [],
+      bill_descriptions: []
     }
 
     this.handleBillCategoryType = this.handleBillCategoryType.bind(this);
@@ -36,23 +38,36 @@ class AddBillForm extends React.Component {
     this.handleDescriptionSelect = this.handleDescriptionSelect.bind(this);
     this.handleAlertChange = this.handleAlertChange.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
+    this.handleCancelUpdateClick = this.handleCancelUpdateClick.bind(this);
   }
 
   handleBillCategoryType(e) {
-    console.log('ADDBILLFORM CATEGORY TYPE', e);
-    this.setState({bill_category_description:e.target.value});
-    this.setState({bill_category_id:getInputCategoryID(e.target.value,this.props.billCategories)});
+    e.preventDefault();
+    this.setState({bill_category_description: e.target.value});
+    this.setState({bill_category_id: getInputCategoryID(e.target.value, this.props.billCategories)});
+    let filteredCategories = this.props.billCategories
+      .filter(categoryObj => categoryObj.name.toLowerCase()
+        .includes(this.state.bill_category_description.toLowerCase())
+      )
+      .map(categoryObj => categoryObj.name);
+    this.setState({ bill_categories: filteredCategories });
   }
 
   handleBillCategorySelect(e) {
-    console.log('ADDBILLFORM CATEGORY SELECT', e);
-    let category = this.props.billCategories.filter(categoryObj => categoryObj.name.toLowerCase() === e.suggestion.toLowerCase())
+    let category = this.props.billCategories
+      .filter(categoryObj => 
+        categoryObj.name.toLowerCase() === e.suggestion.toLowerCase());
     this.setState({bill_category_description:e.suggestion})
     this.setState({bill_category_id:category[0].id});
   }
 
   handleDescriptionType(e) {
-    this.setState({description:e.target.value})
+    this.setState({ description: e.target.value });
+    let filteredDescriptions = this.props.bills
+      .filter(bill => bill.description.toLowerCase()
+      .includes(e.target.value.toLowerCase()))
+      .map(bill => bill.description);
+      this.setState({bill_descriptions:filteredDescriptions})
   }
 
   handleDescriptionSelect(e) {
@@ -69,6 +84,20 @@ class AddBillForm extends React.Component {
   
   handleAlertChange(e) {
     this.setState({alert: !this.state.alert});
+  }
+
+  handleCancelUpdateClick(e) {
+    e.preventDefault();
+    this.props.handleFormToggle();
+    this.setState({
+      user_id:1,
+      bill_category_id:'',
+      bill_category_description:'',
+      description:'',
+      paid: false,
+      amount:'',
+      due_date:'',
+    });
   }
   
   handleAddClick(e) {
@@ -100,7 +129,10 @@ class AddBillForm extends React.Component {
       });
     } else {
       this.props.CREATE_BILL_CATEGORY({
-        variables: { name: this.state.bill_category_description },
+        variables: { 
+          name: this.state.bill_category_description,
+          user_id: this.state.user_id
+        }
       })
       .then(({ data }) => {
         let newBillVariables = {
@@ -135,7 +167,7 @@ class AddBillForm extends React.Component {
     }
     this.props.handleFormToggle();
   }
-  
+
   render() {
     if (this.props.billFormToggle) {
       return (
@@ -154,7 +186,7 @@ class AddBillForm extends React.Component {
               <SearchInput
                 value = {this.state.bill_category_description}
                 placeHolder='Enter Description'
-                suggestions={this.props.billCategories ?  this.props.billCategories.map(category => category.name): null}
+                suggestions={this.state.bill_categories}
                 onSelect = {this.handleBillCategorySelect}
                 onDOMChange = {this.handleBillCategoryType}
               />
@@ -165,7 +197,7 @@ class AddBillForm extends React.Component {
               <SearchInput
                 value = {this.state.description}
                 placeHolder='Enter Description'
-                suggestions={this.props.bills ? this.props.bills.map(bill => bill.description) : null}
+                suggestions = {this.state.bill_descriptions}
                 onSelect = {this.handleDescriptionSelect}
                 onDOMChange = {this.handleDescriptionType}
               />
@@ -193,13 +225,31 @@ class AddBillForm extends React.Component {
             </div>
           </Heading>
           <Footer pad={{"vertical": "medium"}}>
-            <Button label='Add'
-              type='submit'
-              primary={true}
-              onClick={this.handleAddClick} 
-              style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
-            />
-          </Footer>
+            <Columns justify="center" size="small" maxCount="2">
+              <Box align="center" pad="small">
+                <Button
+                    label="Cancel"
+                    primary={true}
+                    onClick={this.handleCancelUpdateClick}
+                    style={{
+                      backgroundColor: '#49516f',
+                      color: 'white',
+                      width: '130px',
+                      fontSize: '20px',
+                      padding: '6px 12px',
+                      border: 'none',
+                    }}
+                  />
+              </Box>
+                <Box align="center" pad="small">
+                  <Button label='Add'
+                    primary={true}
+                    onClick={this.handleAddClick} 
+                    style={{backgroundColor:'#49516f', color:'white', width: '130px', fontSize:'20px', padding:'6px 12px', border:'none'}}
+                  />
+                </Box>
+            </Columns>
+            </Footer>
         </Form>
       </Layer>)
   } else { 

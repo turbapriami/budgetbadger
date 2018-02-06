@@ -120,8 +120,9 @@ module.exports = {
         id
       }),
       
-    getBillCategories: (parent, { id }, { knex }) => 
+    getBillCategories: (parent, { user_id }, { knex }) => 
       knex('bill_categories').where({
+        user_id
       }),
     
     getBill: (parent, { id }, { knex }) => 
