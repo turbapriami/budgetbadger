@@ -58,6 +58,7 @@ const currentUser = graphql(Get_User, {
   })
 })
 
+
 class Profile extends Component {
   constructor(props) {
     super(props)
@@ -65,7 +66,6 @@ class Profile extends Component {
       first_name: '',
       last_name: '',
       street: '',
-      city: '',
       state: '',
       zip_code: '',
       phone: '',
@@ -74,11 +74,9 @@ class Profile extends Component {
       edit: false
     }
     this.editing = this.editing.bind(this);
-    this.handleChanges = this.handleChanges.bind(this);
     this.updateFirstName = this.updateFirstName.bind(this);
     this.updateLastName = this.updateLastName.bind(this);
     this.updateStreet = this.updateStreet.bind(this);
-    this.updateCity = this.updateCity.bind(this);
     this.updateState = this.updateState.bind(this);
     this.updateZipCode = this.updateZipCode.bind(this);
     this.updatePhone = this.updatePhone.bind(this);
@@ -86,7 +84,6 @@ class Profile extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("NEXT PROPS!!!!!!!!", nextProps.data);
     if (nextProps.data.getUser) {
       this.setState({
         first_name: nextProps.data.getUser[0].first_name,
@@ -109,62 +106,43 @@ class Profile extends Component {
     })
   }
 
-  handleChanges() {
-    console.log("MUTATION QUERY");
-    this.editing();
-  }
-
   updateFirstName(e) {
-    console.log("FIRST NAME",e.target.value);
     this.setState({
       first_name: e.target.value
     })
   }
 
   updateLastName(e) {
-    console.log("LAST NAME", e.target.value);
     this.setState({
       last_name: e.target.value
     })
   }
 
   updateStreet(e) {
-    console.log("STREET", e.target.value);
     this.setState({
       street: e.target.value
     })
   }
 
-  updateCity(e) {
-    console.log("CITY", e.target.value);
-    this.setState({
-      city: e.target.value
-    })
-  }
-
   updateState(e) {
-    console.log("STATE", e.target.value);
     this.setState({
       state: e.target.value
     })
   }
 
   updateZipCode(e) {
-    console.log("ZIP CODE", e.target.value);
     this.setState({
       zip_code: e.target.value
     })
   }
 
   updatePhone(e) {
-    console.log("PHONE", e.target.value);
     this.setState({
       phone: e.target.value
     })
   }
 
   updateEmail(e) {
-    console.log("EMAIL", e.target.value);
     this.setState({
 >>>>>>> Working on edit profile
       email: e.target.value
@@ -175,15 +153,7 @@ class Profile extends Component {
     return (
       <div>
         {this.state.edit ? <button onClick={this.handleChanges}>Submit</button> : <button onClick={this.editing} >Edit your profile</button>}
-        {this.state.edit ? <ProfileEdit userInfo={this.state}
-          updateFirstName={this.updateFirstName}
-          updateLastName={this.updateLastName}
-          updateStreet={this.updateStreet}
-          updateCity={this.updateCity}
-          updateState={this.updateState}
-          updateZipCode={this.updateZipCode}
-          updatePhone={this.updatePhone}
-          updateEmail={this.updateEmail} /> : <ProfileCard userInfo={this.state} />}
+        {this.state.edit ? <ProfileEdit userInfo={this.state} /> : <ProfileCard userInfo={this.state} />}
       </div>
     )
   }

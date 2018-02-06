@@ -4,7 +4,12 @@ import gql from 'graphql-tag';
 import Bank from './BankContainer.jsx';
 import { App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, Card, TextInput, FormField } from 'grommet';
 
-let mutationQuery = null;
+const UPDATE_USER = gql`mutation
+  updateUser($email: String!, $first_name: String, $last_name: String, $city: String, $street: String, $zip_code: String, $state: String, $phone: String) {
+   updateUser(email: $email, first_name: $first_name, last_name: $last_name, city: $city, street: $street, zip_code: $zip_code, state: $state, phone: $phone) {
+     email
+ }
+}`
 
 class ProfileEdit extends Component {
   constructor({userInfo}) {
@@ -13,13 +18,13 @@ class ProfileEdit extends Component {
       first_name: userInfo.first_name,
       last_name: userInfo.last_name,
       street: userInfo.street,
-      city: userInfo.city,
       state: userInfo.state,
       zip_code: userInfo.zip_code,
       phone: userInfo.phone,
       email: userInfo.email,
       banks: userInfo.banks
     }
+    
   }
 
   componentDidMount() {
@@ -27,6 +32,7 @@ class ProfileEdit extends Component {
   }
 
   render() {
+    {console.log(this.props)}
     return (
       <Box full={true} align="center" pad="large" flex={true}>
         <Card label="User Info" alignSelf="center" style={{ height: "100%", width: "100%", outline: "#000 solid thin" }} >
@@ -36,24 +42,32 @@ class ProfileEdit extends Component {
               <Card label="Name" size={{ height: "medium", width: "medium" }} style={{ display: "inline-block" }} colorIndex="light-2" margin={{ horizontal: "small" }}>                
                 <Box pad={{ between: "small" }}>
                   <FormField>
-                      <TextInput onDOMChange={this.props.updateFirstName} defaultValue={this.state.first_name}/>
-                      <TextInput onDOMChange={this.props.updateLastName} defaultValue={this.state.last_name}/>
+                      <TextInput onDOMChange={e => this.setState({
+                        first_name: e.target.value
+                      })} defaultValue={this.state.first_name}/>
+                      <TextInput onDOMChange={e => this.setState({
+                        last_name: e.target.value
+                      })} defaultValue={this.state.last_name}/>
                   </FormField>
                 </Box>
               </Card>
               <Card label="Address" size={{ height: "medium", width: "medium" }} style={{ display: "inline-block" }} colorIndex="light-2" margin={{ horizontal: "small" }}>              
                 <FormField>
-                  <TextInput onDOMChange={this.props.updateStreet} defaultValue={this.state.street}/>
-                  <TextInput onDOMChange={this.props.updateCity} defaultValue={`${this.state.city},`}/>
-                  <TextInput onDOMChange={this.props.updateState} defaultValue={this.state.state}/>
-                  <TextInput onDOMChange={this.props.updateZipCode} defaultValue={this.state.zip_code}/>
+                  <TextInput onDOMChange={e => this.setState({
+                    street: e.target.value
+                  })} defaultValue={this.state.street}/>
+                  <TextInput onDOMChange={e => this.setState({
+                    state: e.target.value
+                  })} defaultValue={this.state.state}/>
+                  <TextInput onDOMChange={e => this.setState({
+                    zip_code: e.target.value
+                  })} defaultValue={this.state.zip_code}/>
                 </FormField>
               </Card>
-              <Card wrap={true} label="Email" size={{ height: "medium", width: "medium" }} style={{ display: "inline-block" }} colorIndex="light-2" margin={{ horizontal: "small" }}>                     
-                <TextInput onDOMChange={this.props.updateEmail} defaultValue={this.state.email}/>
-              </Card>
               <Card label="Phone" size={{ height: "medium", width: "medium" }} style={{ display: "inline-block" }} colorIndex="light-2" margin={{ horizontal: "small" }}>
-                <TextInput onDOMChange={this.props.updatePhone} defaultValue={this.state.phone}/>
+                <TextInput onDOMChange={e => this.setState({
+                  phone: e.target.value
+                })} defaultValue={this.state.phone}/>
               </Card>
             </Box>
             <Card label="Accounts" size={{ height: "medium", width: "medium" }} style={{ display: "inline" }} colorIndex="light-2" margin={{ vertical: "small", horizontal: "small" }}>
@@ -63,33 +77,24 @@ class ProfileEdit extends Component {
             </Card>
           </Box>
         </Card>
+        <button onClick={() => {
+          this.props.updateUserProfile({
+            variables: {
+              email: this.state.email,
+              first_name: this.state.first_name,
+              last_name: this.state.last_name,
+              street: this.state.street,
+              zip_code:this.state.zip_code,
+              state:this.state.state,
+              phone:this.state.phone
+            }
+          }).then(({data}) => {
+            console.log(data);
+          })}
+        }>Handle the changes</button>
       </Box>
     )
   }
 }
 
-const UPDATE_USER = gql`
-  mutation UPDATE_USER($email: String!, $first_name: String!, $last_name: String!, $city: String!, $street: String!, $zip_code: String!, $state: String!, $phone: String!) {
-    updateUser(
-      email:"$email",
-      first_name:"Joe",
-      last_name:"Shmoe",
-      city:"South Kakalaka",
-      street:"45th",
-      zip_code:"13521",
-      state:"Wyoming"
-    ) {
-      first_name
-      last_name
-      city
-      street
-      zip_code
-      state
-      phone
-      email
-      banks
-    }
-  }
-`
-
-export default ProfileEdit;
+export default compose(graphql(UPDATE_USER, {name: "updateUserProfile"})(ProfileEdit));
