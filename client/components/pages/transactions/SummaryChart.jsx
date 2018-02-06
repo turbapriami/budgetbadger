@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Select } from 'grommet';
 import Layer from 'grommet/components/Layer';
 import { identity, map } from 'lodash';
 import c3 from 'c3'
@@ -10,17 +11,18 @@ import moment from 'moment'
 class SummaryChart extends React.Component {
   constructor() {
     super();
-    this.state = {chart:{}}
+    this.state = {chart:{}, begDate:null, endDate:null}
     this.getTransactionsFromTo = this.getTransactionsFromTo.bind(this);
     this.assignToDate = this.assignToDate.bind(this);
     this.generateChartInput = this.generateChartInput.bind(this);
     this.lineChart = this.lineChart.bind(this);
+    this.renderChart = this.renderChart.bind(this);
   }
 
-  getTransactionsFromTo(transactions, begDate, endDate) {
+  getTransactionsFromTo(begDate = '1990-10-10', endDate = new Date()) {
     let beg = moment(begDate);
     let end = moment(endDate);
-    return transactions.filter(transaction => {
+    return this.props.transactions.filter(transaction => {
       let curr = moment(transaction.date);
       return (curr >= beg && curr <= end)
     });
@@ -64,21 +66,53 @@ class SummaryChart extends React.Component {
           },
         },
       })
-    console.log(chart)
+  }
+
+  renderChart(value, callback) {
+    let transactions = this.getTransactionsFromTo();
+    let output = this.generateChartInput(transactions, (transaction) => transaction.category === value)
+    this.state.chart.unload();
+    this.state.chart.load({
+      colums: [
+        [value, ...output[0]],
+        ['x', ...output[1]]
+      ]
+    })
   }
 
   componentDidMount() {
-    let foodNDrink = this.generateChartInput(this.props.transactions)
-    const food = ['food', ...foodNDrink[0].slice(1)]
-    console.log(food)
-    const dates = ['x', ...foodNDrink[1]]
-    this.lineChart(food, dates)
+    let foodNDrink = this.generateChartInput(this.props.transactions);
+    const food = ['bot', ...foodNDrink[0].slice(1)];
+    const dates = ['x', ...foodNDrink[1]];
+    this.lineChart(food, dates);
   }
 
   render() {
     return (
+      <div>
       <div style={{width: '600px'}} id="chart">
-        <p> hello</p>
+      </div>
+        <Select 
+          placeholder="Select a category"
+          options={this.props.categories.map(a => a[0])}
+          onChange={({value}) => {
+            this.renderChart(value, (transaction) => {
+              return transaction.category === value
+            })
+            // let data = this.generateChartInput(this.props.transactions, (transaction) => {
+            //   return transaction.category === value;
+            // })
+            // this.state.chart
+            // .unload();
+            // this.state.chart
+            // .load({
+            //   columns: [
+            //     [value.value,...data[0]],
+            //     ['x', ...data[1]]
+            //   ]
+            // })
+          }}
+        />
       </div>
     ) 
   }
