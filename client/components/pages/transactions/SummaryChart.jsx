@@ -11,7 +11,7 @@ import moment from 'moment'
 class SummaryChart extends React.Component {
   constructor() {
     super();
-    this.state = {chartData:[], begDate:null, endDate:null}
+    this.state = {chartData:[], chart: {}, begDate: null, endDate:null}
     this.getTransactionsFromTo = this.getTransactionsFromTo.bind(this);
     this.assignToDate = this.assignToDate.bind(this);
     this.generateChartInput = this.generateChartInput.bind(this);
@@ -47,19 +47,35 @@ class SummaryChart extends React.Component {
         return filter(b) ? a += Math.abs(b.amount):  a;
       }, 0)
     })
-    console.log(input[0])
     return input;
   }
 
-  lineChart (data, labels) {
-    this.state.chart = c3.generate({
+  renderChart(value, callback) {
+    let transactions = this.getTransactionsFromTo();
+    let output = this.generateChartInput(transactions, callback)
+    output[0].unshift(value);
+    output[1].unshift('x')
+    this.setState({
+      chartData: output
+    }, ()=> {
+      console.log(this.state.chartData)
+      this.forceUpdate()
+      this.chart.unload();
+      this.chart.load({
+        data: {
+          colums: [['x',...this.state.chartData[0]], [value,...this.state.chartData[1]]]
+        }
+      })
+    })
+  }
+
+  lineChart () {
+    this.chart = c3.generate({
         bindto:  '#chart',
         data: {
           x: 'x',
-          columns: [
-            [...labels],
-            [...data]
-          ]
+          columns: [...this.state.chartData], 
+          type: 'spline'
         },
         axis: {
           x: {
@@ -69,61 +85,42 @@ class SummaryChart extends React.Component {
       })
   }
 
-  renderChart(value, callback) {
-    // let transactions = this.getTransactionsFromTo();
-    // let output = this.generateChartInput(transactions, (transaction) => transaction.category === value)
-    // console.log(output[0])
-    // this.state.chart.unload();
-    // this.state.chart.load({
-    //   colums: [
-    //     [value, ...output[0]],
-    //     ['x', ...output[1]]
-    //   ]
-    // })
-    // this.setState({chart})
-  }
-
   componentDidMount() {
-    // let { name } = this.props;
-    const name = 'Tectra Inc'
+    let { name } = this.props.summaryTransaction;
     let range = this.getTransactionsFromTo();
-    console.log(range[0])
     let transactions = this.generateChartInput(range, (transaction) => transaction.name === name);
     transactions[0].unshift(name);
     transactions[1].unshift('x')
     this.setState({
       chartData: transactions
-    }, () => this.lineChart(transactions[0], transactions[1]))
-    // let chart = 
+    }, () => this.lineChart())
   }
 
   render() {
-    // const { chartData } = this.state;
     return (
       <div>
-      <div style={{width: '600px'}} id="chart">
+      <div style={{width: '600px', height: '500px'}} id="chart">
       </div>
         <Select 
           placeholder="Select a category"
           options={this.props.categories.map(a => a[0])}
           onChange={({value}) => {
-            // this.renderChart(value, (transaction) => {
-            //   return transaction.category === value
+            this.renderChart(value, (transaction) => {
+              return transaction.category === value
+            })
+            // let data = this.generateChartInput(this.props.transactions, (transaction) => {
+            //   return transaction.category === value;
             // })
-            let data = this.generateChartInput(this.props.transactions, (transaction) => {
-              console.log('cat', transaction.category)
-              console.log('val', value)
-              return transaction.category === value;
-            })
-            this.state.chart
-            .unload();
-            this.state.chart
-            .load({
-              columns: [
-                [value,...data[0]],
-                // ['x', ...data[1]]
-              ]
-            })
+            // console.log(data)
+            // this.chart
+            // .unload();
+            // this.chart
+            // .load({
+            //   columns: [
+            //     [value,...data[0]],
+            //     ['x', ...data[1]]
+            //   ]
+            // })
           }}
         />
       </div>

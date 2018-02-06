@@ -103,7 +103,7 @@ class TransactionContainer extends Component {
     });
   }
 
-  handleSummary(transaction) {
+  handleSummary(transaction = {}) {
     this.setState({
       displaySummary: !this.state.displaySummary,
       summaryTransaction: transaction
@@ -194,8 +194,16 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <TransactionSummary transactions={this.state.transactions} summaryTransaction={this.state.summaryTransaction} categories={this.state.categoryBreakdown} display={this.state.displaySummary} summaryName={this.state.summaryName}/>
-          <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} displayModal={displayModal} />
+          <TransactionSummary 
+            transactions={this.state.transactions} 
+            summaryTransaction={this.state.summaryTransaction} 
+            categories={this.state.categoryBreakdown} 
+            handleSummary={this.handleSummary}display={this.state.displaySummary} 
+            summaryName={this.state.summaryName}/>
+          <PieChart 
+            breakdown={this.state.categoryBreakdown} 
+            handleClose={this.handleModal} 
+            displayModal={displayModal} />
           <Split 
             fixed={false}
             separator={false}
@@ -210,7 +218,11 @@ class TransactionContainer extends Component {
               <Box align='end' alignContent='end'>
                 <Search transactions={this.state.transactions} search={this.handleSearch}/>
               </Box>
-              <NewTransaction handleForm={this.handleForm} accounts={this.props.data.getAccounts} submitForm={this.newTransaction} form={this.state.transactionForm}/>
+              <NewTransaction 
+                handleForm={this.handleForm} 
+                accounts={this.props.data.getAccounts} 
+                submitForm={this.newTransaction} 
+                form={this.state.transactionForm}/>
               <TransactionList
                 displaySummary={this.handleSummary} 
                 sort={this.sortTransactions} 

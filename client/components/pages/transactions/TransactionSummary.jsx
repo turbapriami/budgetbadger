@@ -26,16 +26,22 @@ const TransactionSummary = (props) => {
   return (
     props.display ?
     <Layer
-    closer="true"
+    closer={true}
+    overlayClose={true}
     padding="small"
-    flush="true"
-    overlayClose="true"
+    flush={true}
+    onClose={props.handleSummary}
     >
     <Split>
       <Box>
-        <SummaryChart transactions={props.transactions} calculateSpend={calculateSpend} name={'UberSFPOOL'} categories={props.categories} />
+        <SummaryChart 
+          transactions={props.transactions} 
+          calculateSpend={calculateSpend} 
+          summaryTransaction={props.summaryTransaction} 
+          categories={props.categories} />
       </Box>
-      <Box align='center'
+      <Box 
+        align='center'
         justify='center'
         pad='large'
         margin='large'
