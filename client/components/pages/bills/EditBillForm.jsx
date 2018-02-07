@@ -43,19 +43,19 @@ class EditBillForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.selectedBill.bill_category) {
-    this.setState({     
-      alert:nextProps.selectedBill.alert,
-      amount:nextProps.selectedBill.amount,
-      bill_category_id: nextProps.selectedBill.bill_category_id,
-      bill_category_description: nextProps.selectedBill.bill_category[0].name,
-      description:nextProps.selectedBill.description,
-      due_date:nextProps.selectedBill.due_date,
-      id: nextProps.selectedBill.id,
-      paid: nextProps.selectedBill.paid,
-      paid_date: nextProps.selectedBill.paid_date,
-      user_id: nextProps.selectedBill.user_id
-    })
+    if (nextProps.selectedBill.bill_category) {
+      this.setState({     
+        alert:nextProps.selectedBill.alert,
+        amount:nextProps.selectedBill.amount,
+        bill_category_id: nextProps.selectedBill.bill_category_id,
+        bill_category_description: nextProps.selectedBill.bill_category[0].name,
+        description:nextProps.selectedBill.description,
+        due_date:nextProps.selectedBill.due_date,
+        id: nextProps.selectedBill.id,
+        paid: nextProps.selectedBill.paid,
+        paid_date: nextProps.selectedBill.paid_date,
+        user_id: nextProps.selectedBill.user_id
+      })
   }
   }
  

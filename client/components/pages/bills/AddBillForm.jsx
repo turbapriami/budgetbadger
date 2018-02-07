@@ -17,7 +17,7 @@ class AddBillForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_id:1,
+      user_id: window.localStorage.getItem('user_id'),
       bill_category_id:0,
       bill_category_description:'',
       description:'',
@@ -90,7 +90,6 @@ class AddBillForm extends React.Component {
     e.preventDefault();
     this.props.handleFormToggle();
     this.setState({
-      user_id:1,
       bill_category_id:'',
       bill_category_description:'',
       description:'',
@@ -115,7 +114,6 @@ class AddBillForm extends React.Component {
       this.props.CREATE_BILL({variables: variables})
       .then(({ data }) => {
         this.setState({
-          user_id:1,
           bill_category_id:'',
           bill_category_description:'',
           description:'',
@@ -148,7 +146,6 @@ class AddBillForm extends React.Component {
         this.props.CREATE_BILL({variables: newBillVariables})
           .then(({ data }) => {
             this.setState({
-              user_id:1,
               bill_category_id:'',
               bill_category_description:'',
               description:'',
