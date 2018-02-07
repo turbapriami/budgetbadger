@@ -17,6 +17,7 @@ module.exports = `
     accounts: [Account!]
     banks: [Bank!]
     bills: [Bill!]
+    goals: [Goal!]
   }
 
   type Loan {
@@ -82,6 +83,7 @@ module.exports = `
     type: String!
     current_balance: Int!
     transactions: [Transaction!]
+    monthly_balance: [MonthlyBalance!]
   }
 
   type School {
@@ -119,15 +121,24 @@ module.exports = `
   }
   
   type Goal {
-    
+    id: Int!
+    description: String!
+    amount: String!
+    start_date: Date!
+    end_date: Date!
+    goal_progress: [GoalProgress!]
   }
   
   type GoalProgress {
-    
+    id: Int!
+    amount: String!
+    date: Date!
   }
   
   type MonthlyBalance {
-
+    id: Int!
+    amount: String!
+    date: Date!
   }
 
   type Query {
