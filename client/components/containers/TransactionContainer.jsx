@@ -10,6 +10,7 @@ import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
 import NewTransaction from '../pages/transactions/NewTransaction.jsx'
+import TransactionSummary from '../pages/transactions/TransactionSummary.jsx'
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag'
 
@@ -22,14 +23,14 @@ const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   })
 })
 
-// const createNewTransaction = graphql(UPDATE_TRANSACTIONS, {
-//   options: (props) => ({
-//     variables: {
-//      user_id: window.localStorage.getItem('user_id')
-//     },
-//     name: 'createNewTransaction'
-//   })
-// })
+const createNewTransaction = graphql(UPDATE_TRANSACTIONS, {
+  options: (props) => ({
+    variables: {
+     user_id: window.localStorage.getItem('user_id')
+    },
+    name: 'createNewTransaction'
+  })
+})
 
 
 class TransactionContainer extends Component {
@@ -44,6 +45,9 @@ class TransactionContainer extends Component {
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
+      displaySummary: false,
+      summaryTransaction: {},
+      summaryName: '',
       transactionForm: {
         name: '',
         category:'',
@@ -53,6 +57,7 @@ class TransactionContainer extends Component {
         account: ''
       }
     }
+    this.handleSummary = this.handleSummary.bind(this);
     this.filterTransactions = this.filterTransactions.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.generateCategories = this.generateCategories.bind(this);
@@ -62,6 +67,10 @@ class TransactionContainer extends Component {
     this.handleForm = this.handleForm.bind(this);
   }
 
+
+  // Filter transactions based on some provided parameter,
+  // this is triggered when a user clicks an account, or account type
+  // on the left-most sidebar
   filterTransactions(e, type) {
     let transactions;
     type === 'all' ?
@@ -75,6 +84,9 @@ class TransactionContainer extends Component {
     }, () => this.generateCategories());
   }
 
+  // This is used to render the pie chart, it simply groups all transactions based
+  // on their category and returns an array of tuples including the category
+  // name and the corresponding total spend
   generateCategories() {
     let columns = [];
     const breakdown = this.state.transactions.reduce((a, b) => {
@@ -96,6 +108,13 @@ class TransactionContainer extends Component {
     this.setState({
       transactions: searchResult
     });
+  }
+
+  handleSummary(transaction = {}) {
+    this.setState({
+      displaySummary: !this.state.displaySummary,
+      summaryTransaction: transaction
+    })
   }
 
   handleModal(e) {
@@ -136,6 +155,8 @@ class TransactionContainer extends Component {
     }
   }
 
+
+  // Dynamically sorts transactions when a user clicks on a specific table header
   sortTransactions(index, direction) {
     const { transactions, sorting } = this.state;
     const labels = ['date', 'type', 'category','name', 'amount'];
@@ -159,7 +180,8 @@ class TransactionContainer extends Component {
     variables.user_id = 1;
     variables.account_id = this.props.data.getAccounts[variables.account.slice(0, variables.account.indexOf('.'))].id
     variables.amount = Number(variables.amount);
-    const transaction = await this.props.mutate({variables});
+    variables.type = 'd'
+    const transaction = await this.props.createNewTransaction({variables});
     const { transactions } = this.state
     transactions.unshift(variables);
     this.setState({
@@ -181,7 +203,16 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          { displayModal ? <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} display={displayModal} /> : null}
+          <TransactionSummary 
+            transactions={this.state.transactions} 
+            summaryTransaction={this.state.summaryTransaction} 
+            categories={this.state.categoryBreakdown} 
+            handleSummary={this.handleSummary}display={this.state.displaySummary} 
+            summaryName={this.state.summaryName}/>
+          <PieChart 
+            breakdown={this.state.categoryBreakdown} 
+            handleClose={this.handleModal} 
+            displayModal={displayModal} />
           <Split 
             fixed={false}
             separator={false}
@@ -196,8 +227,13 @@ class TransactionContainer extends Component {
               <Box align='end' alignContent='end'>
                 <Search transactions={this.state.transactions} search={this.handleSearch}/>
               </Box>
-              <NewTransaction handleForm={this.handleForm} accounts={this.props.data.getAccounts} submitForm={this.newTransaction} form={this.state.transactionForm}/>
-              <TransactionList 
+              <NewTransaction 
+                handleForm={this.handleForm} 
+                accounts={this.props.data.getAccounts} 
+                submitForm={this.newTransaction} 
+                form={this.state.transactionForm}/>
+              <TransactionList
+                displaySummary={this.handleSummary} 
                 sort={this.sortTransactions} 
                 sortIdx={this.state.sortIdx} 
                 dir={this.state.sorting[this.state.sortIdx]} 
@@ -208,7 +244,9 @@ class TransactionContainer extends Component {
         </div>
       )
     } else {
-      return <Spinner />
+      return (
+        <Spinner />
+      )
     }
   }
 }

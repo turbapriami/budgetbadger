@@ -10,14 +10,12 @@ class BillsDueTableItem extends Component {
     super(props);
     this.state = {
       billEditFormToggle: false,
-      deleteBillFormToggle: false,
-      selectedBill: {},
+      deleteBillFormToggle: false
     };
     this.onMarkPaidClick = this.onMarkPaidClick.bind(this);
     this.handleEditFormToggle = this.handleEditFormToggle.bind(this);
-    this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(
-      this
-    );
+    this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
   }
 
   onMarkPaidClick(bill) {
@@ -39,9 +37,9 @@ class BillsDueTableItem extends Component {
         console.log('there was an error sending the query', error);
       });
   }
-  
-  handleMenuClick(bill) {
-    this.setState({ selectedBill: bill });
+
+  handleMenuClick (e) {
+    this.props.handleBillSelect(this.props.bill);
   }
 
   handleEditFormToggle() {
@@ -70,9 +68,7 @@ class BillsDueTableItem extends Component {
         <td>
           <Menu
             responsive={true}
-            onClick={() => {
-              this.handleMenuClick(this.props.bill);
-            }}
+            onClick={this.handleMenuClick}
             icon={<MoreIcon />}
           >
             <Anchor
@@ -99,14 +95,14 @@ class BillsDueTableItem extends Component {
             deleteBillFormToggle={this.state.deleteBillFormToggle}
             handleDeleteBillFormToggle={this.handleDeleteBillFormToggle}
           />
-          <EditBillForm
-            selectedBill={this.state.selectedBill}
-            bills={this.props.bills}
-            billCategories={this.props.billCategories}
-            billEditFormToggle={this.state.billEditFormToggle}
-            handleFormToggle={this.handleEditFormToggle}
-          />
         </td>
+        <EditBillForm
+          selectedBill={this.props.selectedBill}
+          bills={this.props.bills}
+          billCategories={this.props.billCategories}
+          billEditFormToggle={this.state.billEditFormToggle}
+          handleFormToggle={this.handleEditFormToggle}
+        />
       </TableRow>
     );
   }

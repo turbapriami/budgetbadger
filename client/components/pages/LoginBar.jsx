@@ -16,7 +16,6 @@ class LoginBar extends Component {
     this.refs.plaid.handleOnClick()
   }
   handleLogout() {
-    console.log('loggin out')
     new Cookies().remove('user')
     window.location.reload()
   }
