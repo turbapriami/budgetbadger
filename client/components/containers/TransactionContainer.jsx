@@ -45,7 +45,8 @@ class TransactionContainer extends Component {
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
-      displaySummary: true,
+      displaySummary: false,
+      summaryTransaction: {},
       summaryName: '',
       transactionForm: {
         name: '',
@@ -56,6 +57,7 @@ class TransactionContainer extends Component {
         account: ''
       }
     }
+    this.handleSummary = this.handleSummary.bind(this);
     this.filterTransactions = this.filterTransactions.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.generateCategories = this.generateCategories.bind(this);
@@ -65,6 +67,10 @@ class TransactionContainer extends Component {
     this.handleForm = this.handleForm.bind(this);
   }
 
+
+  // Filter transactions based on some provided parameter,
+  // this is triggered when a user clicks an account, or account type
+  // on the left-most sidebar
   filterTransactions(e, type) {
     let transactions;
     type === 'all' ?
@@ -78,6 +84,9 @@ class TransactionContainer extends Component {
     }, () => this.generateCategories());
   }
 
+  // This is used to render the pie chart, it simply groups all transactions based
+  // on their category and returns an array of tuples including the category
+  // name and the corresponding total spend
   generateCategories() {
     let columns = [];
     const breakdown = this.state.transactions.reduce((a, b) => {
@@ -99,6 +108,13 @@ class TransactionContainer extends Component {
     this.setState({
       transactions: searchResult
     });
+  }
+
+  handleSummary(transaction = {}) {
+    this.setState({
+      displaySummary: !this.state.displaySummary,
+      summaryTransaction: transaction
+    })
   }
 
   handleModal(e) {
@@ -139,6 +155,8 @@ class TransactionContainer extends Component {
     }
   }
 
+
+  // Dynamically sorts transactions when a user clicks on a specific table header
   sortTransactions(index, direction) {
     const { transactions, sorting } = this.state;
     const labels = ['date', 'type', 'category','name', 'amount'];
@@ -185,8 +203,16 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <TransactionSummary transactions={this.state.transactions} summaryName={this.state.summaryName}/>
-          <PieChart breakdown={this.state.categoryBreakdown} handleClose={this.handleModal} displayModal={displayModal} />
+          <TransactionSummary 
+            transactions={this.state.transactions} 
+            summaryTransaction={this.state.summaryTransaction} 
+            categories={this.state.categoryBreakdown} 
+            handleSummary={this.handleSummary}display={this.state.displaySummary} 
+            summaryName={this.state.summaryName}/>
+          <PieChart 
+            breakdown={this.state.categoryBreakdown} 
+            handleClose={this.handleModal} 
+            displayModal={displayModal} />
           <Split 
             fixed={false}
             separator={false}
@@ -201,8 +227,13 @@ class TransactionContainer extends Component {
               <Box align='end' alignContent='end'>
                 <Search transactions={this.state.transactions} search={this.handleSearch}/>
               </Box>
-              <NewTransaction handleForm={this.handleForm} accounts={this.props.data.getAccounts} submitForm={this.newTransaction} form={this.state.transactionForm}/>
-              <TransactionList 
+              <NewTransaction 
+                handleForm={this.handleForm} 
+                accounts={this.props.data.getAccounts} 
+                submitForm={this.newTransaction} 
+                form={this.state.transactionForm}/>
+              <TransactionList
+                displaySummary={this.handleSummary} 
                 sort={this.sortTransactions} 
                 sortIdx={this.state.sortIdx} 
                 dir={this.state.sorting[this.state.sortIdx]} 
