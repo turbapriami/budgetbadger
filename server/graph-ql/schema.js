@@ -131,12 +131,14 @@ module.exports = `
   
   type GoalProgress {
     id: Int!
+    goal_id: Int!
     amount: String!
     date: Date!
   }
   
   type MonthlyBalance {
     id: Int!
+    account_id: String!
     amount: String!
     date: Date!
   }

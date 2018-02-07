@@ -180,7 +180,7 @@ knex.schema.hasTable('monthly_balance').then(exists => {
   if (!exists) {
     knex.schema.createTable('monthly_balance', table => {
       table.increments('id').primary();
-      table.integer('account_id').references('accounts.id');
+      table.string('account_id').references('accounts.id');
       table.string('amount');
       table.date('date');
       // last day of month
