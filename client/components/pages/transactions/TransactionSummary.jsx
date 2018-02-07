@@ -11,9 +11,11 @@ class TransactionSummary extends Component {
       monthly: 0,
       biAnnual: 0,
       annual: 0,
+      selected: ''
     }
     this.convertName = this.convertName.bind(this);
     this.calculateSpend = this.calculateSpend.bind(this);
+    this.initializeTable = this.initializeTable.bind(this);
   }
   // Below removes all whitespace and any special characters from a transactions description
   // This is because some transactions may belong to the same group, however the description
@@ -42,31 +44,32 @@ class TransactionSummary extends Component {
 
   // Initializes spending table with total spend for its corresponding period
 
-  initializeTable (name, field, filter = identity) {
-    const monthly = this.calculateSpend(name, this.props.transactions, field, (a) => {
+  initializeTable (name, field, filter = identity, callback) {
+    const monthly = Math.round(this.calculateSpend(name, this.props.transactions, field, (a) => {
       if (filter(a)) {
         const date = moment().subtract(30, 'days');
         return moment(a.date) > date;
       }
-    })
-    const biAnnual = this.calculateSpend(name, this.props.transactions, field, (a) => {
+    }))
+    const biAnnual = Math.round(this.calculateSpend(name, this.props.transactions, field, (a) => {
       if (filter(a)) {
         const date = moment().subtract(180, 'days');
         return moment(a.date) > date;
       }
-    })
-    const annual = this.calculateSpend(name, this.props.transactions, field, (a) => {
+    }))
+    const annual = Math.round(this.calculateSpend(name, this.props.transactions, field, (a) => {
       if (filter(a)) {
         const date = moment().subtract(360, 'days');
         return moment(a.date) > date;
       }
-    })
+    }))
 
     this.setState({
+      selected: name,
       monthly,
       biAnnual,
       annual
-    })
+    }, () => callback ? callback() : null)
   } 
 
   componentWillReceiveProps(nextProps) {
@@ -88,7 +91,7 @@ class TransactionSummary extends Component {
         <Box>
           <SummaryChart 
             transactions={this.props.transactions} 
-            calculateSpend={this.calculateSpend} 
+            initializeTable={this.initializeTable} 
             summaryTransaction={this.props.summaryTransaction} 
             categories={this.props.categories} />
         </Box>
@@ -99,7 +102,7 @@ class TransactionSummary extends Component {
           margin='large'
           colorIndex='light-2'>
           <Headline margin='none' align='center' style={{fontSize: "25px"}} >
-            Spending Summary: {this.props.summaryTransaction.name}
+            Spending Summary: {this.state.selected}
             <p />
           </Headline>
           <Value 

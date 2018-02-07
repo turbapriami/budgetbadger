@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Select } from 'grommet';
+import { Select, CheckBox } from 'grommet';
 import Layer from 'grommet/components/Layer';
-import { identity, map } from 'lodash';
+import { identity, map, unionBy } from 'lodash';
 import { Line, Bar } from 'react-chartjs-2'
 import moment from 'moment'
 
@@ -13,7 +13,9 @@ class SummaryChart extends React.Component {
       chartData: {}, 
       begDate: null, 
       endDate:null, 
-      chartToggle: true
+      displayAnnual: true,
+      displayTotal: false,
+      month: ''
     }
     this.getTransactionsFromTo = this.getTransactionsFromTo.bind(this);
     this.assignToDate = this.assignToDate.bind(this);
@@ -21,6 +23,7 @@ class SummaryChart extends React.Component {
     this.generateMonthlyChart = this.generateMonthlyChart.bind(this);
     this.renderChart = this.renderChart.bind(this);
     this.handleChartClick = this.handleChartClick.bind(this);
+    this.displayChartTotal = this.displayChartTotal.bind(this);
   }
 
   // Filters transactions by date range, if no parameters provides it returns an
@@ -114,27 +117,59 @@ class SummaryChart extends React.Component {
     let chartData = this.generateMonthlyChart(transactions, callback)
     this.setState({
       chartData
-    })
+    }, () => console.log(this.state))
   }
 
 
-  // chartToggle checks whether or not a month has been selected
+  // displayAnnual checks whether or not a month has been selected
   // if true, the chart will render daily transactions for the selected month
   // else it will reset to all transactions for the year
 
   handleChartClick(element) {
     let chartData;
-    if (this.state.chartToggle) {
-      const month = this.state.chartData.labels[element[0]._index];
+    let month = null;
+    if (this.state.displayAnnual) {
+      month = this.state.chartData.labels[element[0]._index];
       chartData = this.generateDailyChart(this.props.transactions, month);
     } else {
       chartData = this.generateMonthlyChart(this.props.transactions);
     }
     this.setState({
+      month,
       chartData,
-      chartToggle: !this.state.chartToggle
+      displayAnnual: !this.state.displayAnnual
     })
   }
+
+  displayChartTotal() {
+    let chartData;
+    // untoggles totals line
+    // i.e splices it out of chart data
+    if (this.state.displayTotal) {
+      chartData = this.state.chartData;
+      chartData.datasets.splice(1);
+
+    } else {
+      let totals;
+      // checks whether or not chart is in annual view, and renders totals 
+      // for either the month or for the year
+      if (this.state.displayAnnual) {
+        totals = this.generateMonthlyChart(this.props.transactions).datasets[0].data;
+      } else {
+        totals = this.generateDailyChart(this.props.transactions, this.state.month).datasets[0].data;
+      }
+      chartData = this.state.chartData
+      chartData.datasets.push({
+        label: 'Total Spend',
+        data: totals
+      })
+    }
+    this.setState({
+      chartData,
+      displayTotal: !this.state.displayTotal
+    });
+  }
+
 
   // On load, chart renders with annual transaction data for the selected transaction type
   componentDidMount() {
@@ -185,19 +220,26 @@ class SummaryChart extends React.Component {
     return (
       <div>
         <Line data={this.state.chartData} options={options} width="600" height="500" getElementAtEvent={(element) => this.handleChartClick(element)}/>
+        <CheckBox label='Show Total'
+          toggle={true}
+          disabled={false}
+          reverse={true} 
+          checked={this.state.displayTotal}
+          onChange={() => this.displayChartTotal()}
+          />
         <Select 
           placeholder="Select a category"
           options={this.props.categories.map(a => a[0])}
           onChange={({value}) => {
-
             // this rerenders the chart based on the selected category
-            this.props.calculateSpend(value, this.props.transactions, 'category', (transaction) => {
-              console.log('hello')
+            this.props.initializeTable(value, 'category', (transaction) => {
               return transaction.category === value;
-            })
-            this.renderChart(value, (transaction) => {
-              return transaction.category === value
-            })
+            }, () => {
+              this.renderChart(value, (transaction) => {
+                return transaction.category === value
+              })
+              }
+            )
           }}
         />
       </div>
