@@ -16,7 +16,7 @@ class SummaryChart extends React.Component {
       displayAnnual: true,
       displayTotal: false,
       month: '',
-      filter: false,
+      filter: {},
     }
     this.getTransactionsFromTo = this.getTransactionsFromTo.bind(this);
     this.assignToDate = this.assignToDate.bind(this);
@@ -29,15 +29,17 @@ class SummaryChart extends React.Component {
     this.filterTransactionsByValue = this.filterTransactionsByValue.bind(this);
   }
 
-  filterTransactionsByValue(field, value) {
-    let name = this.props.convertName(value);
-    return this.props.transactions.filter(transaction => {
-      if (field === 'account') {
-        return transaction[field][0].bank_name === value;
-      } else {
-        return transaction[field] === value;
-      }
-    })
+  // Filters transactions according to filter object in state
+  // if transaction matches all properties of filter, it is returned
+  filterTransactionsByValue(filterObject = this.state.filter) {
+    if (this.props.transactions) {
+      let transactions = this.props.transactions.filter(transaction => {
+        return Object.keys(filterObject).every((key) => transaction[key] === filterObject[key])
+      })
+      this.setState({
+        filteredTransactions: transactions
+      })
+    }
   }
 
   // Filters transactions by date range, if no parameters provides it returns an
@@ -46,7 +48,7 @@ class SummaryChart extends React.Component {
   getTransactionsFromTo(begDate = '1990-10-10', endDate = new Date()) {
     let beg = moment(begDate);
     let end = moment(endDate);
-    return this.props.transactions.filter(transaction => {
+    return this.state.filteredTransactions.filter(transaction => {
       let curr = moment(transaction.date);
       return (curr >= beg && curr <= end)
     });
@@ -124,22 +126,22 @@ class SummaryChart extends React.Component {
     return chartData;   
   }
 
-  renderChart(value, callback) {
-    let transactions = this.getTransactionsFromTo();
-    let chartData = this.generateMonthlyChart(transactions, callback)
+  renderChart() {
+    let transactions = this.state.filteredTransactions;
+    let chartData = this.generateMonthlyChart(transactions)
     this.setState({
       chartData
-    }, () => console.log(this.state))
+    })
   }
 
   // Checks whether or not a filter is applied and returns the 
   // correct set of transactions.
 
-  getRelevantTransactions() {
-    return this.state.filter.field ?
-    this.state.filteredTransactions :
-    this.props.transactions;
-  }
+  // getRelevantTransactions() {
+  //   return this.state.filter ?
+  //   this.state.filteredTransactions :
+  //   this.props.transactions;
+  // }
 
 
   // displayAnnual checks whether or not a month has been selected
@@ -151,9 +153,9 @@ class SummaryChart extends React.Component {
     let month = null;
     if (this.state.displayAnnual) {
       month = this.state.chartData.labels[element[0]._index];
-      chartData = this.generateDailyChart(this.props.transactions, month);
+      chartData = this.generateDailyChart(this.state.filteredTransactions, month);
     } else {
-      chartData = this.generateMonthlyChart(this.props.transactions);
+      chartData = this.generateMonthlyChart(this.state.filteredTransactions);
     }
     this.setState({
       month,
@@ -194,10 +196,12 @@ class SummaryChart extends React.Component {
 
 
   // On load, chart renders with annual transaction data for the selected transaction type
-  componentDidMount() {
+  async componentDidMount() {
     let { name } = this.props.summaryTransaction;
-    let range = this.getTransactionsFromTo();
-    let chartData = this.generateMonthlyChart(range, (transaction) => transaction.name === name);
+    let filter = { name };
+    await this.filterTransactionsByValue(filter);
+    console.log(this.state.filteredTransactions)
+    let chartData = this.generateMonthlyChart(this.state.filteredTransactions);
     this.setState({chartData})
   }
 
@@ -239,15 +243,19 @@ class SummaryChart extends React.Component {
         ]
       }
     }
-
     return (
       <div>
-        <Line data={this.state.chartData} options={options} width="600" height="500" getElementAtEvent={(element) => this.handleChartClick(element)}/>
+        <Line 
+          data={this.state.chartData} 
+          options={options} 
+          width="600" 
+          height="500" 
+          getElementAtEvent={(element) => this.handleChartClick(element)}/>
         <CheckBox label='Show Total'
           toggle={true}
           disabled={false}
           reverse={true} 
-          checked={this.state.displayTotal               }
+          checked={this.state.displayTotal}
           onChange={() => this.displayChartTotal()}
           />
         <Select 
@@ -255,17 +263,15 @@ class SummaryChart extends React.Component {
           options={this.props.categories.map(a => a[0])}
           onChange={({value}) => {
             // this rerenders the chart based on the selected category
-            const transactions = this.filterTransactionsByValue('category', value);
+            let filter = this.state.filter;
+            filter.category = value;
             this.setState({
-              filteredTransactions: transactions,
-              filter: true
+              filter
             }, () => {
               this.props.initializeTable(value, 'category', (transaction) => {
                 return transaction.category === value;
               }, () => {
-                this.renderChart(value, (transaction) => {
-                  return transaction.category === value
-                })
+                this.renderChart()
                 }
               )
             })

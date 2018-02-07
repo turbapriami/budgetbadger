@@ -203,7 +203,8 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <TransactionSummary 
+          <TransactionSummary
+            accounts={this.props.data.getAccounts} 
             transactions={this.state.transactions} 
             summaryTransaction={this.state.summaryTransaction} 
             categories={this.state.categoryBreakdown} 

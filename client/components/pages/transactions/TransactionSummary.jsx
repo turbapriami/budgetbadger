@@ -78,7 +78,6 @@ class TransactionSummary extends Component {
 
 
   render() {
-    console.log(this.props.transactions)
     return (
       this.props.display ?
       <Layer
@@ -91,6 +90,7 @@ class TransactionSummary extends Component {
       <Split>
         <Box>
           <SummaryChart 
+            accounts={this.props.accounts}
             convertName={this.convertName}
             transactions={this.props.transactions} 
             initializeTable={this.initializeTable} 
