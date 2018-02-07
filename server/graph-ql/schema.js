@@ -117,6 +117,18 @@ module.exports = `
     name: String!
     bills: [Bill!]
   }
+  
+  type Goal {
+    
+  }
+  
+  type GoalProgress {
+    
+  }
+  
+  type MonthlyBalance {
+
+  }
 
   type Query {
     getUser(email: String, id: Int): [User!]

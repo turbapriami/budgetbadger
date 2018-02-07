@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const port = process.env.WORKER_PORT || 8002;
+const knex = require('../database/index.js').knex;
+const models = require('../database/index.js');
 const schedule = require('node-schedule')
 
 const app = express();
