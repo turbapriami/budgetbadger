@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/turbapriami/budgetbadger#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.2.1",
     "amortization": "^1.1.1",
     "apollo-cache-inmemory": "^1.1.5",
     "apollo-client": "^2.2.0",
