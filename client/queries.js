@@ -116,24 +116,12 @@ const DELETE_BILL = gql`
     deleteBill(id: $id)
   }`;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 const CREATE_BILL_CATEGORY = gql`
   mutation createBillCategory($name: String!, $user_id: Int!) {
     createBillCategory(name: $name, user_id: $user_id) {
       id
     }
   }`;
-=======
-// const GET_USER = gql`
-//   query GET_USER()
-// `
->>>>>>> reset
-=======
-// const GET_USER = gql`
-//   query GET_USER()
-// `
->>>>>>> transaction-summary
 
 export {
   TRANS_ACC_QUERY,
