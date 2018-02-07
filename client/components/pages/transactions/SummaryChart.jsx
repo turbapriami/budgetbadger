@@ -191,7 +191,10 @@ class SummaryChart extends React.Component {
           onChange={({value}) => {
 
             // this rerenders the chart based on the selected category
-
+            this.props.calculateSpend(value, this.props.transactions, 'category', (transaction) => {
+              console.log('hello')
+              return transaction.category === value;
+            })
             this.renderChart(value, (transaction) => {
               return transaction.category === value
             })
