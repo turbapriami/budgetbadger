@@ -23,7 +23,8 @@ class SummaryChart extends React.Component {
     this.handleChartClick = this.handleChartClick.bind(this);
   }
 
-  // Filters transactions by date range
+  // Filters transactions by date range, if no parameters provides it returns an
+  // arbitrary range including all transactions
 
   getTransactionsFromTo(begDate = '1990-10-10', endDate = new Date()) {
     let beg = moment(begDate);
@@ -66,6 +67,7 @@ class SummaryChart extends React.Component {
   generateDailyChart (transactions, month, filter = identity) {
     const monthlyTransactions = this.assignToMonth(transactions)[month];
     const dailyTransactions = this.assignToDate(monthlyTransactions)
+    // for some reason map didn't like an object-like array...
     const days = [...Object.keys(dailyTransactions)];
     const amounts = days.map(day => {
       return dailyTransactions[day].reduce((a, b) => {
@@ -134,6 +136,7 @@ class SummaryChart extends React.Component {
     })
   }
 
+  // On load, chart renders with annual transaction data for the selected transaction type
   componentDidMount() {
     let { name } = this.props.summaryTransaction;
     let range = this.getTransactionsFromTo();
@@ -186,7 +189,9 @@ class SummaryChart extends React.Component {
           placeholder="Select a category"
           options={this.props.categories.map(a => a[0])}
           onChange={({value}) => {
-            console.log(value)
+
+            // this rerenders the chart based on the selected category
+
             this.renderChart(value, (transaction) => {
               return transaction.category === value
             })

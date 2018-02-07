@@ -6,11 +6,19 @@ import SummaryChart from './SummaryChart.jsx';
 
 const TransactionSummary = (props) => {
 
+  // Below removes all whitespace and any special characters from a transactions description
+  // This is because some transactions may belong to the same group, however the description
+  // includes say a date, or some other numerical value.
+
   const convertName = (name) => {
     if (name) {
       return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/0-9\s]/gi, '')
     }
   }
+
+  // Below function generates total spend for some selected field, based on a filter
+  // provided through a callback. This is what renders the table on the side.
+  // Works for any selected field, namely, category, account, or date.
 
   const calculateSpend = (name, transactions, field, filter = identity) => {
     name = convertName(name);

@@ -67,6 +67,10 @@ class TransactionContainer extends Component {
     this.handleForm = this.handleForm.bind(this);
   }
 
+
+  // Filter transactions based on some provided parameter,
+  // this is triggered when a user clicks an account, or account type
+  // on the left-most sidebar
   filterTransactions(e, type) {
     let transactions;
     type === 'all' ?
@@ -80,6 +84,9 @@ class TransactionContainer extends Component {
     }, () => this.generateCategories());
   }
 
+  // This is used to render the pie chart, it simply groups all transactions based
+  // on their category and returns an array of tuples including the category
+  // name and the corresponding total spend
   generateCategories() {
     let columns = [];
     const breakdown = this.state.transactions.reduce((a, b) => {
@@ -148,6 +155,8 @@ class TransactionContainer extends Component {
     }
   }
 
+
+  // Dynamically sorts transactions when a user clicks on a specific table header
   sortTransactions(index, direction) {
     const { transactions, sorting } = this.state;
     const labels = ['date', 'type', 'category','name', 'amount'];
