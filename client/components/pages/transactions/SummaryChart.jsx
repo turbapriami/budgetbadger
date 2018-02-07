@@ -15,7 +15,8 @@ class SummaryChart extends React.Component {
       endDate:null, 
       displayAnnual: true,
       displayTotal: false,
-      month: ''
+      month: '',
+      filter: false,
     }
     this.getTransactionsFromTo = this.getTransactionsFromTo.bind(this);
     this.assignToDate = this.assignToDate.bind(this);
@@ -24,6 +25,19 @@ class SummaryChart extends React.Component {
     this.renderChart = this.renderChart.bind(this);
     this.handleChartClick = this.handleChartClick.bind(this);
     this.displayChartTotal = this.displayChartTotal.bind(this);
+    this.generateChartDataObject = this.generateChartDataObject.bind(this);
+    this.filterTransactionsByValue = this.filterTransactionsByValue.bind(this);
+  }
+
+  filterTransactionsByValue(field, value) {
+    let name = this.props.convertName(value);
+    return this.props.transactions.filter(transaction => {
+      if (field === 'account') {
+        return transaction[field][0].bank_name === value;
+      } else {
+        return transaction[field] === value;
+      }
+    })
   }
 
   // Filters transactions by date range, if no parameters provides it returns an
@@ -77,17 +91,8 @@ class SummaryChart extends React.Component {
         return filter(b) ? a += Math.abs(b.amount):  a;
       }, 0)
     })
-    const chartData = {
-      labels: days, 
-      datasets:[
-      {
-        label: 'Monthly Amounts',
-        data: [...amounts]
-      }]
-    }
-    return chartData;
+    return this.generateChartDataObject(days, amounts);
   }
-
 
   // Takes monthly transactions and calculates total spend for the month
   // then sets state to rerender the chart
@@ -101,15 +106,22 @@ class SummaryChart extends React.Component {
         return filter(b) ? a += Math.abs(b.amount) : a;
       }, 0);
     });
+    return this.generateChartDataObject(year, amounts);
+  }
+
+  // Formats data in preparation for chart
+
+  generateChartDataObject (labels, data) {
     const chartData = {
-      labels: year, 
+      labels: labels, 
       datasets:[
       {
         label: 'Monthly Amounts',
-        data: [...amounts]
+        data: [...data],
+        backgroundColor: "rgb(71, 255, 178)"
       }]
     }
-    return chartData;
+    return chartData;   
   }
 
   renderChart(value, callback) {
@@ -118,6 +130,15 @@ class SummaryChart extends React.Component {
     this.setState({
       chartData
     }, () => console.log(this.state))
+  }
+
+  // Checks whether or not a filter is applied and returns the 
+  // correct set of transactions.
+
+  getRelevantTransactions() {
+    return this.state.filter.field ?
+    this.state.filteredTransactions :
+    this.props.transactions;
   }
 
 
@@ -161,7 +182,8 @@ class SummaryChart extends React.Component {
       chartData = this.state.chartData
       chartData.datasets.push({
         label: 'Total Spend',
-        data: totals
+        data: totals,
+        backgroundColor: "rgba(95, 0, 96, 0.8)",
       })
     }
     this.setState({
@@ -217,6 +239,7 @@ class SummaryChart extends React.Component {
         ]
       }
     }
+
     return (
       <div>
         <Line data={this.state.chartData} options={options} width="600" height="500" getElementAtEvent={(element) => this.handleChartClick(element)}/>
@@ -224,7 +247,7 @@ class SummaryChart extends React.Component {
           toggle={true}
           disabled={false}
           reverse={true} 
-          checked={this.state.displayTotal}
+          checked={this.state.displayTotal               }
           onChange={() => this.displayChartTotal()}
           />
         <Select 
@@ -232,14 +255,20 @@ class SummaryChart extends React.Component {
           options={this.props.categories.map(a => a[0])}
           onChange={({value}) => {
             // this rerenders the chart based on the selected category
-            this.props.initializeTable(value, 'category', (transaction) => {
-              return transaction.category === value;
+            const transactions = this.filterTransactionsByValue('category', value);
+            this.setState({
+              filteredTransactions: transactions,
+              filter: true
             }, () => {
-              this.renderChart(value, (transaction) => {
-                return transaction.category === value
-              })
-              }
-            )
+              this.props.initializeTable(value, 'category', (transaction) => {
+                return transaction.category === value;
+              }, () => {
+                this.renderChart(value, (transaction) => {
+                  return transaction.category === value
+                })
+                }
+              )
+            })
           }}
         />
       </div>
