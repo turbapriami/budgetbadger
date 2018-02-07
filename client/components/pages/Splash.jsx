@@ -8,13 +8,13 @@ const Splash = ({ match, location, history }) => {
 
 
           <Box full="horizontal">
-            <Hero background={<img src='https://lh3.googleusercontent.com/tSEL7VbU51DxFg8xy1oKn3WjYkxprg2deMAUhrrMpUXDnhvngKPFN6HJBJP2ZQdSnyoRVxJnt-TLkMMXid_6MTTfiGx926GVyNqVjEJkZrA_52MPbSeFPU9DYYvCwq-AeTGo31_uGhiUF3h7zHl-OKcD5r9kMGSbB4to-DbNCCezPiMIYaGtx1qx5GpTCUziTKriyKihwhjbrxpTg-x8MHNTNJCf7-IxJ2Jk4UVOyMh22Td9ufbfi8d0wQ3hd_lgIuxv0BvJ-ATrcOmWByZrV7jWkunMxVI62hUx8Ej0ytWQNwVm3-R833eyYtYgiM6nVB6Ra85xtouhH9xT2peNwpK3Cwf6ZD_RbG7DAd4zWgc9p6C3nkB5B03BikqIOgxci5mCevw9Z4UHhgpyBR9KQ4W3xiDc_tTfoK2o_lmOK45G86zmHK1LVK-9qQ5T5v-pQNYkrSy16m5tx9rxpgkRGf8tq1JmZ01EavVbQhQAC3NOhQ5D6hZIW6ivYZBdpsUq0rHk17d4Lgf5B4PD_jQz-oHpSAJAg001vGxRjhu47-iu0afv6O2fDGxGGKPVHiKbiDtes5KiOtGCNu931OC0tutC4d-pC-vhQVIGS53uvX39-1uw94_ZYoVh0qYmHmnv0l8m1EeUlqF4kUsg6iHoY1QXZO10BTwr=w2400-h1160-no' fit="cover" full={true} />}>
+            <Hero background={<Image src='https://lh3.googleusercontent.com/tSEL7VbU51DxFg8xy1oKn3WjYkxprg2deMAUhrrMpUXDnhvngKPFN6HJBJP2ZQdSnyoRVxJnt-TLkMMXid_6MTTfiGx926GVyNqVjEJkZrA_52MPbSeFPU9DYYvCwq-AeTGo31_uGhiUF3h7zHl-OKcD5r9kMGSbB4to-DbNCCezPiMIYaGtx1qx5GpTCUziTKriyKihwhjbrxpTg-x8MHNTNJCf7-IxJ2Jk4UVOyMh22Td9ufbfi8d0wQ3hd_lgIuxv0BvJ-ATrcOmWByZrV7jWkunMxVI62hUx8Ej0ytWQNwVm3-R833eyYtYgiM6nVB6Ra85xtouhH9xT2peNwpK3Cwf6ZD_RbG7DAd4zWgc9p6C3nkB5B03BikqIOgxci5mCevw9Z4UHhgpyBR9KQ4W3xiDc_tTfoK2o_lmOK45G86zmHK1LVK-9qQ5T5v-pQNYkrSy16m5tx9rxpgkRGf8tq1JmZ01EavVbQhQAC3NOhQ5D6hZIW6ivYZBdpsUq0rHk17d4Lgf5B4PD_jQz-oHpSAJAg001vGxRjhu47-iu0afv6O2fDGxGGKPVHiKbiDtes5KiOtGCNu931OC0tutC4d-pC-vhQVIGS53uvX39-1uw94_ZYoVh0qYmHmnv0l8m1EeUlqF4kUsg6iHoY1QXZO10BTwr=w2400-h1160-no' fit="cover" full={true} />}>
               <Box direction="row" justify="center" align="center">
                 <Box basis="1/2" align="end" pad="medium" />
                 <Box basis="1/2" align="start" pad={{horizontal: "large", vertical: "large", between: "medium"}}>
                   <Label margin="none" size="medium" uppercase={true}>Learn to Life</Label>
                   <h1>Accelerate your wallet with Budget Badger, he got yo back</h1>
-                  <p>Budget Badger can help you benefit now, just sign up and stop spending so much $$$</p>
+                  <Paragraph margin="medium" size="large">Budget Badger can help you benefit now, just sign up and stop spending so much $$$</Paragraph>
                 </Box>
               </Box>
             </Hero>
