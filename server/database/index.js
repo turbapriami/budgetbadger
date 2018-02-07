@@ -129,13 +129,16 @@ knex.schema.hasTable('bills').then(exists => {
   if (!exists) {
     knex.schema.createTable('bills', table => {
       table.increments('id').primary();
-      table.integer('user_id');
-      table.integer('bill_category_id');
+      table.integer('user_id').references('users.id');
+      table.integer('bill_category_id').references('bill_categories.id');
       table.string('description');
       table.decimal('amount',14,2);
+      table.integer('bill_recurrence_id').references('bill_recurrence.id');
       table.date('due_date');
-      table.boolean('paid');
-      table.date('paid_date');
+      table.date('start_date');
+      table.date('end_date');
+      table.date('last_paid_date');
+      table.boolean('bill_status');
       table.boolean('alert');
     }).then(() => console.log('created table bills'))
   }
@@ -150,6 +153,29 @@ knex.schema.hasTable('bill_categories').then(exists => {
     }).then(() => console.log('created table bill_categories'))
   }
 })
+
+knex.schema.hasTable('bill_recurrence').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('bill_recurrence', table => {
+      table.increments('id').primary();
+      table.string('recurrence_type');
+    }).then(() => console.log('created table bill_recurrence'))
+  }
+})
+
+knex.schema.hasTable('bill_payment_history').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('bill_payment_history', table => {
+      table.increments('id').primary();
+      table.integer('bill_id').references('bills.id');
+      table.decimal('amount_paid',14,2);
+      table.date('paid_date');
+      table.boolean('paid');
+    }).then(() => console.log('created table bill_payment_history'))
+  }
+})
+
+
 
 const db = require('bookshelf')(knex);
 

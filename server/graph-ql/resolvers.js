@@ -77,15 +77,33 @@ module.exports = {
 
   Bill: {
     bill_category: ({ bill_category_id }, args, { knex }) => 
-    knex('bill_categories').where({
-      id: bill_category_id
-    })
+      knex('bill_categories').where({
+        id: bill_category_id
+      }), 
+    bill_recurrence: ({ bill_recurrence_id }, args, { knex }) => 
+      knex('bill_recurrence').where({
+        id: bill_recurrence_id
+      })
   },
 
   BillCategory: {
     bills: ({ id }, args, { knex }) => 
       knex('bills').where({
         bill_category_id: id
+      })
+  },
+
+  BillPaymentHistory: {
+    bills: ({ bill_id }, args, { knex }) => 
+    knex('bills').where({
+      id: bill_id
+    })
+  },
+
+  BillRecurrence: {
+    bills: ({ id }, args, { knex }) => 
+      knex('bills').where({
+        bill_recurrence_id: id
       })
   },
 
@@ -305,20 +323,46 @@ module.exports = {
       const bill = await new models.Bill(args).save(null, {method: 'insert'});
       return bill.attributes;
      },
+
     updateBill: async (parent, args, { models }) => {
       const bill = await new models.Bill(args).save(null, {method: 'update'});
       return bill.attributes;
     },
+
     deleteBill: (parent, args, { knex }) => knex('bills').where(args).del(),
+
     createBillCategory: async (parent, args, { models }) => {
       const billCategory = await new models.BillCategory(args).save(null, {method: 'insert'});
       return billCategory.attributes;
     },
+
     updateBillCategory: async (parent, args, { models }) => {
       const billCategory = await new models.BillCategory(args).save(null, {method: 'update'});
       return billCategory.attributes;
     },
+
     deleteBillCategory: (parent, args, { knex }) => knex('bill_categories').where(args).del(),
+
+
+    createBillRecurrence: async (parent, args, { models }) => {
+      const billRecurrence = await new models.BillRecurrence(args).save(null, {method: 'insert'});
+      return billRecurrence.attributes;
+    },
+    
+    deleteBillRecurrence: async (parent, args, { knex }) => knex('bill_recurrence').where(args).del(),
+//==>>
+    createBillPaymentHistory: async (parent, args, { models }) => {
+      const billPaymentHistory = await new models.BillPaymentHistory(args).save(null, {method: 'insert'});
+      return billPaymentHistory.attributes;
+     },
+
+    updateBillPaymentHistory: async (parent, args, { models }) => {
+      const billPaymentHistory = await new models.BillPaymentHistory(args).save(null, {method: 'update'});
+      return billPaymentHistory.attributes;
+    },
+
+    deleteBillPaymentHistory: (parent, args, { knex }) => knex('bill_payment_history').where(args).del(),
+//=====>
     createLoan: async (parent, args, { models }) => await new models.Loan(args).save(null, {method:'insert'}),
     createLoanPayment: async (parent, args, { models }) => await new models.Loan_Payment(args).save(null, {method: 'insert'}),
   }

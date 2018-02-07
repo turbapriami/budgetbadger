@@ -8,6 +8,8 @@ const Bill = require('./bill.js');
 const Loan = require('./loan.js');
 const Loan_Payment = require('./loan_payment.js');
 const BillCategory = require('./billcategory.js');
+const BillRecurrence = require('./bill_recurrence.js');
+const BillPaymentHistory = require('./bill_payment.js');
 
 module.exports = {
   Account,
@@ -19,5 +21,7 @@ module.exports = {
   Bill,
   BillCategory,
   Loan,
-  Loan_Payment
+  Loan_Payment,
+  BillRecurrence,
+  BillPaymentHistory
 }
