@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Spinner from '../pages/Spinner.jsx'
-import AccountsTable from '../pages/AccountsTable.jsx'
-import AccountsTotals from '../pages/AccountsTotals.jsx'
+import AccountsTable from '../pages/accounts/AccountsTable.jsx'
+import AccountsTotals from '../pages/accounts/AccountsTotals.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
 

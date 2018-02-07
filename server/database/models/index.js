@@ -19,5 +19,7 @@ module.exports = {
   Bill,
   BillCategory,
   Loan,
-  Loan_Payment
+  Loan_Payment,
+  Goal,
+  Monthly_Balance
 }
