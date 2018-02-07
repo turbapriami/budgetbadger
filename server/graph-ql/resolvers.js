@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const _ = require('lodash')
 const plaid = require('../plaid.js')
+const sendgrid = require('../sendgrid.js');
 const moment = require('moment')
 const Promise = require('bluebird');
 const knex = require('../database/index.js').knex;
@@ -143,7 +144,7 @@ module.exports = {
     getLoanPayments: (parent, { loan_id }, { knex }) =>
       knex('loan_payments').where({
         loan_id
-      })
+      }),      
     },
 
   Mutation: {
@@ -292,6 +293,19 @@ module.exports = {
       return updated.attributes
     },
 
+    updateEmail: async (parent, args, {models, knex}) => {
+      const { id } = args;
+      const user = await new models.User({id}).fetch();
+      const { email } = user;
+      for (let field in user.attributes) {
+        if (args[field]) {
+          user.attributes[field] = args[field]
+        }
+      }
+      let updated = await new models.User(user.attributes).save();
+      return updated.attributes
+    },
+
     createSchool: async (parent, args, { models }) => {
       const school = await new models.School(args).save(null, {method: 'insert'});
       return school.attributes;
@@ -322,6 +336,11 @@ module.exports = {
     deleteBillCategory: (parent, args, { knex }) => knex('bill_categories').where(args).del(),
     createLoan: async (parent, args, { models }) => await new models.Loan(args).save(null, {method:'insert'}),
     createLoanPayment: async (parent, args, { models }) => await new models.Loan_Payment(args).save(null, {method: 'insert'}),
+    getPasswordRecoveryEmail: (parent, args, { knex, user }) => {
+      knex('users').where(args).then((data) => {
+        sendgrid.sendEmail(data[0].first_name, data[0].email)
+      })
+    },
   }
 }
 
