@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import Splash from './components/pages/Splash.jsx';
@@ -9,6 +9,7 @@ import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
+import PasswordRecoveryModal from './components/pages/PasswordRecoveryModal.jsx';
 
 const httpLink = new HttpLink();
 
@@ -17,9 +18,16 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 })
 
-document.addEventListener('DOMContentLoaded', () => {
+class SplashHome extends Component {
+  constructor() {
+    super()
+    this.state = {
+      forgotPass: false
+    }
+  }
+
+  render() {
     return (
-      ReactDOM.render(
       <ApolloProvider client={client}>
         <App centered={false}>
           <BrowserRouter>
@@ -59,10 +67,21 @@ document.addEventListener('DOMContentLoaded', () => {
               <Route exact={true} path="/SplashSignUp" render={() => (
                 <SplashSignUp client={client} />
               )} />
+              <Route exact={true} path="/PasswordRecovery" render={() => (
+                <PasswordRecoveryModal />
+              )} />
             </div>
           </BrowserRouter>
         </App>
-      </ApolloProvider>,
+      </ApolloProvider>
+    )
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    return (
+      ReactDOM.render(
+      <SplashHome />,
         document.getElementById('splash')
       )
     )

@@ -3,19 +3,19 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Anchor, Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header, Heading, Label, Paragraph, TextInput, Tiles, Layer, PasswordInput } from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import Cookies from 'universal-cookie'
-import axios from 'axios'
+import Cookies from 'universal-cookie';
+import PasswordRecoveryModal from './PasswordRecoveryModal.jsx';
+import SplashSignUp from './SplashSignUp.jsx';
 
 class SplashSignIn extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       user_email: '',
       password: '',
       layerActive: false
     }
     this._confirm = this._confirm.bind(this)
-    this.activateLayer = this.activateLayer.bind(this);
   }
 
   async _confirm() {
@@ -39,41 +39,9 @@ class SplashSignIn extends Component {
     }
   }
 
-  activateLayer() {
-    this.setState({
-      layerActive: true
-    })
-  }
-
   render() {
-    const layer = this.state.layerActive ? <Layer closer={true} flush={true} onClose={() => {
-      this.setState({ layerActive: false })}}>
-      <Box full={false} pad="small" size={{ height: "medium", width: "medium" }} pad="medium">
-        <Paragraph align="center">Please enter your email in the form below, and we'll send you a special link to reset your password.</Paragraph>
-        <Paragraph align="center">Please be mindful that the link will only be active for the next 20 minutes</Paragraph>
-        <TextInput name="userEmail" onDOMChange={e => this.setState({user_email: e.target.value})} />
-        <Box size={{ height: "10%", width: "15%" }} alignSelf="center" margin={{ top: "medium" }} >
-          <Button label='Submit'
-            href='#'
-            primary={false}
-            secondary={false}
-            accent={false}
-            critical={false}
-            plain={false}
-            onClick={() => {
-              axios.post('/passwordRecovery', {
-                email: this.state.email
-              }
-            )
-              .then(res => console.log("RESPONSE!!!!", res))
-              .catch(err => console.error(err))
-            }} />
-        </Box>
-      </Box>
-      </Layer> : null;
     return (
       <Box align="center" focusable={true}>
-      {layer}
         <Card align="center" style={{ outline: "#000 solid thin" }}> 
               <h3 style={{ textAlign: "center" }} >Everything you could ever want in an accountant, and more</h3>
             <div style={{ outline: "#E8E8E8 solid thin" }}></div>
@@ -95,13 +63,15 @@ class SplashSignIn extends Component {
           </Form>
           <div style={{ outline: "#E8E8E8 solid thin" }}></div>
           <Paragraph align="center" size="small" margin="small" >
-            <Anchor href="#" onClick={this.activateLayer}>I forgot my password</Anchor>
+            <Link to={'/PasswordRecovery'}>
+              <a style={{ color: "#000" }} class="grommetux-anchor">I forgot my password</a>
+            </Link>
           </Paragraph>
           <Router>
             <Paragraph align="center" size="small" margin="small" >
               New to Budget Badger?
               <Link to={'/SplashSignUp'}>
-                <a style={{ color: " #0000EE" }} > Create an account.</a>
+                <a style={{ color: " #0000EE" }} class="grommetux-anchor"> Create an account.</a>
               </Link>
             </Paragraph>
           </Router>
