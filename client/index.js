@@ -6,9 +6,12 @@ import ApolloClient from 'apollo-client'
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from 'react-apollo'
+import { ApolloLink, concat } from 'apollo-link'
 import App from './components/pages/App.jsx'
+import Cookies from 'universal-cookie';
 
-const httpLink = new HttpLink();
+const httpLink = new HttpLink({ uri: 'http://localhost:1337/graphql', withCredentials: true, credentials: 'same-origin' });
+
 
 // const middlewareLink = setContext(() => ({
 //   headers: { 

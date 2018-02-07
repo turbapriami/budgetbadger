@@ -37,7 +37,6 @@ const getToken = async (req) => {
   } catch (err) {
     console.log(err);
   }
-  // req.user = 'user' // <= uncomment to dummy authenticate
   req.next()
 }
 
@@ -57,6 +56,8 @@ const homeCheck = (req, res) => {
   }
 }
 
+
+app.use(cors({credentials: true}))
 app.post('/passwordRecovery', (req, res) => {
   console.log("DATA",req.data);
   var options = { method: 'POST',
@@ -83,8 +84,6 @@ app.post('/passwordRecovery', (req, res) => {
   });
 })
 
-app.use(cors())
-
 app.use(morgan('dev'))
 
 app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
@@ -92,15 +91,18 @@ app.use(/\/((?!graphql).)*/, bodyParser.json());
 // app.use(bodyParser.text({ type: 'text/plain' }));
 
 const logger = (req, res, next) => {
-  console.log(req.body)
   next();
 }
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
 
+app.use(getToken); // => uncomment to enable authentication
+
+
 app.use('/graphql',
   bodyParser.json(), 
+  // getToken,
   logger,
   graphqlExpress(req => ({
     schema: schema,
@@ -114,7 +116,6 @@ app.use('/graphql',
   }))
 );
 
-app.use(getToken); // => uncomment to enable authentication
 
 app.use('/home', homeCheck, express.static(path.join(__dirname, '../public/splash')));
 
