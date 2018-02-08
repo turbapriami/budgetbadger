@@ -45,7 +45,7 @@ class TransactionContainer extends Component {
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
-      displaySummary: false,
+      displaySummary: true,
       summaryTransaction: {},
       summaryName: '',
       transactionForm: {
@@ -111,6 +111,7 @@ class TransactionContainer extends Component {
   }
 
   handleSummary(transaction = {}) {
+    console.log('hello')
     this.setState({
       displaySummary: !this.state.displaySummary,
       summaryTransaction: transaction
@@ -208,7 +209,8 @@ class TransactionContainer extends Component {
             transactions={this.state.transactions} 
             summaryTransaction={this.state.summaryTransaction} 
             categories={this.state.categoryBreakdown} 
-            handleSummary={this.handleSummary}display={this.state.displaySummary} 
+            handleSummary={this.handleSummary}
+            displaySummary={this.state.displaySummary} 
             summaryName={this.state.summaryName}/>
           <PieChart 
             breakdown={this.state.categoryBreakdown} 

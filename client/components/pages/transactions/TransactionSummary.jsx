@@ -19,6 +19,7 @@ class TransactionSummary extends Component {
     this.calculateSpend = this.calculateSpend.bind(this);
     this.initializeTable = this.initializeTable.bind(this);
   }
+  
   // Below removes all whitespace and any special characters from a transactions description
   // This is because some transactions may belong to the same group, however the description
   // includes say a date, or some other numerical value.

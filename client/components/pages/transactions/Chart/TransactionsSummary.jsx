@@ -40,6 +40,7 @@ class SummaryChartContainer extends React.Component {
 
   // Filters transactions according to filter object in state
   // if transaction matches all properties of filter, it is returned
+
   filterTransactionsByValue(callback) {
     if (this.props.transactions) {
       let transactions = this.props.transactions.filter(transaction => {
@@ -54,7 +55,6 @@ class SummaryChartContainer extends React.Component {
       return transactions
     }
   }
-
 
   // Groups annual transactions by date
 
@@ -87,15 +87,18 @@ class SummaryChartContainer extends React.Component {
 
   generateDailyData (transactions, month) {
     const monthlyTransactions = this.assignToMonth(transactions)[month];
-    const dailyTransactions = this.assignToDate(monthlyTransactions)
-    // for some reason map didn't like an object-like array...
-    const days = [...Object.keys(dailyTransactions)];
-    const amounts = days.map(day => {
-      return dailyTransactions[day].reduce((a, b) => {
-        return  a += Math.abs(b.amount);
-      }, 0)
-    })
-    return this.generateChartDataObject(days, amounts);
+    if (monthlyTransactions) {
+      const dailyTransactions = this.assignToDate(monthlyTransactions)
+      // for some reason map didn't like an object-like array...
+      const days = [...Object.keys(dailyTransactions)];
+      const amounts = days.map(day => {
+        return dailyTransactions[day].reduce((a, b) => {
+          return  a += Math.abs(b.amount);
+        }, 0)
+      })
+      return this.generateChartDataObject(days, amounts);
+    }
+    return this.generateChartDataObject([], [])
   }
 
   // Takes monthly transactions and calculates total spend for the month
@@ -113,6 +116,9 @@ class SummaryChartContainer extends React.Component {
     return this.generateChartDataObject(year, amounts);
   }
 
+  // Below checks whether or not a month has been selected
+  // if true, the chart will render daily transactions for the selected month
+  // else it will reset to all transactions for the year
 
   handleChartClick(element) {
     let chartData, month;
@@ -131,7 +137,11 @@ class SummaryChartContainer extends React.Component {
 
   renderChart() {
     let filteredTransactions = this.filterTransactionsByValue();
-    let chartData = this.generateMonthlyData(filteredTransactions);
+
+    const chartData = this.state.displayAnnual ?
+    this.generateMonthlyData(filteredTransactions) :
+    this.generateDailyData(filteredTransactions, this.state.month);
+
     this.setState({
       filteredTransactions,
       chartData
@@ -144,10 +154,22 @@ class SummaryChartContainer extends React.Component {
 
   render() {
     return (
-      <Layer>
+      this.props.displaySummary ?
+      <Layer
+        closer={true}
+        overlayClose={true}
+        padding="small"
+        flush={true}
+        onClose={this.props.handleSummary}>
         <TransactionChart 
           chartData={this.state.chartData} 
           handleChartClick={this.handleChartClick}/>
+        <CheckBox label='Show Total'
+          toggle={true}
+          disabled={false}
+          reverse={true} 
+          checked={this.state.displayTotal}
+          onChange={() => console.log('hello')}/>
         <Select 
           placeHolder="Select a category"
           options={this.props.categories.map(a => a[0])}
@@ -168,7 +190,8 @@ class SummaryChartContainer extends React.Component {
             this.setState({filter}, () => this.renderChart())
           }}
         />
-      </Layer>
+      </Layer> :
+      null
     )
   }
 
