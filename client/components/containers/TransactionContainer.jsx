@@ -10,7 +10,7 @@ import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
 import NewTransaction from '../pages/transactions/NewTransaction.jsx'
-import TransactionSummary from '../pages/transactions/TransactionSummary.jsx'
+import SummaryChartContainer from '../pages/transactions/Chart/TransactionsSummary.jsx'
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag'
 
@@ -45,7 +45,7 @@ class TransactionContainer extends Component {
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
-      displaySummary: false,
+      displaySummary: true,
       summaryTransaction: {},
       summaryName: '',
       transactionForm: {
@@ -111,6 +111,7 @@ class TransactionContainer extends Component {
   }
 
   handleSummary(transaction = {}) {
+    console.log('hello')
     this.setState({
       displaySummary: !this.state.displaySummary,
       summaryTransaction: transaction
@@ -203,11 +204,13 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <TransactionSummary 
+          <SummaryChartContainer
+            accounts={this.props.data.getAccounts} 
             transactions={this.state.transactions} 
             summaryTransaction={this.state.summaryTransaction} 
             categories={this.state.categoryBreakdown} 
-            handleSummary={this.handleSummary}display={this.state.displaySummary} 
+            handleSummary={this.handleSummary}
+            displaySummary={this.state.displaySummary} 
             summaryName={this.state.summaryName}/>
           <PieChart 
             breakdown={this.state.categoryBreakdown} 

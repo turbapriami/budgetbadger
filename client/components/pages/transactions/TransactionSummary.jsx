@@ -1,16 +1,30 @@
 import { Split, Value, CurrencyIcon, Headline, Section, Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
-import React from 'react';
+import React, { Component } from 'react';
 import identity from 'lodash'
 import moment from 'moment';
 import SummaryChart from './SummaryChart.jsx';
+import TransactionPie from './TransactionPie.jsx'
 
-const TransactionSummary = (props) => {
-
+class TransactionSummary extends Component {
+  constructor(){
+    super();
+    this.state = {
+      monthly: 0,
+      biAnnual: 0,
+      annual: 0,
+      allTime: 0,
+      selected: ''
+    }
+    this.convertName = this.convertName.bind(this);
+    this.calculateSpend = this.calculateSpend.bind(this);
+    this.initializeTable = this.initializeTable.bind(this);
+  }
+  
   // Below removes all whitespace and any special characters from a transactions description
   // This is because some transactions may belong to the same group, however the description
   // includes say a date, or some other numerical value.
 
-  const convertName = (name) => {
+  convertName (name) {
     if (name) {
       return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/0-9\s]/gi, '')
     }
@@ -20,10 +34,10 @@ const TransactionSummary = (props) => {
   // provided through a callback. This is what renders the table on the side.
   // Works for any selected field, namely, category, account, or date.
 
-  const calculateSpend = (name, transactions, field, filter = identity) => {
-    name = convertName(name);
+  calculateSpend (name, transactions, field, filter = identity) {
+    name = this.convertName(name);
     return transactions.reduce((a, b) => {
-      let fieldValue = convertName(b[field])
+      let fieldValue = this.convertName(b[field])
       if (filter(b) && fieldValue.includes(name)) {
         a += Math.abs(b.amount);
       }
@@ -31,68 +45,95 @@ const TransactionSummary = (props) => {
     }, 0)
   }
 
-  return (
-    props.display ?
-    <Layer
-    closer={true}
-    overlayClose={true}
-    padding="small"
-    flush={true}
-    onClose={props.handleSummary}
-    >
-    <Split>
-      <Box>
-        <SummaryChart 
-          transactions={props.transactions} 
-          calculateSpend={calculateSpend} 
-          summaryTransaction={props.summaryTransaction} 
-          categories={props.categories} />
-      </Box>
-      <Box 
-        align='center'
-        justify='center'
-        pad='large'
-        margin='large'
-        colorIndex='light-2'>
-        <Headline margin='none' align='center' style={{fontSize: "25px"}} >
-          Spending Summary: {props.summaryTransaction.name}
-          <p />
-        </Headline>
-        <Value 
-          value={calculateSpend(props.summaryTransaction.name, props.transactions, 'name', (a) => {
-            const date = moment().subtract(30, 'days');
-            return moment(a.date) > date;
-          })}
-          icon={<CurrencyIcon />}
-          label='Last 30 days'
-          units='$' />
-          <p />
-        <Value 
-          value={
-            calculateSpend(props.summaryTransaction.name, props.transactions, 'name', (a) => {
-              const date = moment().subtract(180, 'days');
-              return moment(a.date) > date;
-            })
-          }
-          icon={<CurrencyIcon />}
-          label='Last 6 months'
-          units='$' />
-          <p />
-        <Value 
-          value={
-            calculateSpend(props.summaryTransaction.name, props.transactions, 'name', (a) => {
-              const date = moment().subtract(360, 'days');
-              return moment(a.date) > date;
-            })
-          }
-          icon={<CurrencyIcon />}
-          label='Last 12 Months'
-          units='$' />
-      </Box>
-    </Split>
-    </Layer>:
-    null
-  )
+  // Initializes spending table with total spend for its corresponding period
+
+  initializeTable (name, field, filter = identity, callback) {
+    const monthly = Math.round(this.calculateSpend(name, this.props.transactions, field, (a) => {
+      if (filter(a)) {
+        const date = moment().subtract(30, 'days');
+        return moment(a.date) > date;
+      }
+    }))
+    const biAnnual = Math.round(this.calculateSpend(name, this.props.transactions, field, (a) => {
+      if (filter(a)) {
+        const date = moment().subtract(180, 'days');
+        return moment(a.date) > date;
+      }
+    }))
+    const annual = Math.round(this.calculateSpend(name, this.props.transactions, field, (a) => {
+      if (filter(a)) {
+        const date = moment().subtract(360, 'days');
+        return moment(a.date) > date;
+      }
+    }))
+
+    const allTime = Math.round(this.props.transactions.reduce((a, b) => {
+      return a + Math.abs(b.amount)
+    }, 0))
+
+    this.setState({
+      selected: name,
+      monthly,
+      biAnnual,
+      annual,
+      allTime,
+    }, () => callback ? callback() : null)
+  } 
+
+  componentWillReceiveProps(nextProps) {
+    this.initializeTable(nextProps.summaryTransaction.name, 'name');
+  }
+
+
+  render() {
+    return (
+      this.props.display ?
+      <Layer
+      closer={true}
+      overlayClose={true}
+      padding="small"
+      flush={true}
+      onClose={this.props.handleSummary}
+      >
+      <Split>
+        <Box>
+          <TransactionPie 
+            data={[this.state.allTime, this.state.annual]} 
+            labels={['Total Spend', 'Annual: ' + this.props.summaryTransaction.name]}/>
+        </Box>
+        <Box 
+          align='center'
+          justify='center'
+          pad='large'
+          margin='large'
+          colorIndex='light-2'>
+          <Headline margin='none' align='center' style={{fontSize: "25px"}} >
+            Spending Summary: {this.state.selected}
+            <p />
+          </Headline>
+          <Value 
+            value={this.state.monthly}
+            icon={<CurrencyIcon />}
+            label='Last 30 days'
+            units='$' />
+            <p />
+          <Value 
+            value={this.state.biAnnual}
+            icon={<CurrencyIcon />}
+            label='Last 6 months'
+            units='$' />
+            <p />
+          <Value 
+            value={this.state.annual}
+            icon={<CurrencyIcon />}
+            label='Last 12 Months'
+            units='$' />
+        </Box>
+      </Split>
+      </Layer>:
+      null
+    )
+  }
 
 }
 
