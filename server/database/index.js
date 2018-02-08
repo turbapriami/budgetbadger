@@ -166,6 +166,16 @@ knex.schema.hasTable('goals').then(exists => {
   }
 })
 
+knex.schema.hasTable('goal_categories').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goal_categories', table => {
+      table.increments('id').primary();
+      table.integer('goal_id').references('goals.id');
+      table.string('name');
+    }).then(() => console.log('created table goal_categories'))
+  }
+})
+
 knex.schema.hasTable('goal_progress').then(exists => {
   if (!exists) {
     knex.schema.createTable('goal_progress', table => {
@@ -173,7 +183,6 @@ knex.schema.hasTable('goal_progress').then(exists => {
       table.integer('goal_id').references('goals.id');
       table.string('amount');
       table.date('date');
-      // last day of month
     }).then(() => console.log('created table goal_progress'))
   }
 })
@@ -185,7 +194,6 @@ knex.schema.hasTable('monthly_balance').then(exists => {
       table.string('account_id').references('accounts.id');
       table.string('amount');
       table.date('date');
-      // last day of month
     }).then(() => console.log('created table monthly_balance'))
   }
 })

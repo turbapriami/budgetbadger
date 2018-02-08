@@ -1,10 +1,10 @@
 const { db } = require('../index.js');
 
-const GoalProgress = db.Model.extend({
-  tableName: 'goal_progress',  
+const GoalCategory = db.Model.extend({
+  tableName: 'goal_categories',  
   goal_id: () => {
     return this.belongsTo(Goal, 'id');
   }
 })
 
-module.exports = GoalProgress;
+module.exports = GoalCategory;

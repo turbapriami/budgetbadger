@@ -125,11 +125,18 @@ module.exports = `
     user_id: Int!
     account_id: String
     description: String!
-    category: String!
+    goal_category_id: Int!
     amount: String!
     start_date: Date!
     end_date: Date!
     goal_progress: [GoalProgress!]
+    goal_categories: [GoalCategory!]
+  }
+
+  type GoalCategory {
+    id: Int!
+    goal_id: Int!
+    name: String!
   }
   
   type GoalProgress {
@@ -157,6 +164,7 @@ module.exports = `
     getBillCategories(user_id: Int!): [BillCategory!]
     getLoans(user_id: Int!): [Loan!]
     getLoanPayments(loan_id: Int!): [Loan_Payment!]
+    getGoals(user_id: Int!): [Goal!]
   }
 
   type Mutation {
@@ -186,5 +194,6 @@ module.exports = `
     deleteBillCategory(id: Int!): Int!
     createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]
+    createGoal(id: Int!, user_id: Int, description: String!, amount: String!, start_date: Date!, end_date: Date!): Goal!
   }
   `
