@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import GoalMeter from './GoalMeter.jsx';
 
 const Goals = () => {
   return (
     <div>
-      goals
+      <GoalMeter />
     </div>
   )
 }
