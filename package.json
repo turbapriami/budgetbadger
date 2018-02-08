@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon server/index.js",
-    "start": "node server/index.js",
+    "start": "nodemon server/index.js",
     "build": "webpack --watch",
     "worker": "nodemon server/worker/index.js",
+    "budget-worker": "nodemon server/budget-worker/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "webpack"
   },
