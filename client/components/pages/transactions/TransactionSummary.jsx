@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import identity from 'lodash'
 import moment from 'moment';
 import SummaryChart from './SummaryChart.jsx';
+import TransactionPie from './TransactionPie.jsx'
 
 class TransactionSummary extends Component {
   constructor(){
@@ -11,6 +12,7 @@ class TransactionSummary extends Component {
       monthly: 0,
       biAnnual: 0,
       annual: 0,
+      allTime: 0,
       selected: ''
     }
     this.convertName = this.convertName.bind(this);
@@ -64,11 +66,16 @@ class TransactionSummary extends Component {
       }
     }))
 
+    const allTime = Math.round(this.props.transactions.reduce((a, b) => {
+      return a + Math.abs(b.amount)
+    }, 0))
+
     this.setState({
       selected: name,
       monthly,
       biAnnual,
-      annual
+      annual,
+      allTime,
     }, () => callback ? callback() : null)
   } 
 
@@ -89,13 +96,9 @@ class TransactionSummary extends Component {
       >
       <Split>
         <Box>
-          <SummaryChart 
-            accounts={this.props.accounts}
-            convertName={this.convertName}
-            transactions={this.props.transactions} 
-            initializeTable={this.initializeTable} 
-            summaryTransaction={this.props.summaryTransaction} 
-            categories={this.props.categories} />
+          <TransactionPie 
+            data={[this.state.allTime, this.state.annual]} 
+            labels={['Total Spend', 'Annual: ' + this.props.summaryTransaction.name]}/>
         </Box>
         <Box 
           align='center'
