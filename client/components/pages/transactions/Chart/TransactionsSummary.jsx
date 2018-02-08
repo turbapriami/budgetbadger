@@ -21,6 +21,7 @@ class SummaryChartContainer extends React.Component {
     this.generateMonthlyData = this.generateMonthlyData.bind(this);
     this.generateDailyData = this.generateDailyData.bind(this);
     this.renderChart = this.renderChart.bind(this);
+    this.toggleTotal = this.toggleTotal.bind(this);
   }
 
   // Formats data in preparation for chart
@@ -135,9 +136,23 @@ class SummaryChartContainer extends React.Component {
     })
   }
 
-  renderChart() {
-    let filteredTransactions = this.filterTransactionsByValue();
+  toggleTotal () {
+    let { chartData } = this.state, total;
+    console.log(total)
+    if (this.state.displayAnnual) {
+      total = this.generateMonthlyData(this.props.transactions);
+      total.datasets[0].label = 'Monthly Totals'
+    } else {
+      total = this.generateDailyData(this.props.transactions, this.state.month);
+      total.datasets[0].label = 'Daily Totals'
+    }
+    total.datasets[0].backgroundColor = "rgb(148, 0, 211)"
+    chartData.datasets.push(total.datasets[0]);
+    this.setState({chartData})
+  }
 
+  renderChart() {
+    const filteredTransactions = this.filterTransactionsByValue();
     const chartData = this.state.displayAnnual ?
     this.generateMonthlyData(filteredTransactions) :
     this.generateDailyData(filteredTransactions, this.state.month);
@@ -169,7 +184,7 @@ class SummaryChartContainer extends React.Component {
           disabled={false}
           reverse={true} 
           checked={this.state.displayTotal}
-          onChange={() => console.log('hello')}/>
+          onChange={() => this.toggleTotal()}/>
         <Select 
           placeHolder="Select a category"
           options={this.props.categories.map(a => a[0])}
