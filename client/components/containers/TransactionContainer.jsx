@@ -96,7 +96,7 @@ class TransactionContainer extends Component {
     for (let pair in breakdown) {
       columns.push([pair, breakdown[pair]])
     }
-    this.setState({categoryBreakdown: columns});
+    this.setState({ categoryBreakdown: columns });
   }
 
   handleSearch(searchString) {
@@ -111,7 +111,6 @@ class TransactionContainer extends Component {
   }
 
   handleSummary(transaction = {}) {
-    console.log('hello')
     this.setState({
       displaySummary: !this.state.displaySummary,
       summaryTransaction: transaction

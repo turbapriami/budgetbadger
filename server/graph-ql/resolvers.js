@@ -204,7 +204,7 @@ module.exports = {
             .then(response => {
               response.transactions.map(async transaction => {
                 const today = moment().format('YYYY-MM-DD');
-                let category = transaction.category ? transaction.category[0] : 'none';
+                let category = transaction.category ? transaction.category[0] : 'UNCATEGORIZED';
                 if (transaction.date !== today) {
                   return await new models.Transaction({
                     user_id: bank.user_id,

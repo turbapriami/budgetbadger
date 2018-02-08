@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Line, Bar } from 'react-chartjs-2'
+import { Line, Bar } from 'react-chartjs-2';
+import { Layer, Select, CheckBox } from 'grommet';
 
-const TransactionsChart = ({chartData, handleChartClick}) => {
+const TransactionsChart = (props) => {
   const options = {
     responsive: true,
     title: {
@@ -41,12 +42,40 @@ const TransactionsChart = ({chartData, handleChartClick}) => {
   }
   return (
     <div>
-      <Line 
-        data={chartData} 
-        options={options} 
-        width="600" 
-        height="500" 
-        getElementAtEvent={(element) => handleChartClick(element)}/>
+      <div>
+        <Line 
+          data={props.chartData} 
+          options={options} 
+          width="600" 
+          height="500" 
+          getElementAtEvent={(element) => props.handleChartClick(element)}/>
+      </div>
+      <CheckBox label='Show Total'
+        toggle={true}
+        disabled={false}
+        reverse={true} 
+        checked={props.displayTotal}
+        onChange={() => props.toggleTotal()}/>
+      <Select 
+        placeHolder="Select a category"
+        options={props.categories}
+        value={props.filter.category}
+        onChange={({value}) => {
+          props.updateFilter('category', value, () => {
+            props.renderChart();
+          })
+        }}
+      />
+      <Select 
+        placeHolder="Select an account"
+        options={props.accounts}
+        value={props.filter.account}
+        onChange={({value}) => {
+          props.updateFilter('account', value, () => {
+            props.renderChart();
+          })
+        }}
+      />
     </div>
   )
 }
