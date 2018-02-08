@@ -123,6 +123,7 @@ module.exports = `
   type Goal {
     id: Int!
     description: String!
+    category: String!
     amount: String!
     start_date: Date!
     end_date: Date!

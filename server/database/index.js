@@ -157,6 +157,7 @@ knex.schema.hasTable('goals').then(exists => {
       table.increments('id').primary();
       table.integer('user_id').references('users.id');
       table.string('description');
+      table.string('category');
       table.string('amount');
       table.date('start_date');
       table.date('end_date');

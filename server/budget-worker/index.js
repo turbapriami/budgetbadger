@@ -1,5 +1,4 @@
 require('dotenv').config()
-import { ID_KEY } from '../../public/main/main-bundle';
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -35,7 +34,27 @@ app.use(bodyParser.json());
 //   })
 // })
 
-const trackGoals = () => {
+const calculateGoalProgress = (id, category) => {
+  knex('transactions').where({
+    user_id: id,
+    category: category
+  }).then(found => {
+    // filter for transactions from the current month and reduce to total amount
+    return found.filter((item) => {
+      // using last month as a placeholder for sandbox data
+      if (moment(item.date).format('YYYY-MM') === moment('2018-01').format('YYYY-MM')) {
+        return item
+      }
+    }).reduce((acc, elem) => {
+      return acc + Number(elem.amount)
+    }, 0)
+  }).then(total => {
+    updateGoalProgress(total)
+  })
+}
+
+const updateGoalProgress = (total) => {
+  console.log(total)
   knex('goals').then(res => {
     res.forEach((goal) => {
       knex('goal_progress').where({
@@ -45,7 +64,7 @@ const trackGoals = () => {
         if (found.length === 0) {
           new models.GoalProgress({
             goal_id: goal.id,
-            // amount: calculated,
+            amount: total,
             date: moment().format('YYYY-MM-DD')
           }).save()
         } else {
@@ -56,14 +75,7 @@ const trackGoals = () => {
   })
 }
 
-const calculateGoalProgress = (id) => {
-  knex('transactions').where({
-    user_id: id,
-
-  }).then(found => {
-
-  })
-}
+calculateGoalProgress(1, 'Food and Drink')
 
 const trackBalance = () => {
   knex('accounts').then(res => {
