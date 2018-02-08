@@ -134,7 +134,6 @@ knex.schema.hasTable('bills').then(exists => {
       table.string('description');
       table.decimal('amount',14,2);
       table.integer('bill_recurrence_id').references('bill_recurrence.id');
-      table.date('due_date');
       table.date('start_date');
       table.date('end_date');
       table.date('last_paid_date');
@@ -168,8 +167,10 @@ knex.schema.hasTable('bill_payment_history').then(exists => {
     knex.schema.createTable('bill_payment_history', table => {
       table.increments('id').primary();
       table.integer('bill_id').references('bills.id');
+      table.integer('user_id').references('users.id');
       table.decimal('amount_paid',14,2);
       table.date('paid_date');
+      table.date('due_date');
       table.boolean('paid');
     }).then(() => console.log('created table bill_payment_history'))
   }

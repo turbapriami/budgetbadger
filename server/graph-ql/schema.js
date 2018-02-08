@@ -106,7 +106,6 @@ module.exports = `
     description: String!
     amount: Float!
     bill_recurrence_id: Int!
-    due_date: Date!
     start_date: Date
     end_date: Date
     last_paid_date: Date
@@ -114,6 +113,7 @@ module.exports = `
     alert: Boolean
     bill_category: [BillCategory!]
     bill_recurrence: [BillRecurrence!]
+    bill_payment_history: [BillPaymentHistory]
   }
 
   type BillCategory {
@@ -125,10 +125,13 @@ module.exports = `
   type BillPaymentHistory {
     id: Int!
     bill_id: Int!
-    amount: Float!
-    paid_date: Date!
+    user_id: Int!
+    amount_paid: Float
+    paid_date: Date
+    due_date: Date
     paid: Boolean
     bills: [Bill!]
+    user: [User!]
   }
 
   type BillRecurrence {
@@ -148,6 +151,7 @@ module.exports = `
     getBillCategories(user_id: Int!): [BillCategory!]
     getLoans(user_id: Int!): [Loan!]
     getLoanPayments(loan_id: Int!): [Loan_Payment!]
+    getBillPaymentHistory(user_id: Int!): [BillPaymentHistory!]
   }
 
   type Mutation {
@@ -169,16 +173,16 @@ module.exports = `
       zip_code: String
       state: String
       phone: String): User
-    createBill(user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, bill_recurrence_id: Int!, due_date: Date!, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill!
+    createBill(user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, bill_recurrence_id: Int!, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill!
     deleteBill(id: Int!): Int!
-    updateBill(id: Int!user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, bill_recurrence_id: Int!, due_date: Date!, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill
+    updateBill(id: Int!user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, bill_recurrence_id: Int!, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill
     createBillCategory(name: String!, user_id: Int!): BillCategory!
     updateBillCategory(id: Int!, name: String!): BillCategory!
     deleteBillCategory(id: Int!): Int!
     createBillRecurrence(recurrence_type: String!): BillRecurrence!
     deleteBillRecurrence(id: Int!): Int!
-    createBillPaymentHistory(bill_id: Int!, amount_paid: Float!, paid_date: Date!, paid: Boolean): BillPaymentHistory!
-    updateBillPaymentHistory(id:Int!, bill_id: Int, amount_paid: Float!, paid_date: Date!, paid: Boolean): BillPaymentHistory!
+    createBillPaymentHistory(bill_id: Int!, user_id: Int!, amount_paid: Float, paid_date: Date, due_date: Date!, paid: Boolean): BillPaymentHistory!
+    updateBillPaymentHistory(id:Int!, user_id: Int,  bill_id: Int, amount_paid: Float, paid_date: Date, due_date: Date, paid: Boolean): BillPaymentHistory!
     deleteBillPaymentHistory(id:Int!): Int!
     createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]

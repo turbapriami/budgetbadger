@@ -7,23 +7,14 @@ import BillsPaidTable from '../pages/bills/BillsPaidTable.jsx';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import billSortingFunctions from '../pages/bills/billSortingFunctions.jsx';
-import {BILLS_QUERY} from '../../queries.js';
-
-const withBills = graphql(BILLS_QUERY, {
-  options: props => ({
-    variables: {
-      user_id: window.localStorage.getItem('user_id'),
-    },
-    name: 'AllUserBills',
-  }),
-});
+import {BILL_PAYMENT_HISTORY_QUERY} from '../../queries.js';
 
 class BillsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       billsDueThisMonth: [],
-      overdueBills: [1, 2, 3, 4],
+      overdueBills: [],
       paidBills: [],
       unpaidBills: [],
     };
@@ -31,28 +22,20 @@ class BillsContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data.getBills) {
-      var paidBills = nextProps.data.getBills
-        .sort((a, b) => {
-          return new Date(b.paid_date) - new Date(a.paid_date);
-        })
+    var currentDate = new Date();
+
+    if (nextProps.data.getBillPaymentHistory) {
+      var paidBills = nextProps.data.getBillPaymentHistory
         .filter(bill => bill.paid);
 
-      const unpaidBills = nextProps.data.getBills.sort((a, b) => {
-        return new Date(a.due_date) - new Date(b.due_date);
-      });
+      var unpaidBills = nextProps.data.getBillPaymentHistory
+        .filter(bill => !bill.paid);
 
-      var billsDueThisMonth = nextProps.data.getBills.filter(bill => {
-        const dueDate = new Date(bill.due_date);
-        const currentDate = new Date();
-        return (currentDate.getMonth() === dueDate.getMonth()) && !bill.paid;
-      });
+      var billsDueThisMonth = nextProps.data.getBillPaymentHistory
+        .filter(bill => !bill.paid && (new Date(bill.due_date).getMonth() === currentDate.getMonth()));
 
-      const overdueBills = nextProps.data.getBills.filter(bill => { 
-        let currentDate = new Date();
-        let dueDate = new Date(bill.due_date);
-        return !bill.paid && (currentDate.setHours(0,0,0) > dueDate.setHours(0,0,0)+ 86400000);
-      });
+      var overdueBills = nextProps.data.getBillPaymentHistory
+        .filter(bill => !bill.paid && (new Date(bill.due_date).setHours(0,0,0)+ 86400000 < currentDate.setHours(0,0,0)));
 
       this.setState({
         billsDueThisMonth,
@@ -81,21 +64,13 @@ class BillsContainer extends Component {
     if (paid) {
       const label = paidBillsLabels[index];
       var sortedBills = this.state.paidBills.sort((a, b) => {
-        return billSortingFunctions[label](
-          a[label] || a,
-          b[label] || a,
-          ascending
-        );
+        return billSortingFunctions[label](a, b, ascending);
       });
       this.setState({ paidBills: sortedBills });
     } else {
       const label = unpaidBillsLabels[index];
       var sortedBills = this.state.unpaidBills.sort((a, b) => {
-        return billSortingFunctions[label](
-          a[label] || a,
-          b[label] || a,
-          ascending
-        );
+        return billSortingFunctions[label](a, b, ascending);
       });
       this.setState({ unpaidBills: sortedBills });
     }
@@ -121,5 +96,15 @@ class BillsContainer extends Component {
     );
   }
 }
+
+
+const withBills = graphql(BILL_PAYMENT_HISTORY_QUERY, {
+  options: props => ({
+    variables: {
+      user_id: window.localStorage.getItem('user_id'),
+    },
+    name: 'AllUserBills',
+  }),
+});
 
 export default compose(withApollo, withBills)(BillsContainer);

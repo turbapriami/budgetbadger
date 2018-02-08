@@ -54,16 +54,16 @@ class BillsDueTableItem extends Component {
     return (
       <TableRow>
         <td>
-          {this.props.bill.description}
+          {this.props.bill.bills[0].description}
         </td>
         <td>
-          {this.props.bill.bill_category[0].name}
+          {this.props.bill.bills[0].bill_category[0].name}
         </td>
         <td>
           <Timestamp value={this.props.bill.due_date} fields="date" />
         </td>
         <td>
-          ${this.props.bill.amount}
+          ${this.props.bill.bills[0].amount}
         </td>
         <td>
           <Menu

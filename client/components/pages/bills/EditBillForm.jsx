@@ -43,6 +43,7 @@ class EditBillForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('this.nextProps', nextProps.selectedBill)
     if (nextProps.selectedBill.bill_category) {
       this.setState({     
         alert:nextProps.selectedBill.alert,
@@ -55,7 +56,7 @@ class EditBillForm extends React.Component {
         paid: nextProps.selectedBill.paid,
         paid_date: nextProps.selectedBill.paid_date,
         user_id: nextProps.selectedBill.user_id
-      })
+      }, console.log("this.state",this.state))
   }
   }
  

@@ -83,6 +83,10 @@ module.exports = {
     bill_recurrence: ({ bill_recurrence_id }, args, { knex }) => 
       knex('bill_recurrence').where({
         id: bill_recurrence_id
+      }),
+    bill_payment_history: ({ bill_id }, args, { knex }) => 
+      knex('bill_payment_history').where({
+        bill_id
       })
   },
 
@@ -94,6 +98,10 @@ module.exports = {
   },
 
   BillPaymentHistory: {
+    user: ({ user_id }, args, { knex }) => 
+    knex('users').where({
+      id: user_id
+    }),
     bills: ({ bill_id }, args, { knex }) => 
     knex('bills').where({
       id: bill_id
@@ -160,6 +168,11 @@ module.exports = {
     getLoanPayments: (parent, { loan_id }, { knex }) =>
       knex('loan_payments').where({
         loan_id
+      }),
+
+    getBillPaymentHistory: (parent, { user_id }, { knex }) =>
+      knex('bill_payment_history').where({
+        user_id
       })
     },
 
@@ -350,7 +363,7 @@ module.exports = {
     },
     
     deleteBillRecurrence: async (parent, args, { knex }) => knex('bill_recurrence').where(args).del(),
-//==>>
+
     createBillPaymentHistory: async (parent, args, { models }) => {
       const billPaymentHistory = await new models.BillPaymentHistory(args).save(null, {method: 'insert'});
       return billPaymentHistory.attributes;
@@ -362,7 +375,7 @@ module.exports = {
     },
 
     deleteBillPaymentHistory: (parent, args, { knex }) => knex('bill_payment_history').where(args).del(),
-//=====>
+
     createLoan: async (parent, args, { models }) => await new models.Loan(args).save(null, {method:'insert'}),
     createLoanPayment: async (parent, args, { models }) => await new models.Loan_Payment(args).save(null, {method: 'insert'}),
   }

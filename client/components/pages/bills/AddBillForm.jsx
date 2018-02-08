@@ -22,10 +22,14 @@ class AddBillForm extends React.Component {
       bill_category_description:'',
       description:'',
       amount:'',
-      due_date:'',
+      bill_recurrence_id: 0,
+      start_date:'',
+      end_date:'',
       paid:false,
       paid_date:'',
+      last_paid_date: null,
       alert:false,
+      bill_status: true,
       bill_categories: [],
       bill_descriptions: []
     }
@@ -100,68 +104,68 @@ class AddBillForm extends React.Component {
   }
   
   handleAddClick(e) {
-    if (this.state.bill_category_id) {
-      let variables = {
-        user_id: this.state.user_id,
-        bill_category_id: this.state.bill_category_id,
-        description: this.state.description,
-        amount: this.state.amount,
-        due_date: new Date(this.state.due_date),
-        paid: this.state.paid,
-        paid_date: new Date(this.state.paid_date),
-        alert: this.state.alert,
-      };
-      this.props.CREATE_BILL({variables: variables})
-      .then(({ data }) => {
-        this.setState({
-          bill_category_id:'',
-          bill_category_description:'',
-          description:'',
-          paid: false,
-          amount:'',
-          due_date:'',
-        });
-      })
-      .catch(error => {
-        console.log('error saving new bill after saving new bill category', error);
-      });
-    } else {
-      this.props.CREATE_BILL_CATEGORY({
-        variables: { 
-          name: this.state.bill_category_description,
-          user_id: this.state.user_id
-        }
-      })
-      .then(({ data }) => {
-        let newBillVariables = {
-          user_id: this.state.user_id,
-          bill_category_id: data.createBillCategory.id,
-          description: this.state.description,
-          amount: this.state.amount,
-          due_date: new Date(this.state.due_date),
-          paid: this.state.paid,
-          paid_date: new Date(this.state.paid_date),
-          alert: this.state.alert,
-        };
-        this.props.CREATE_BILL({variables: newBillVariables})
-          .then(({ data }) => {
-            this.setState({
-              bill_category_id:'',
-              bill_category_description:'',
-              description:'',
-              paid: false,
-              amount:'',
-              due_date:'',
-            });
-          })
-          .catch(error => {
-            console.log('error saving new bill after saving new bill category', error);
-          });
-      })
-      .catch(error => {
-        console.log('error saving new bill category', error);
-      });
-    }
+    // if (this.state.bill_category_id) {
+    //   let variables = {
+    //     user_id: this.state.user_id,
+    //     bill_category_id: this.state.bill_category_id,
+    //     description: this.state.description,
+    //     amount: this.state.amount,
+    //     due_date: new Date(this.state.due_date),
+    //     paid: this.state.paid,
+    //     paid_date: new Date(this.state.paid_date),
+    //     alert: this.state.alert,
+    //   };
+    //   this.props.CREATE_BILL({variables: variables})
+    //   .then(({ data }) => {
+    //     this.setState({
+    //       bill_category_id:'',
+    //       bill_category_description:'',
+    //       description:'',
+    //       paid: false,
+    //       amount:'',
+    //       due_date:'',
+    //     });
+    //   })
+    //   .catch(error => {
+    //     console.log('error saving new bill after saving new bill category', error);
+    //   });
+    // } else {
+    //   this.props.CREATE_BILL_CATEGORY({
+    //     variables: { 
+    //       name: this.state.bill_category_description,
+    //       user_id: this.state.user_id
+    //     }
+    //   })
+    //   .then(({ data }) => {
+    //     let newBillVariables = {
+    //       user_id: this.state.user_id,
+    //       bill_category_id: data.createBillCategory.id,
+    //       description: this.state.description,
+    //       amount: this.state.amount,
+    //       due_date: new Date(this.state.due_date),
+    //       paid: this.state.paid,
+    //       paid_date: new Date(this.state.paid_date),
+    //       alert: this.state.alert,
+    //     };
+    //     this.props.CREATE_BILL({variables: newBillVariables})
+    //       .then(({ data }) => {
+    //         this.setState({
+    //           bill_category_id:'',
+    //           bill_category_description:'',
+    //           description:'',
+    //           paid: false,
+    //           amount:'',
+    //           due_date:'',
+    //         });
+    //       })
+    //       .catch(error => {
+    //         console.log('error saving new bill after saving new bill category', error);
+    //       });
+    //   })
+    //   .catch(error => {
+    //     console.log('error saving new bill category', error);
+    //   });
+    // }
     this.props.handleFormToggle();
   }
 

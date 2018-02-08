@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Columns, Box, Button, Section, Heading, Paragraph, Table, TableHeader, TableRow, Timestamp, Toast} from 'grommet';
+import {Columns, Box, Button, Section, Heading, Paragraph, Split, Table, TableHeader, TableRow, Timestamp, Toast} from 'grommet';
 import AddBillForm from '../bills/AddBillForm.jsx';
 import { gql, graphql } from 'react-apollo';
 import BillsDueTableItem from '../bills/BillsDueTableItem.jsx';
@@ -20,6 +20,7 @@ class BillsDueTable extends Component {
   }
   
   handleBillSelect(bill) {
+    console.log('bill selected', bill);
     this.setState({selectedBill: bill});
   }
 
@@ -46,8 +47,13 @@ class BillsDueTable extends Component {
   render() {
     return (
       <div>
-        <Columns size="large" masonry={true} justify="center">
-          <Section style={{ width: '1030px' }}>
+        <Columns masonry={false}
+          maxCount={2}
+          size='small'
+          justify="center"
+          >
+        <Box align="end" size="large" direction="row" pad="none" margin="none" style={{marginLeft: '70%'}}>
+          <Box align="end" margin="small">
             <Button
               label="Add Bill"
               onClick={this.handleFormToggle}
@@ -60,10 +66,31 @@ class BillsDueTable extends Component {
                 fontSize: '20px',
                 padding: '6px 12px',
                 border: 'none',
-                marginLeft: '850px',
               }}
               box="true"
             />
+          </Box>
+          <Box align="end" margin="small">
+            <Button
+              label="Add Category"
+              onClick={this.handleFormToggle}
+              primary={false}
+              hoverIndicator={{ background: 'neutral-4-a' }}
+              style={{
+                backgroundColor: '#49516f',
+                color: 'white',
+                width: '180px',
+                fontSize: '20px',
+                padding: '6px 12px',
+                border: 'none',
+              }}
+              box="true"
+            />
+          </Box>
+          </Box>
+        </Columns>
+        <Columns size="large" masonry={true} justify="center">
+          <Section style={{ width: '1030px' }}>
             <AddBillForm
               bills={this.props.bills}
               billCategories={this.props.billCategories}
