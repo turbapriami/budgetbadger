@@ -6,9 +6,6 @@ import { identity, map, unionBy } from 'lodash';
 import moment from 'moment'
 import TransactionChart from './SummaryChart.jsx'
 import {
-  generateChartDataObject,
-  assignToDate,
-  assignToMonth,
   filterTransactionsByValue,
   generateDailyData,
   generateMonthlyData
@@ -31,11 +28,11 @@ class SummaryChartContainer extends React.Component {
       accounts: [],
       categories: [],
     }
-    // this.handleChartClick = this.handleChartClick.bind(this)
+    this.handleChartClick = this.handleChartClick.bind(this)
     // this.generateMonthlyData = this.generateMonthlyData.bind(this);
     // this.generateDailyData = this.generateDailyData.bind(this);
-    // this.renderChart = this.renderChart.bind(this);
-    // this.toggleTotal = this.toggleTotal.bind(this);
+    this.renderChart = this.renderChart.bind(this);
+    this.toggleTotal = this.toggleTotal.bind(this);
   }
 
   // // Formats data in preparation for chart
@@ -139,9 +136,9 @@ class SummaryChartContainer extends React.Component {
     let chartData, month;
     if (this.state.displayAnnual) {
       month = this.state.chartData.labels[element[0]._index];
-      chartData = this.generateDailyData(this.state.filteredTransactions, month);
+      chartData = generateDailyData(this.state.filteredTransactions, month);
     } else {
-      chartData = this.generateMonthlyData(this.state.filteredTransactions);
+      chartData = generateMonthlyData(this.state.filteredTransactions);
     }    
     this.setState({
       month,
@@ -160,10 +157,10 @@ class SummaryChartContainer extends React.Component {
     if (!this.state.displayTotal) {
 
       if (this.state.displayAnnual) {
-        total = this.generateMonthlyData(this.props.transactions);
+        total = generateMonthlyData(this.props.transactions);
         total.datasets[0].label = 'Monthly Totals'
       } else {
-        total = this.generateDailyData(this.props.transactions, this.state.month);
+        total = generateDailyData(this.props.transactions, this.state.month);
         total.datasets[0].label = 'Daily Totals'
       }
 
@@ -180,11 +177,11 @@ class SummaryChartContainer extends React.Component {
   }
 
   renderChart() {
-    const filteredTransactions = this.filterTransactionsByValue();
+    const filteredTransactions = filterTransactionsByValue(this.props.transactions, this.state.filter);
     // check current state of the chart
     const chartData = this.state.displayAnnual ?
-    this.generateMonthlyData(filteredTransactions) :
-    this.generateDailyData(filteredTransactions, this.state.month);
+    generateMonthlyData(filteredTransactions) :
+    generateDailyData(filteredTransactions, this.state.month);
 
     this.setState({
       filteredTransactions,

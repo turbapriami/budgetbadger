@@ -1,7 +1,7 @@
-
+import moment from 'moment'
 
 // Formats data in preparation for chart
-export const generateChartDataObject = (labels, data) => {
+const generateChartDataObject = (labels, data) => {
   const chartData = {
     labels: labels, 
     datasets:[
@@ -14,25 +14,8 @@ export const generateChartDataObject = (labels, data) => {
   return chartData;   
 }
 
-// Filters transactions according to filter object in state
-// if transaction matches all properties of filter, it is returned
-export const filterTransactionsByValue = (transactions, filterObject) => {
-  if (transactions) {
-    let transactions = transactions.filter(transaction => {
-      return Object.keys(filterObject).every((key) => {
-        if (key === 'account') {
-          return transaction[key][0].bank_name === filterObject[key];
-        }
-        return transaction[key] === filterObject[key]
-      })
-    })
-    return transactions
-  }
-}
-
-
 // Groups annual transactions by date
-export const assignToDate = (transactions) => {
+const assignToDate = (transactions) => {
   let dates = {};
   transactions.forEach(transaction => {
     let date = transaction.date;
@@ -44,7 +27,7 @@ export const assignToDate = (transactions) => {
 }
 
 // Groups annual transactions by month
-export const assignToMonth = (transactions) => {
+const assignToMonth = (transactions) => {
   let months = {};
   transactions.forEach(transaction => {
     let month = moment(transaction.date).format('MMMM')
@@ -53,6 +36,23 @@ export const assignToMonth = (transactions) => {
     months[month] = [transaction];
   })
   return months;
+}
+
+// Filters transactions according to filter object in state
+// if transaction matches all properties of filter, it is returned
+export const filterTransactionsByValue = (transactions, filterObject) => {
+  console.log('transactions', transactions)
+  if (transactions) {
+    let filteredTransactions = transactions.filter(transaction => {
+      return Object.keys(filterObject).every((key) => {
+        if (key === 'account') {
+          return transaction[key][0].bank_name === filterObject[key];
+        }
+        return transaction[key] === filterObject[key]
+      })
+    })
+    return filteredTransactions
+  }
 }
 
 // Takes daily transactions and calculates total spend for the day for each date
