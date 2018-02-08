@@ -122,6 +122,8 @@ module.exports = `
   
   type Goal {
     id: Int!
+    user_id: Int!
+    account_id: String
     description: String!
     category: String!
     amount: String!
