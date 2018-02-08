@@ -151,6 +151,53 @@ knex.schema.hasTable('bill_categories').then(exists => {
   }
 })
 
+knex.schema.hasTable('goals').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goals', table => {
+      table.increments('id').primary();
+      table.integer('user_id').references('users.id');
+      table.string('account_id').references('accounts.id');
+      table.string('description');
+      table.string('category');
+      table.string('amount');
+      table.date('start_date');
+      table.date('end_date');
+    }).then(() => console.log('created table goals'))
+  }
+})
+
+knex.schema.hasTable('goal_categories').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goal_categories', table => {
+      table.increments('id').primary();
+      table.integer('goal_id').references('goals.id');
+      table.string('name');
+    }).then(() => console.log('created table goal_categories'))
+  }
+})
+
+knex.schema.hasTable('goal_progress').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goal_progress', table => {
+      table.increments('id').primary();
+      table.integer('goal_id').references('goals.id');
+      table.string('amount');
+      table.date('date');
+    }).then(() => console.log('created table goal_progress'))
+  }
+})
+
+knex.schema.hasTable('monthly_balance').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('monthly_balance', table => {
+      table.increments('id').primary();
+      table.string('account_id').references('accounts.id');
+      table.string('amount');
+      table.date('date');
+    }).then(() => console.log('created table monthly_balance'))
+  }
+})
+
 const db = require('bookshelf')(knex);
 
 module.exports = { db, knex };

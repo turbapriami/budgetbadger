@@ -6,6 +6,7 @@ import TransactionContainer from '../containers/TransactionContainer.jsx';
 import BillsContainer from '../containers/BillsContainer.jsx';
 import AccountsOverview from '../containers/AccountsOverview.jsx';
 import DashBoard from '../containers/Dashboard.jsx';
+import Goals from '../containers/GoalsContainer.jsx';
 
 class Main extends Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class Main extends Component {
       '/transactions': 2,
       '/bills': 3,
       '/loans': 4,
-      '/profile': 5
+      '/goals': 5,
+      '/profile': 6
     }
   }
   componentWillMount() {
@@ -60,6 +62,10 @@ class Main extends Component {
         <Tab title='Loans' onClick={()=>{this.setState({activeIndex: 4})}}>
           <Redirect to='/loans'/>
           <Route path='/loans' component={Loans} />
+        </Tab>
+        <Tab title='Goals' onClick={()=>{this.setState({activeIndex: 5})}}>
+          <Redirect to='/goals'/>
+          <Route path='/goals' component={Goals} />
         </Tab>
       </Tabs>
       

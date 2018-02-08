@@ -17,6 +17,7 @@ module.exports = `
     accounts: [Account!]
     banks: [Bank!]
     bills: [Bill!]
+    goals: [Goal!]
   }
 
   type Loan {
@@ -82,6 +83,7 @@ module.exports = `
     type: String!
     current_balance: Int!
     transactions: [Transaction!]
+    monthly_balance: [MonthlyBalance!]
   }
 
   type School {
@@ -117,6 +119,39 @@ module.exports = `
     name: String!
     bills: [Bill!]
   }
+  
+  type Goal {
+    id: Int!
+    user_id: Int!
+    account_id: String
+    description: String!
+    goal_category_id: Int!
+    amount: String!
+    start_date: Date!
+    end_date: Date!
+    goal_progress: [GoalProgress!]
+    goal_categories: [GoalCategory!]
+  }
+
+  type GoalCategory {
+    id: Int!
+    goal_id: Int!
+    name: String!
+  }
+  
+  type GoalProgress {
+    id: Int!
+    goal_id: Int!
+    amount: String!
+    date: Date!
+  }
+  
+  type MonthlyBalance {
+    id: Int!
+    account_id: String!
+    amount: String!
+    date: Date!
+  }
 
   type Query {
     getUser(email: String, id: Int): [User!]
@@ -129,6 +164,7 @@ module.exports = `
     getBillCategories(user_id: Int!): [BillCategory!]
     getLoans(user_id: Int!): [Loan!]
     getLoanPayments(loan_id: Int!): [Loan_Payment!]
+    getGoals(user_id: Int!): [Goal!]
   }
 
   type Mutation {
@@ -169,5 +205,6 @@ module.exports = `
     createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]
     getPasswordRecoveryEmail(email: String!) : [User!]
+    createGoal(id: Int!, user_id: Int, description: String!, amount: String!, start_date: Date!, end_date: Date!): Goal!
   }
   `
