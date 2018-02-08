@@ -34,6 +34,25 @@ app.use(bodyParser.json());
 //   })
 // })
 
+// const calculateGoalProgress = schedule.scheduleJob('30 * * * *', (id, category) => {
+//   knex('transactions').where({
+//     user_id: id,
+//     category: category
+//   }).then(found => {
+//     // filter for transactions from the current month and reduce to total amount
+//     return found.filter((item) => {
+//       // using last month as a placeholder for sandbox data
+//       if (moment(item.date).format('YYYY-MM') === moment('2018-01').format('YYYY-MM')) {
+//         return item
+//       }
+//     }).reduce((acc, elem) => {
+//       return acc + Number(elem.amount)
+//     }, 0)
+//   }).then(total => {
+//     updateGoalProgress(total)
+//   })
+// })
+
 const calculateGoalProgress = (id, category) => {
   knex('transactions').where({
     user_id: id,
@@ -98,6 +117,7 @@ const trackBalance = () => {
     })
   })
 }
+
 trackBalance()
 
 app.listen(port, () => {
