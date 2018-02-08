@@ -53,7 +53,8 @@ app.use(bodyParser.json());
 //   })
 // })
 
-const calculateGoalProgress = (id, category) => {
+// refactor to check all transactions if account/category provided >><<<<
+const calculateGoalProgress = (id, category, account) => {
   knex('transactions').where({
     user_id: id,
     category: category

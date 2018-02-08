@@ -3,6 +3,7 @@ import Spinner from '../pages/Spinner.jsx'
 import MonthlyBudgetTable from '../pages/goals/MonthlyBudgetTable.jsx'
 import Goals from '../pages/goals/Goals.jsx'
 import GoalHistory from '../pages/goals/GoalHistory.jsx'
+import GoalForm from '../pages/goals/GoalForm.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 // import {GOALS_QUERY} from '../../queries.js';
 
@@ -15,9 +16,9 @@ class GoalsContainer extends React.Component {
     if (this.props) {
       return(
         <div>
-          {/* <MonthlyBudgetTable /> */}
-          < Goals />
-          < GoalHistory />
+          <GoalForm />
+          <Goals />
+          <GoalHistory />
         </div>
       )
     } else {
