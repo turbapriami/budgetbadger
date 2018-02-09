@@ -18,12 +18,15 @@ class SummaryChartContainer extends Component {
       filter: {},
       filteredTransactions: [],
       accounts: [],
-      categories: []
+      categories: [],
+      annotations: {min: 0, max: 0},
+      displayGoal: false
     }
     this.handleChartClick = this.handleChartClick.bind(this);
     this.updateFilter = this.updateFilter.bind(this);
     this.renderChart = this.renderChart.bind(this);
     this.toggleTotal = this.toggleTotal.bind(this);
+    this.toggleGoal = this.toggleGoal.bind(this)
   }
 
   // Below checks whether or not a month has been selected
@@ -42,7 +45,7 @@ class SummaryChartContainer extends Component {
       month,
       chartData,
       displayAnnual: !this.state.displayAnnual
-    })
+    }, () => this.state.displayTotal ? this.toggleTotal() : null)
   }
 
   // Enables users to add a total spending dataset to the chart
@@ -96,10 +99,34 @@ class SummaryChartContainer extends Component {
     const chartData = this.state.displayAnnual ?
     generateMonthlyData(filteredTransactions) :
     generateDailyData(filteredTransactions, this.state.month);
-
     this.setState({
       filteredTransactions,
       chartData
+    }, () => this.state.displayTotal ? this.toggleTotal() : null)
+  }
+
+
+  // Allows users to toggle a treshold line to track they spending goals
+  // as compared to their actual spending
+  toggleGoal() {
+    const { filteredTransactions } = this.state;
+    const id = filteredTransactions[0].account[0].id;
+    let min = 0, max = 0, center = null;
+    const goal = {
+      account_id: 'mq1a8D3X19HbmJgVxLLyF1bwn9854NtRX6GG5',
+      description: 'spending',
+      amount: 3500
+    }
+    if (!this.state.displayGoal) {
+      min = goal.amount * 0.9;
+      max = goal.amount * 1.1;
+      center = goal.amount;
+    }
+    this.setState({
+      annotations: {
+        min, max, center
+      },
+      displayGoal: !this.state.displayGoal
     })
   }
 
@@ -128,6 +155,9 @@ class SummaryChartContainer extends Component {
         flush={true}
         onClose={this.props.handleSummary}>
         <TransactionChart 
+          annotations={this.state.annotations}
+          toggleGoal={this.toggleGoal}
+          displayGoal={this.state.displayGoal}
           categories={this.state.categories}
           accounts={this.state.accounts}
           renderChart={this.renderChart}

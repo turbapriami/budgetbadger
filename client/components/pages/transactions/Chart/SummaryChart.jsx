@@ -7,28 +7,12 @@ class TransactionsChart extends Component {
     super()
   }
 
-  componentWillMount() {
-    Chart.pluginService.register({
-      id: 'threshold',
-      afterDraw: (chart, easing) => {
-          if (typeof chart.chart.config.data.datasets[0].install != 'undefined') {
-              if (chart.chart.config.data.datasets[0].install != '-1') {
-                  var meta = chart.getDatasetMeta(0);
-                  var x = meta.data[chart.chart.config.data.datasets[0].install]._model.x;
-                  chart.chart.ctx.restore();
-                  chart.chart.ctx.beginPath();
-                  chart.chart.ctx.setLineDash([500, 500]);
-                  chart.chart.ctx.strokeStyle = '#000000';
-                  chart.chart.ctx.moveTo(x, 0);
-                  chart.chart.ctx.lineTo(x, 10000);
-                  chart.chart.ctx.stroke();
-              }
-          }
-      }
-    })
-}
+  componentWillReceiveProps() {
+
+  }
 
   render() {
+    const { min, max, center } = this.props.annotations
     const options = {
       responsive: true,
       title: {
@@ -53,6 +37,7 @@ class TransactionsChart extends Component {
         ],
         yAxes: [
           {
+            id: 'y-axis-0',
             display: true,
             scaleLabel: {
               show: true,
@@ -69,17 +54,25 @@ class TransactionsChart extends Component {
         // drawTime: "afterDraw",
         events: ['dblclick'],
         annotations: [{
-                drawTime: 'afterDraw', // overrides annotation.drawTime if set
-                id: 'a-line-1', // optional
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                value: '599',
-                borderColor: 'red',
-                borderWidth: 2,
-        }]
+          type: 'box',
+          yScaleID: 'y-axis-0',
+          yMin: min,
+          yMax: max,
+          // borderColor: 'blue',
+          backgroundColor: "rgba(238, 119, 119, 0.54)"
+        },
+        {
+          type: 'line',
+          mode: 'horizontal',
+          value: center,
+          borderDash: [2,2],
+          borderColor: 'red',
+          scaleID: 'y-axis-0',
+        }
+        ]
       }
     }
+    console.log(options)
     return (
       <div>
         <div>
@@ -90,12 +83,18 @@ class TransactionsChart extends Component {
             height="500" 
             getElementAtEvent={(element) => this.props.handleChartClick(element)}/>
         </div>
-        <CheckBox label='Show Total'
+        <CheckBox label='Toggle Total'
           toggle={true}
           disabled={false}
           reverse={true} 
           checked={this.props.displayTotal}
           onChange={() => this.props.toggleTotal()}/>
+        <CheckBox label='Toggle Goals'
+          toggle={true}
+          disabled={false}
+          reverse={true} 
+          checked={this.props.displayGoal}
+          onChange={() => this.props.toggleGoal()}/>
         <Select 
           placeHolder="Select a category"
           options={this.props.categories}
@@ -103,6 +102,7 @@ class TransactionsChart extends Component {
           onChange={({value}) => {
             this.props.updateFilter('category', value, () => {
               this.props.renderChart();
+              this.props.displayTotal ? this.props.toggleTotal : console.log('hello')
             })
           }}
         />

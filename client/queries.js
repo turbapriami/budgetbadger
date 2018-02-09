@@ -9,6 +9,7 @@ const TRANS_ACC_QUERY = gql`
         category
         date
         account {
+          id
           type
           bank_name
         }
@@ -21,6 +22,7 @@ const TRANS_ACC_QUERY = gql`
     getUser(id: $user_id) {
       accounts {
         bank_name
+        id
         monthly_balance {
           amount
           date
