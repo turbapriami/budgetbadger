@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Line, Chart } from 'react-chartjs-2';
 import { Layer, Select, CheckBox } from 'grommet';
 import 'chartjs-plugin-annotation'
-class TransactionsChart extends Component {
+
+class HistoricalChart extends Component {
   constructor() {
     super()
   }
@@ -51,15 +52,25 @@ class TransactionsChart extends Component {
         ]
       },
       annotation: {
-        // drawTime: "afterDraw",
-        events: ['dblclick'],
+        events: ['mouseover'],
         annotations: [{
           type: 'box',
           yScaleID: 'y-axis-0',
           yMin: min,
           yMax: max,
           // borderColor: 'blue',
-          backgroundColor: "rgba(238, 119, 119, 0.54)"
+          backgroundColor: "rgba(238, 119, 119, 0.54)",
+          // label: {    
+          // enabled: false,
+          // content: 'Test label'},
+          // onMouseover: function(e) {
+          //   var element = this;
+          //   element.options.borderWidth = 7;
+          //   element.options.label.enabled = true;
+          //   element.options.label.content = e.type;
+          //   element.chartInstance.update();
+          //   element.chartInstance.chart.canvas.style.cursor = 'pointer';
+          // }
         },
         {
           type: 'line',
@@ -68,11 +79,10 @@ class TransactionsChart extends Component {
           borderDash: [2,2],
           borderColor: 'red',
           scaleID: 'y-axis-0',
-        }
+        },
         ]
       }
     }
-    console.log(options)
     return (
       <div>
         <div>
@@ -102,7 +112,6 @@ class TransactionsChart extends Component {
           onChange={({value}) => {
             this.props.updateFilter('category', value, () => {
               this.props.renderChart();
-              this.props.displayTotal ? this.props.toggleTotal : console.log('hello')
             })
           }}
         />
@@ -121,4 +130,4 @@ class TransactionsChart extends Component {
   }
 }
 
-export default TransactionsChart
+export default HistoricalChart
