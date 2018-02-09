@@ -87,6 +87,7 @@ class BillsContainer extends Component {
           bills={this.state.unpaidBills}
           billCategories={this.props.data.getBillCategories}
           sortBills={this.sortBills}
+          billRecurrenceTypes={this.props.data.getBillRecurrence}
         />
         <BillsPaidTable
           bills={this.state.paidBills}

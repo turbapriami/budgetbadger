@@ -2,43 +2,61 @@ import React, { Component } from 'react';
 import { Actions, Anchor, Box, Button, CheckmarkIcon, Columns, EditIcon, Section, TrashIcon, Heading, Menu, MoreIcon, Paragraph, Table, TableHeader, TableRow, Timestamp, Toast} from 'grommet';
 import EditBillForm from '../bills/EditBillForm.jsx';
 import DeleteBillForm from './DeleteBillForm.jsx';
-import { gql, graphql } from 'react-apollo';
-import {UPDATE_BILL} from '../../../queries.js';
+import { graphql, compose, withApollo } from 'react-apollo';
+import {UPDATE_BILL, UPDATE_BILL_PAYMENT_HISTORY} from '../../../queries.js';
 
 class BillsDueTableItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       billEditFormToggle: false,
-      deleteBillFormToggle: false
+      deleteBillFormToggle: false,
     };
     this.onMarkPaidClick = this.onMarkPaidClick.bind(this);
     this.handleEditFormToggle = this.handleEditFormToggle.bind(this);
-    this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(this);
+    this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(
+      this
+    );
     this.handleMenuClick = this.handleMenuClick.bind(this);
   }
 
   onMarkPaidClick(bill) {
-    let variables = {
-      id: bill.id,
-      user_id: bill.user_id,
-      paid: true,
-      paid_date: new Date(),
-    };
-
     this.props
-      .mutate({
-        variables: variables,
+      .UPDATE_BILL_PAYMENT_HISTORY({
+        variables: {
+          id: bill.id,
+          amount_paid: bill.bills[0].amount,
+          paid_date: new Date(),
+          paid: true,
+        },
       })
       .then(({ data }) => {
-        console.log('successfully updated bill to unpaid', data);
+        console.log('successfully updated bill payment History', data);
+        let x = {
+          id: bill.bills[0].id,
+          last_paid_date: new Date(),
+        }
+        console.log('xxxx', x)
+        this.props
+          .UPDATE_BILL({
+            variables: {
+              id: bill.bills[0].id,
+              last_paid_date: new Date(),
+            },
+          })
+          .then(({ data }) => {
+            console.log('successfully updated the bills last_paid_date', data);
+          })
+          .catch(error => {
+            console.log('error updating the bills last_paid_date', error);
+          });
       })
       .catch(error => {
-        console.log('there was an error sending the query', error);
+        console.log('error updating bill payment history', error);
       });
   }
 
-  handleMenuClick (e) {
+  handleMenuClick(e) {
     this.props.handleBillSelect(this.props.bill);
   }
 
@@ -51,6 +69,7 @@ class BillsDueTableItem extends Component {
   }
 
   render() {
+    console.log('this.props', this.props);
     return (
       <TableRow>
         <td>
@@ -97,6 +116,7 @@ class BillsDueTableItem extends Component {
           />
         </td>
         <EditBillForm
+          billRecurrenceTypes={this.props.billRecurrenceTypes}
           selectedBill={this.props.selectedBill}
           bills={this.props.bills}
           billCategories={this.props.billCategories}
@@ -108,8 +128,7 @@ class BillsDueTableItem extends Component {
   }
 }
 
-export default graphql(UPDATE_BILL, {
-  options: {
-    refetchQueries: ['BILLS_QUERY'],
-  },
-})(BillsDueTableItem);
+export default compose(
+  graphql(UPDATE_BILL, { name: 'UPDATE_BILL' }),
+  graphql(UPDATE_BILL_PAYMENT_HISTORY, { name: 'UPDATE_BILL_PAYMENT_HISTORY' })
+)(BillsDueTableItem);

@@ -173,7 +173,10 @@ module.exports = {
     getBillPaymentHistory: (parent, { user_id }, { knex }) =>
       knex('bill_payment_history').where({
         user_id
-      })
+      }),
+
+    getBillRecurrence:  (parent, { id }, { knex }) =>
+      knex('bill_recurrence').where({})
     },
 
   Mutation: {

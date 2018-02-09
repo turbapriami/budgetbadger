@@ -3,12 +3,14 @@ import {Columns, Box, Button, Section, Heading, Paragraph, Split, Table, TableHe
 import AddBillForm from '../bills/AddBillForm.jsx';
 import { gql, graphql } from 'react-apollo';
 import BillsDueTableItem from '../bills/BillsDueTableItem.jsx';
+import AddBillCategoryForm from './AddBillCategoryForm.jsx';
 
 class BillsDueTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       billFormToggle: false,
+      billCategoryFormToggle: false,
       sortIndex: 0,
       sortAscending: false,
       selectedBill: {},
@@ -16,11 +18,10 @@ class BillsDueTable extends Component {
     this.handleFormToggle = this.handleFormToggle.bind(this);
     this.handleSortClick = this.handleSortClick.bind(this);
     this.handleBillSelect = this.handleBillSelect.bind(this);
-
+    this.handleAddBillCategoryFormToggle = this.handleAddBillCategoryFormToggle.bind(this);
   }
   
   handleBillSelect(bill) {
-    console.log('bill selected', bill);
     this.setState({selectedBill: bill});
   }
 
@@ -42,6 +43,10 @@ class BillsDueTable extends Component {
 
   handleFormToggle() {
     this.setState({ billFormToggle: !this.state.billFormToggle });
+  }
+
+  handleAddBillCategoryFormToggle() {
+    this.setState({billCategoryFormToggle: !this.state.billCategoryFormToggle});
   }
 
   render() {
@@ -73,7 +78,7 @@ class BillsDueTable extends Component {
           <Box align="end" margin="small">
             <Button
               label="Add Category"
-              onClick={this.handleFormToggle}
+              onClick={this.handleAddBillCategoryFormToggle}
               primary={false}
               hoverIndicator={{ background: 'neutral-4-a' }}
               style={{
@@ -94,8 +99,14 @@ class BillsDueTable extends Component {
             <AddBillForm
               bills={this.props.bills}
               billCategories={this.props.billCategories}
+              billRecurrenceTypes = {this.props.billRecurrenceTypes}
               billFormToggle={this.state.billFormToggle}
               handleFormToggle={this.handleFormToggle}
+            />
+            <AddBillCategoryForm
+              billCategoryFormToggle= {this.state.billCategoryFormToggle}
+              billCategories={this.props.billCategories}
+              handleAddBillCategoryFormToggle = {this.handleAddBillCategoryFormToggle}
             />
             <Heading
               align="left"
@@ -126,6 +137,7 @@ class BillsDueTable extends Component {
                     .filter(bill => bill.paid === false)
                     .map((bill, i) =>
                       <BillsDueTableItem
+                        billRecurrenceTypes = {this.props.billRecurrenceTypes}
                         handleBillSelect = {this.handleBillSelect}
                         key={i}
                         bill={bill}
