@@ -133,6 +133,10 @@ const GOALS_QUERY = gql`
       is_budget
       start_date
       end_date
+      goal_progress {
+        amount
+        date
+      }
       goal_categories {
         name
       }
