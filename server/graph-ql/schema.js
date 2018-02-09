@@ -131,12 +131,19 @@ module.exports = `
     end_date: Date!
     goal_progress: [GoalProgress!]
     goal_categories: [GoalCategory!]
+    goal_accounts: [GoalAccount!]
   }
 
   type GoalCategory {
     id: Int!
     goal_id: Int!
     name: String!
+  }
+  
+  type GoalAccount {
+    id: Int!
+    goal_id: Int!
+    account_id: String!
   }
   
   type GoalProgress {

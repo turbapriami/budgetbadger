@@ -144,8 +144,14 @@ module.exports = {
     getLoanPayments: (parent, { loan_id }, { knex }) =>
       knex('loan_payments').where({
         loan_id
-      }),      
-    },
+      }),
+      
+    getGoals: (parent, { user_id }, { knex, user }) => 
+      knex('goals').where({
+        user_id: user.user.id
+      }),
+    
+  },
 
   Mutation: {
     createBankAccount: (parent, { user_id, public_key }, { knex, models, user }) => {
@@ -341,6 +347,10 @@ module.exports = {
         sendgrid.sendEmail(data[0].first_name, data[0].email)
       })
     },
+
+    createGoal: async (parent, args, { models}) => {
+      return await new models.Goal(args).save(null, {method: 'update'});
+    }
   }
 }
 
