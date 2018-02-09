@@ -18,6 +18,15 @@ const TRANS_ACC_QUERY = gql`
       bank_name
       id
     }
+    getUser(id: $user_id) {
+      accounts {
+        bank_name
+        monthly_balance {
+          amount
+          date
+        }
+      }
+    }
   }`;
 
 const UPDATE_TRANSACTIONS = gql`
@@ -188,6 +197,20 @@ mutation updateBillPaymentHistory($id:Int!, $user_id: Int,  $bill_id: Int, $amou
   }
 }`
 
+const GET_USER_BALANCES = gql`
+  query GET_USER_BALANCES($id: Int!) {
+    getUser(id: $id) {
+      accounts {
+        bank_name
+        monthly_balance {
+          amount
+          date
+        }
+      }
+    }
+  }`
+
+
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,
@@ -201,5 +224,6 @@ export {
   CREATE_BILL_CATEGORY,
   BILL_PAYMENT_HISTORY_QUERY,
   CREATE_BILL_PAYMENT_HISTORY,
-  UPDATE_BILL_PAYMENT_HISTORY
+  UPDATE_BILL_PAYMENT_HISTORY,
+  GET_USER_BALANCES
 };

@@ -7,7 +7,7 @@ import {
   generateMonthlyData
 } from './chartHelpers.jsx'
 
-class SummaryChartContainer extends React.Component {
+class SummaryChartContainer extends Component {
   constructor() {
     super();
     this.state = {
@@ -18,7 +18,7 @@ class SummaryChartContainer extends React.Component {
       filter: {},
       filteredTransactions: [],
       accounts: [],
-      categories: [],
+      categories: []
     }
     this.handleChartClick = this.handleChartClick.bind(this);
     this.updateFilter = this.updateFilter.bind(this);
@@ -71,17 +71,12 @@ class SummaryChartContainer extends React.Component {
     })
   }
 
-  renderChart() {
-    const filteredTransactions = filterTransactionsByValue(this.props.transactions, this.state.filter);
-    // check current state of the chart
-    const chartData = this.state.displayAnnual ?
-    generateMonthlyData(filteredTransactions) :
-    generateDailyData(filteredTransactions, this.state.month);
-
-    this.setState({
-      filteredTransactions,
-      chartData
-    })
+  // Draw line to show goal progress for specific account (this is for goals related
+  // to reducing spending on some category or in some account)
+  drawTargetLine(account, goalTarget) {
+    let min = Math.floor(goalTarget * 0.9);
+    let max = Math.floor(goalTarget * 1.1);
+    
   }
 
   // adds or removes key-value pairs from filter object
@@ -95,11 +90,24 @@ class SummaryChartContainer extends React.Component {
     }, () => callback());
   }
 
+  renderChart() {
+    const filteredTransactions = filterTransactionsByValue(this.props.transactions, this.state.filter);
+    // check current state of the chart
+    const chartData = this.state.displayAnnual ?
+    generateMonthlyData(filteredTransactions) :
+    generateDailyData(filteredTransactions, this.state.month);
+
+    this.setState({
+      filteredTransactions,
+      chartData
+    })
+  }
+
   componentDidMount(){
     this.renderChart();
   }
 
-  componentWillReceiveProps({categories, accounts}){
+  componentWillReceiveProps({ categories, accounts }){
     categories = categories.map(a => a[0]);
     accounts = accounts.map(a => a.bank_name);
     accounts.unshift('none');

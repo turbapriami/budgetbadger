@@ -8,7 +8,7 @@ import { Box, Split } from 'grommet'
 import Spinner from '../pages/Spinner.jsx';
 import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
-import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
+import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS, GET_USER_BALANCES } from '../../queries.js';
 import NewTransaction from '../pages/transactions/NewTransaction.jsx'
 import SummaryChartContainer from '../pages/transactions/Chart/TransactionsSummary.jsx'
 import Modal from 'react-responsive-modal';
@@ -17,7 +17,8 @@ import gql from 'graphql-tag'
 const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   options: (props) => ({
     variables: {
-      user_id: window.localStorage.getItem('user_id')
+      user_id: window.localStorage.getItem('user_id'),
+      id: window.localStorage.getItem('user_id')
     },
     name: 'TransactionsAndAccounts'
   })
@@ -32,6 +33,14 @@ const createNewTransaction = graphql(UPDATE_TRANSACTIONS, {
   })
 })
 
+const withMonthlyBalances = graphql(GET_USER_BALANCES, {
+  options: (props) => ({
+    variables: {
+      id: window.localStorage.getItem('user_id')
+    },
+    name: 'getMonthlyBalances'
+  })
+})
 
 class TransactionContainer extends Component {
   constructor() {
@@ -145,6 +154,7 @@ class TransactionContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('props', nextProps)
     if (nextProps.data.getTransactions) {
       const transactions = nextProps.data.getTransactions.sort((a,b) => {
         return new Date(b.date) - new Date(a.date)
@@ -204,6 +214,7 @@ class TransactionContainer extends Component {
       return (
         <div style={{padding: '5px'}}>
           <SummaryChartContainer
+            balances={this.props.data.getUser[0].accounts}
             accounts={this.props.data.getAccounts} 
             transactions={this.state.transactions} 
             summaryTransaction={this.state.summaryTransaction} 
@@ -254,3 +265,11 @@ class TransactionContainer extends Component {
 }
 
 export default compose(withApollo, graphql(CREATE_TRANSACTION, {name: 'createNewTransaction'}), withTransactionsAndAccounts)(TransactionContainer);
+
+
+
+
+
+
+
+
