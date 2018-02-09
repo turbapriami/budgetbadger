@@ -141,7 +141,7 @@ const GOALS_QUERY = gql`
         name
       }
       goal_accounts {
-        accounts [
+        account [
           bank_name
           type
           current_balance

@@ -212,6 +212,6 @@ module.exports = `
     createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]
     getPasswordRecoveryEmail(email: String!) : [User!]
-    createGoal(id: Int!, user_id: Int, description: String!, amount: String!, start_date: Date!, end_date: Date!): Goal!
+    createGoal(id: Int!, user_id: Int, description: String!, amount: String!, start_date: Date!, end_date: Date!, is_budget: Boolean!): Goal!
   }
   `
