@@ -110,8 +110,13 @@ class AddBillCategoryForm extends React.Component {
   }
 }
 
-export default compose(graphql(CREATE_BILL_CATEGORY, { name: 'CREATE_BILL_CATEGORY'}, {
-  options: {
-    refetchQueries: ['BILL_PAYMENT_HISTORY_QUERY']
-  }
-}))(AddBillCategoryForm)
+export default compose(
+  graphql(CREATE_BILL_CATEGORY,
+    { name: 'CREATE_BILL_CATEGORY' },
+    {
+      options: {
+        refetchQueries: ['BILL_PAYMENT_HISTORY_QUERY'],
+      },
+    }
+  )
+)(AddBillCategoryForm);

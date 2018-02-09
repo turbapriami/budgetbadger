@@ -50,7 +50,7 @@ class BillsPaidTable extends Component {
               strong="true"
               style={{ fontSize: '30px' }}
             >
-              Paid{' '}
+              Paid
             </Heading>
           </Section>
           <Table responsive="true">
@@ -61,7 +61,7 @@ class BillsPaidTable extends Component {
                 'Due Date',
                 'Paid Date',
                 'Amount',
-                'Action',
+                'Action'
               ]}
               sortIndex={this.state.sortIndex}
               sortAscending={this.state.sortAscending}

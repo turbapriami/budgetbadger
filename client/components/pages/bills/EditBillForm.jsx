@@ -21,6 +21,7 @@ class EditBillForm extends React.Component {
     super(props);
     this.state = {
       user_id: window.localStorage.getItem('user_id'),
+      bill_id: 0,
       bill_category_id: 0,
       bill_category_description: '',
       description: '',
@@ -44,30 +45,33 @@ class EditBillForm extends React.Component {
     this.handleAlertChange = this.handleAlertChange.bind(this);
     this.handleUpdateClick = this.handleUpdateClick.bind(this);
     this.handleCancelUpdateClick = this.handleCancelUpdateClick.bind(this);
-    this.handleRecurrenceChange = this.handleRecurrenceChange.bind(this);
+    this.handleRecurrenceChanges = this.handleRecurrenceChanges.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextPropsAAA', nextProps);
-      this.setState({     
-        alert:nextProps.selectedBill.bills[0].alert,
-        amount:nextProps.selectedBill.bills[0].amount,
-        bill_category_id: nextProps.selectedBill.bills[0].bill_category[0].id,
-        bill_category_description: nextProps.selectedBill.bills[0].bill_category[0].name,
-        description:nextProps.selectedBill.bills[0].description,
-        due_date:nextProps.selectedBill.due_date,
-        id: nextProps.selectedBill.id,
-        paid: nextProps.selectedBill.paid,
-        paid_date: nextProps.selectedBill.paid_date,
-        user_id: nextProps.selectedBill.user_id,
-        bill_recurrence_id: nextProps.selectedBill.bills[0].bill_recurrence_id,
-        bill_recurrence_type: nextProps.selectedBill.bills[0].bill_recurrence[0].recurrence_type,
-        start_date: nextProps.selectedBill.bills[0].start_date,
-        end_date: nextProps.selectedBill.bills[0].end_date,
-        bill_categories: this.props.billRecurrenceTypes
-      }, ()=> {console.log('this.state after compwillrecprops', this.state)});
+    this.setState({     
+      alert:nextProps.selectedBill.bills[0].alert,
+      amount:nextProps.selectedBill.bills[0].amount,
+      bill_category_id: nextProps.selectedBill.bills[0].bill_category[0].id,
+      bill_category_description: nextProps.selectedBill.bills[0].bill_category[0].name,
+      bill_status: nextProps.selectedBill.bills[0].bill_status, 
+      description:nextProps.selectedBill.bills[0].description,
+      due_date:nextProps.selectedBill.due_date,
+      bill_id: nextProps.selectedBill.bills[0].id,
+      id: nextProps.selectedBill.id,
+      paid: nextProps.selectedBill.paid,
+      paid_date: nextProps.selectedBill.paid_date,
+      user_id: nextProps.selectedBill.user_id,
+      last_paid_date:nextProps.selectedBill.bills[0].last_paid_date,
+      bill_recurrence_id: nextProps.selectedBill.bills[0].bill_recurrence_id,
+      bill_recurrence_type: nextProps.selectedBill.bills[0].bill_recurrence[0].recurrence_type,
+      start_date: nextProps.selectedBill.bills[0].start_date,
+      end_date: nextProps.selectedBill.bills[0].end_date,
+      bill_categories: this.props.billRecurrenceTypes
+    });
   }
 
+  
   handleBillCategoryChange(e) {
     let selectedCategoryName = e.value;
     let categoryID = this.props.billCategories.filter(
@@ -78,15 +82,17 @@ class EditBillForm extends React.Component {
     this.setState({ bill_category_id: categoryID });
   }
 
-  handleRecurrenceChange(e) {
+  handleRecurrenceChanges(e) {
     let selectedRecurrence = e.value;
     let recurrenceID = this.props.billRecurrenceTypes.filter(
       billRecurrenceType =>
         billRecurrenceType.recurrence_type.toLowerCase() ===
         selectedRecurrence.toLowerCase()
     )[0].id;
-    this.setState({ bill_recurrence_type: selectedRecurrence });
-    this.setState({ bill_recurrence_id: recurrenceID });
+    this.setState({
+      bill_recurrence_type: selectedRecurrence,
+      bill_recurrence_id: recurrenceID
+    });
   }
 
   handleDescriptionType(e) {
@@ -102,11 +108,11 @@ class EditBillForm extends React.Component {
   }
 
   handleStartDateChange(e) {
-    this.setState({ start_date: e });
+    this.setState({ start_date: new Date(e) });
   }
 
   handleEndDateChange(e) {
-    this.setState({ end_date: e });
+    this.setState({ end_date: new Date(e) });
   }
 
   handleRecurrenceChange(e) {
@@ -121,6 +127,7 @@ class EditBillForm extends React.Component {
   handleCancelUpdateClick(e) {
     this.setState({
       user_id: window.localStorage.getItem('user_id'),
+      bill_id: 0,
       bill_category_id: 0,
       bill_category_description: '',
       description: '',
@@ -138,56 +145,24 @@ class EditBillForm extends React.Component {
   }
 
   handleUpdateClick(e) {
-  //   e.preventDefault();
-  //   if (this.state.bill_category_id !== 0) {
-  //     var variables = {
-  //       id: this.state.id,
-  //       user_id: this.state.user_id,
-  //       bill_category_id: this.state.bill_category_id,
-  //       description: this.state.description,
-  //       amount: this.state.amount,
-  //       due_date: this.state.due_date,
-  //       paid: this.state.paid,
-  //       paid_date: this.state.paid_date,
-  //       alert: this.state.alert,
-  //     };
-  //     this.props
-  //       .UPDATE_BILL({
-  //         variables: variables,
-  //       })
-  //       .then(({ data }) => {
-  //         console.log('successfully edited Bill', data);
-  //       })
-  //       .catch(error => {
-  //         console.log('there was an error sending the query', error);
-  //       });
-  //   } else {
-  //     this.props.CREATE_BILL_CATEGORY({
-  //       variables: { 
-  //         name: this.state.bill_category_description,
-  //         user_id: this.state.user_id
-  //       }
-  //     }).then(({ data }) => {
-  //       var updatedBillVariables = {
-  //         id: this.state.id,
-  //         user_id: this.state.user_id,
-  //         bill_category_id: data.createBillCategory.id,
-  //         description: this.state.description,
-  //         amount: this.state.amount,
-  //         due_date: new Date(this.state.due_date),
-  //         paid: this.state.paid,
-  //         paid_date: new Date(this.state.paid_date),
-  //         alert: this.state.alert,
-  //       };
-  //       this.props.UPDATE_BILL({
-  //         variables: updatedBillVariables,
-  //       }).then(({ data }) => {
-  //         console.log('successfully edited Bill', data);
-  //       }).catch(error => {
-  //         console.log('there was an error editing Bill', error);
-  //       });
-  //   })
-  // }
+    var updateBillVariables = {
+      id: this.state.bill_id,
+      user_id: this.state.user_id,
+      bill_category_id: this.state.bill_category_id,
+      description: this.state.description,
+      amount: this.state.amount,
+      bill_recurrence_id: this.state.bill_recurrence_id,
+      start_date: this.state.start_date,
+      end_date: this.state.end_date,
+      last_paid_date: this.state.last_paid_date,
+      bill_status: this.state.bill_status,
+      alert: this.state.alert,
+    }
+
+    this.props.UPDATE_BILL({ variables: updateBillVariables })
+      .then(({ data }) => {console.log('successfully updated bill in bills table', data)})
+      .catch(error => {console.log('error updating bill in bills table table', error)});
+
   this.props.handleFormToggle();
 }
 
@@ -276,7 +251,7 @@ class EditBillForm extends React.Component {
                       billRecurrenceType.recurrence_type
                   )}
                   value={this.state.bill_recurrence_type}
-                  onChange={this.handleRecurrenceChange}
+                  onChange={this.handleRecurrenceChanges}
                 />
               </div>
             </Heading>
@@ -284,6 +259,7 @@ class EditBillForm extends React.Component {
               Alert
               <div>
                 <CheckBox
+                  checked = {this.state.alert}
                   toggle={true}
                   reverse={true}
                   onChange={this.handleAlertChange}
@@ -310,7 +286,7 @@ class EditBillForm extends React.Component {
                 </Box>
                 <Box align="center" pad="small">
                   <Button
-                    label="Add"
+                    label="Update"
                     primary={true}
                     onClick={this.handleUpdateClick}
                     style={{

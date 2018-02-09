@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
 import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, RadioButton, SearchInput, Select, TextInput} from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
-import { CREATE_BILL, CREATE_BILL_PAYMENT_HISTORY } from '../../../queries.js';
+import { CREATE_BILL, CREATE_BILL_PAYMENT_HISTORY, BILL_PAYMENT_HISTORY_QUERY } from '../../../queries.js';
 import gql from 'graphql-tag';
 
 var getInputCategoryID = (value, billCategoryObjs) => {
@@ -149,10 +149,7 @@ class AddBillForm extends React.Component {
         this.props
           .CREATE_BILL_PAYMENT_HISTORY({ variables: billPaymentVariables })
           .then(({ data }) => {
-            console.log(
-              'successfully created bill in billPaymentHistory table',
-              data
-            );
+            console.log('successfully created bill in billPaymentHistory table', data);
             this.setState({
               user_id: window.localStorage.getItem('user_id'),
               bill_category_id: 0,
@@ -170,16 +167,9 @@ class AddBillForm extends React.Component {
               bill_descriptions: [],
             });
           })
-          .catch(error => {
-            console.log(
-              'error saving new bill in billPaymentHistory table',
-              error
-            );
-          });
+          .catch(error => {console.log('error saving new bill in billPaymentHistory table', error)});
       })
-      .catch(error => {
-        console.log('error saving new bill in bills table', error);
-      });
+      .catch(error => {console.log('error saving new bill in bills table', error)});
     this.props.handleFormToggle();
   }
 
@@ -327,6 +317,11 @@ class AddBillForm extends React.Component {
 }
 
 export default compose(
-  graphql(CREATE_BILL_PAYMENT_HISTORY, { name: 'CREATE_BILL_PAYMENT_HISTORY' }),
+  graphql(CREATE_BILL_PAYMENT_HISTORY, {
+    name: 'CREATE_BILL_PAYMENT_HISTORY',
+    options: {
+      refetchQueries: ['BILL_PAYMENT_HISTORY_QUERY'],
+    },
+  }),
   graphql(CREATE_BILL, { name: 'CREATE_BILL' })
 )(AddBillForm);

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {Box, Button,Form, Heading, Header, Layer, Columns} from 'grommet';
 import EditBillForm from '../bills/EditBillForm.jsx';
 import { gql, graphql } from 'react-apollo';
-import {DELETE_BILL} from '../../../queries.js';
+import {UPDATE_BILL, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
+
 
 class DeleteBillForm extends Component {
   constructor(props) {
@@ -12,16 +13,24 @@ class DeleteBillForm extends Component {
   }
 
   handleDeleteClick(e) {
+    let variables = {
+      id: this.props.bill.bills[0].id,
+      bill_status: false,
+    };
     this.props
-      .mutate({
-        variables: { id: this.props.bill.id },
-      })
+      .mutate({ variables: variables })
       .then(({ data }) => {
-        console.log('successfully deleted Bill', data);
+        console.log(
+          'successfully updated Bill_status to false(inactive)',
+          data
+        );
         this.props.handleDeleteBillFormToggle();
       })
       .catch(error => {
-        console.log('there was an error sending the delete bill query', error);
+        console.log(
+          'there was an error updating Bill_status to false(inactive)',
+          error
+        );
       });
   }
 
@@ -81,8 +90,8 @@ class DeleteBillForm extends Component {
   }
 }
 
-export default graphql(DELETE_BILL, {
+export default graphql(UPDATE_BILL, {
   options: {
-    refetchQueries: ['BILLS_QUERY'],
+    refetchQueries: ['BILL_PAYMENT_HISTORY_QUERY'],
   },
 })(DeleteBillForm);

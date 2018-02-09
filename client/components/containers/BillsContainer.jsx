@@ -23,19 +23,19 @@ class BillsContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     var currentDate = new Date();
-
+  console.log('nextProps', nextProps);
     if (nextProps.data.getBillPaymentHistory) {
       var paidBills = nextProps.data.getBillPaymentHistory
-        .filter(bill => bill.paid);
+        .filter(bill => bill.paid && bill.bills[0].bill_status);
 
       var unpaidBills = nextProps.data.getBillPaymentHistory
-        .filter(bill => !bill.paid);
+        .filter(bill => !bill.paid && bill.bills[0].bill_status);
 
       var billsDueThisMonth = nextProps.data.getBillPaymentHistory
-        .filter(bill => !bill.paid && (new Date(bill.due_date).getMonth() === currentDate.getMonth()));
+        .filter(bill => !bill.paid && bill.bills[0].bill_status && (new Date(bill.due_date).getMonth() === currentDate.getMonth()));
 
       var overdueBills = nextProps.data.getBillPaymentHistory
-        .filter(bill => !bill.paid && (new Date(bill.due_date).setHours(0,0,0)+ 86400000 < currentDate.setHours(0,0,0)));
+        .filter(bill => !bill.paid && bill.bills[0].bill_status && (new Date(bill.due_date).setHours(0,0,0)+ 86400000 < currentDate.setHours(0,0,0)));
 
       this.setState({
         billsDueThisMonth,

@@ -32,11 +32,6 @@ class BillsDueTableItem extends Component {
       })
       .then(({ data }) => {
         console.log('successfully updated bill payment History', data);
-        let x = {
-          id: bill.bills[0].id,
-          last_paid_date: new Date(),
-        }
-        console.log('xxxx', x)
         this.props
           .UPDATE_BILL({
             variables: {
