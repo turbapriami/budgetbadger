@@ -32,7 +32,7 @@ module.exports = {
     bills: ({ id }, args, { knex }) => 
       knex('bills').where({
         user_id: id
-      })
+      }),
   },
 
   Loan: {
@@ -72,6 +72,10 @@ module.exports = {
   Account: {
     transactions: ({ id }, args, { knex }) => 
       knex('transactions').where({
+        account_id: id
+      }),
+    monthly_balance: ({ id }, args, { knex }) =>
+      knex('monthly_balance').where({
         account_id: id
       })
   },
@@ -145,6 +149,10 @@ module.exports = {
       knex('loan_payments').where({
         loan_id
       }),      
+    // getMonthlyBalances: (parent, { account_id }, { knex }) =>
+    //   knex('accounts').where({
+    //     account_id
+    //   }),
     },
 
   Mutation: {
@@ -340,7 +348,7 @@ module.exports = {
       knex('users').where(args).then((data) => {
         sendgrid.sendEmail(data[0].first_name, data[0].email)
       })
-    },
+    }
   }
 }
 
