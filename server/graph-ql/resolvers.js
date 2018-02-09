@@ -90,6 +90,28 @@ module.exports = {
       })
   },
 
+  Goal: {
+    goal_progress: ({ id }, args, { knex }) => 
+      knex('goal_progress').where({
+        goal_id: id
+      }),
+    goal_categories: ({ id }, args, { knex }) => 
+      knex('goal_categories').where({
+        goal_id: id
+      }),
+    goal_accounts: ({ id }, args, { knex }) => 
+      knex('goal_accounts').where({
+        goal_id: id
+      })
+  },
+
+  GoalAccount: {
+    account: ({ account_id }, args, { knex }) => 
+      knex('accounts').where({
+        id: account_id
+      })
+  },
+
 
   Query: {
     getUser: (parent, args, { knex, user }) => { 
@@ -148,7 +170,7 @@ module.exports = {
       
     getGoals: (parent, { user_id }, { knex, user }) => 
       knex('goals').where({
-        user_id: user.user.id
+        user_id: user_id
       }),
     
   },
@@ -349,7 +371,16 @@ module.exports = {
     },
 
     createGoal: async (parent, args, { models}) => {
-      return await new models.Goal(args).save(null, {method: 'update'});
+      return await new models.Goal(args).save(null, {method: 'insert'}).attributes;
+    },
+    createGoalProgress: async (parent, args, { models}) => {
+      return await new models.GoalProgress(args).save(null, {method: 'insert'}).attributes;
+    },
+    createGoalCategory: async (parent, args, { models}) => {
+      return await new models.GoalCategory(args).save(null, {method: 'insert'}).attributes;
+    },
+    createGoalAccount: async (parent, args, { models}) => {
+      return await new models.GoalAccount(args).save(null, {method: 'insert'}).attributes;
     }
   }
 }
