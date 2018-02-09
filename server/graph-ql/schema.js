@@ -144,6 +144,7 @@ module.exports = `
     id: Int!
     goal_id: Int!
     account_id: String!
+    account: [Account!]
   }
   
   type GoalProgress {
