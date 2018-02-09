@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Layer from 'grommet/components/Layer';
-import TransactionChart from './SummaryChart.jsx'
+import HistoricalChart from './SummaryChart.jsx'
 import {
   filterTransactionsByValue,
   generateDailyData,
   generateMonthlyData
 } from './chartHelpers.jsx'
 
-class SummaryChartContainer extends Component {
+class HistoricalChartContainer extends Component {
   constructor() {
     super();
     this.state = {
@@ -74,14 +74,6 @@ class SummaryChartContainer extends Component {
     })
   }
 
-  // Draw line to show goal progress for specific account (this is for goals related
-  // to reducing spending on some category or in some account)
-  drawTargetLine(account, goalTarget) {
-    let min = Math.floor(goalTarget * 0.9);
-    let max = Math.floor(goalTarget * 1.1);
-    
-  }
-
   // adds or removes key-value pairs from filter object
   updateFilter(key, value, callback) {
     let { filter } = this.state;
@@ -93,6 +85,7 @@ class SummaryChartContainer extends Component {
     }, () => callback());
   }
 
+  // Below simply redraws chart as data changes (based on filters)
   renderChart() {
     const filteredTransactions = filterTransactionsByValue(this.props.transactions, this.state.filter);
     // check current state of the chart
@@ -105,9 +98,8 @@ class SummaryChartContainer extends Component {
     }, () => this.state.displayTotal ? this.toggleTotal() : null)
   }
 
-
-  // Allows users to toggle a treshold line to track they spending goals
-  // as compared to their actual spending
+  // Allows users to toggle a constant line to track they spending goals
+  // as compared to their actual spending, shows target +/- 5%
   toggleGoal() {
     const { filteredTransactions } = this.state;
     const id = filteredTransactions[0].account[0].id;
@@ -118,8 +110,8 @@ class SummaryChartContainer extends Component {
       amount: 3500
     }
     if (!this.state.displayGoal) {
-      min = goal.amount * 0.9;
-      max = goal.amount * 1.1;
+      min = goal.amount * 0.95;
+      max = goal.amount * 1.05;
       center = goal.amount;
     }
     this.setState({
@@ -153,8 +145,8 @@ class SummaryChartContainer extends Component {
         overlayClose={true}
         padding="small"
         flush={true}
-        onClose={this.props.handleSummary}>
-        <TransactionChart 
+        onClose={this.props.handleSummaryChart}>
+        <HistoricalChart 
           annotations={this.state.annotations}
           toggleGoal={this.toggleGoal}
           displayGoal={this.state.displayGoal}
@@ -171,7 +163,6 @@ class SummaryChartContainer extends Component {
       null
     )
   }
-
 }
 
-export default SummaryChartContainer;
+export default HistoricalChartContainer;

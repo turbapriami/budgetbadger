@@ -4,13 +4,15 @@ import Navigation from '../pages/transactions/Navigation.jsx';
 import Search from '../pages/transactions/Search.jsx'
 import PieChart from '../pages/transactions/PieChart.jsx'
 import SearchFilter from '../pages/transactions/SearchFilters.jsx'
-import { Box, Split } from 'grommet'
+import { Box, Split, Menu, Anchor, Actions } from 'grommet'
 import Spinner from '../pages/Spinner.jsx';
 import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
+import ActionsIcon from 'grommet/components/icons/base/Actions';
 import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS, GET_USER_BALANCES } from '../../queries.js';
 import NewTransaction from '../pages/transactions/NewTransaction.jsx'
-import SummaryChartContainer from '../pages/transactions/Chart/TransactionsSummary.jsx'
+import HistoricalChartContainer from '../pages/transactions/Chart/HistoricalChartContainer.jsx'
+import TransactionSummary from '../pages/transactions/TransactionSummary.jsx'
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag'
 
@@ -51,10 +53,12 @@ class TransactionContainer extends Component {
       categoryBreakdown: [],
       selected: 'All Debit & Credit',
       displayModal: false,
+      displayNewTransaction: false,
       sorting: [false, false, false, false, false],
       sortIdx: 0,
       showForm: false,
-      displaySummary: true,
+      displaySummaryChart: false,
+      displaySummary: false,
       summaryTransaction: {},
       summaryName: '',
       transactionForm: {
@@ -66,7 +70,7 @@ class TransactionContainer extends Component {
         account: ''
       }
     }
-    this.handleSummary = this.handleSummary.bind(this);
+    this.handleSummaryChart = this.handleSummaryChart.bind(this);
     this.filterTransactions = this.filterTransactions.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.generateCategories = this.generateCategories.bind(this);
@@ -74,6 +78,8 @@ class TransactionContainer extends Component {
     this.sortTransactions = this.sortTransactions.bind(this);
     this.newTransaction = this.newTransaction.bind(this);
     this.handleForm = this.handleForm.bind(this);
+    this.handleNewTransaction = this.handleNewTransaction.bind(this);
+    this.handleSummary = this.handleSummary.bind(this);
   }
 
 
@@ -119,18 +125,33 @@ class TransactionContainer extends Component {
     });
   }
 
+  handleSummaryChart(transaction = {}) {
+    this.setState({
+      displaySummaryChart: !this.state.displaySummaryChart,
+      summaryTransaction: transaction
+    })
+  }
+
   handleSummary(transaction = {}) {
     this.setState({
       displaySummary: !this.state.displaySummary,
       summaryTransaction: transaction
-    })
+    }, () => console.log(this.state))
   }
+
 
   handleModal(e) {
     e.preventDefault();
     this.setState({
       displayModal: !this.state.displayModal
     });
+  }
+
+  handleNewTransaction(e) {
+    e.preventDefault();
+    this.setState({
+      displayNewTransaction: !this.state.displayNewTransaction
+    }, () => console.log('state', this.state.displayNewTransaction));
   }
 
   handleSearch(searchString) {
@@ -213,15 +234,21 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
-          <SummaryChartContainer
+          <HistoricalChartContainer
             balances={this.props.data.getUser[0].accounts}
             accounts={this.props.data.getAccounts} 
             transactions={this.state.transactions} 
             summaryTransaction={this.state.summaryTransaction} 
             categories={this.state.categoryBreakdown} 
-            handleSummary={this.handleSummary}
-            displaySummary={this.state.displaySummary} 
+            handleSummaryChart={this.handleSummaryChart}
+            displaySummary={this.state.displaySummaryChart} 
             summaryName={this.state.summaryName}/>
+            <TransactionSummary
+              transactions={this.state.transactions}
+              summaryTransaction={this.state.summaryTransaction}
+              display={this.state.displaySummary}
+              handleSummary={this.handleSummary}
+            />
           <PieChart 
             breakdown={this.state.categoryBreakdown} 
             handleClose={this.handleModal} 
@@ -237,13 +264,31 @@ class TransactionContainer extends Component {
               <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
             </Box>  
             <Box align="left">
-              <Box align='end' alignContent='end'>
-                <Search transactions={this.state.transactions} search={this.handleSearch}/>
+              <Box flex={true}
+                    justify='end'
+                    direction='row'
+                    responsive={false}>
+                <Search inline={true} transactions={this.state.transactions} search={this.handleSearch}/>
+                <Menu icon={<ActionsIcon/>}
+                  dropAlign={{"right": "right"}}>
+                  <Anchor onClick={this.handleModal}
+                    className='active'>
+                    Category Breakdown
+                  </Anchor>
+                  <Anchor onClick={this.handleSummaryChart}>
+                    Transaction Chart
+                  </Anchor>
+                  <Anchor onClick={this.handleNewTransaction}>
+                    New Transaction
+                  </Anchor>
+                </Menu>
               </Box>
               <NewTransaction 
                 handleForm={this.handleForm} 
                 accounts={this.props.data.getAccounts} 
                 submitForm={this.newTransaction} 
+                displayNewTransaction={this.state.displayNewTransaction}
+                handleNewTransaction={this.handleNewTransaction}
                 form={this.state.transactionForm}/>
               <TransactionList
                 displaySummary={this.handleSummary} 

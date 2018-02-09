@@ -2,7 +2,6 @@ import { Split, Value, CurrencyIcon, Headline, Section, Box, Button, CheckBox, C
 import React, { Component } from 'react';
 import identity from 'lodash'
 import moment from 'moment';
-import SummaryChart from './SummaryChart.jsx';
 import TransactionPie from './TransactionPie.jsx'
 
 class TransactionSummary extends Component {
