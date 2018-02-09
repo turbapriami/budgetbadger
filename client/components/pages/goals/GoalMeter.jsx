@@ -9,7 +9,7 @@ const GoalMeter = () => {
         label='Lofty Goal'
         type='circle'
         size='small'
-        value={40}
+        value={this.props.value}
       />
     </div>
   )

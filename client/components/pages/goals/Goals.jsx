@@ -4,7 +4,11 @@ import GoalMeter from './GoalMeter.jsx';
 const Goals = () => {
   return (
     <div>
-      <GoalMeter />
+      {this.props.goals.map((goal => {
+        return (
+          <GoalMeter value={goal} />
+        )
+      }))}
     </div>
   )
 }

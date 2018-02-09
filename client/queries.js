@@ -123,6 +123,29 @@ const CREATE_BILL_CATEGORY = gql`
     }
   }`;
 
+const GOALS_QUERY = gql`
+  query GOALS_QUERY($user_id: Int!) {
+    getGoals(user_id: $user_id) {
+      id
+      user_id
+      description
+      amount
+      is_budget
+      start_date
+      end_date
+      goal_categories {
+        name
+      }
+      goal_accounts {
+        accounts [
+          bank_name
+          type
+          current_balance
+        ]
+      }
+  }
+`
+
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,
@@ -133,5 +156,6 @@ export {
   UPDATE_BILL,
   DELETE_BILL,
   CREATE_BILL,
-  CREATE_BILL_CATEGORY
+  CREATE_BILL_CATEGORY,
+  GOALS_QUERY
 };
