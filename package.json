@@ -49,6 +49,7 @@
     "bookshelf": "^0.12.1",
     "c3": "^0.4.18",
     "chart.js": "^2.7.1",
+    "chartjs-plugin-annotation": "^0.5.7",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "css-loader": "^0.28.9",

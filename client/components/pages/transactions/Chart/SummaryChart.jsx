@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line, Chart } from 'react-chartjs-2';
 import { Layer, Select, CheckBox } from 'grommet';
 
 const TransactionsChart = (props) => {
@@ -40,6 +40,11 @@ const TransactionsChart = (props) => {
       ]
     }
   }
+
+  Chart.pluginService.regiser({
+    
+  })
+  
   return (
     <div>
       <div>
