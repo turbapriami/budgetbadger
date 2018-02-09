@@ -182,7 +182,7 @@ module.exports = {
       }),
 
     getBillRecurrence:  (parent, { id }, { knex }) =>
-      knex('bill_recurrence').where({})
+      knex('bill_recurrence').where({})      
     },
 
   Mutation: {
