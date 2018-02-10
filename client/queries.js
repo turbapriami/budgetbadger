@@ -137,6 +137,9 @@ const DELETE_BILL = gql`
 const CREATE_BILL_CATEGORY = gql`
   mutation createBillCategory($name: String!, $user_id: Int!) {
     createBillCategory(name: $name, user_id: $user_id) {
+      id
+    }
+  }`;
 
 const ADD_LOAN = gql`
   mutation ADD_LOAN($name: String!, $amount: Float!, $interest_rate: Float!, $inception_date: String!, $end_date: String!, $user_id: Int!) {
@@ -230,7 +233,7 @@ export {
   CREATE_BILL_CATEGORY,
   BILL_PAYMENT_HISTORY_QUERY,
   CREATE_BILL_PAYMENT_HISTORY,
-  UPDATE_BILL_PAYMENT_HISTORY
+  UPDATE_BILL_PAYMENT_HISTORY,
   ADD_LOAN,
   LOANS_QUERY,
   DELETE_LOAN,
