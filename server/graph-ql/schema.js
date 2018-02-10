@@ -128,6 +128,7 @@ module.exports = `
     goal_category_id: Int!
     amount: String!
     start_date: Date!
+    is_budget: Boolean!
     end_date: Date!
     goal_progress: [GoalProgress!]
     goal_categories: [GoalCategory!]

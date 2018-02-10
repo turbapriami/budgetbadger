@@ -11,21 +11,19 @@ class GoalsContainer extends React.Component {
   constructor(props){
     super(props)
   }
+  
+  componentDidUpdate() {
+    console.log(this.props.data.getGoals)
+  }
 
   render(){
-    if (this.props) {
-      return(
-        <div>
-          <GoalForm />
-          <Goals goals={this.props.data.getGoals} />
-          <GoalHistory />
-        </div>
-      )
-    } else {
-      return (
-        <Spinner />
-      );
-    }
+    return(
+      <div>
+        <GoalForm />
+        <Goals goals={this.props.data.getGoals} />
+        <GoalHistory />
+      </div>
+    )
   }
 };
 

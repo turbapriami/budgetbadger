@@ -127,7 +127,6 @@ const GOALS_QUERY = gql`
   query GOALS_QUERY($user_id: Int!) {
     getGoals(user_id: $user_id) {
       id
-      user_id
       description
       amount
       is_budget
@@ -141,14 +140,14 @@ const GOALS_QUERY = gql`
         name
       }
       goal_accounts {
-        account [
+        account {
           bank_name
           type
           current_balance
-        ]
+        }
       }
-  }
-`
+    }
+  }`;
 
 export {
   TRANS_ACC_QUERY,

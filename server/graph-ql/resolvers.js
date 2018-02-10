@@ -126,12 +126,12 @@ module.exports = {
 
     getTransactions: (parent, { user_id }, {knex, user}) =>   
       knex('transactions').where({
-        user_id: user.user.id
+        user_id: user_id
       }), 
 
     getAccounts: (parent, { user_id }, { knex, user }) => 
       knex('accounts').where({
-        user_id: user.user.id
+        user_id: user_id
       }),
 
     getAccount: (parent, { account_id }, { knex }) =>
@@ -156,19 +156,19 @@ module.exports = {
 
     getBills: (parent, { user_id }, { knex, user }) => 
       knex('bills').where({
-        user_id: user.user.id
+        user_id: user_id
       }),
 
     getLoans: (parent, { user_id }, { knex, user }) => 
       knex('loans').where({
-        user_id: user.user.id
+        user_id: user_id
       }),
     getLoanPayments: (parent, { loan_id }, { knex }) =>
       knex('loan_payments').where({
         loan_id
       }),
       
-    getGoals: (parent, { user_id }, { knex, user }) => 
+    getGoals: (parent, { user_id }, { knex }) => 
       knex('goals').where({
         user_id: user_id
       }),
