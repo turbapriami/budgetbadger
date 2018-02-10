@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
 import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, RadioButton, SearchInput, Select, TextInput} from 'grommet'
 import { graphql, compose, withApollo } from 'react-apollo';
-import {UPDATE_BILL, CREATE_BILL_CATEGORY} from '../../../queries.js';
+import {UPDATE_BILL, CREATE_BILL_CATEGORY, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
 import gql from 'graphql-tag';
 
 var convertDateFormat = date => {
@@ -49,27 +49,31 @@ class EditBillForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({     
-      alert:nextProps.selectedBill.bills[0].alert,
-      amount:nextProps.selectedBill.bills[0].amount,
-      bill_category_id: nextProps.selectedBill.bills[0].bill_category[0].id,
-      bill_category_description: nextProps.selectedBill.bills[0].bill_category[0].name,
-      bill_status: nextProps.selectedBill.bills[0].bill_status, 
-      description:nextProps.selectedBill.bills[0].description,
-      due_date:nextProps.selectedBill.due_date,
-      bill_id: nextProps.selectedBill.bills[0].id,
-      id: nextProps.selectedBill.id,
-      paid: nextProps.selectedBill.paid,
-      paid_date: nextProps.selectedBill.paid_date,
-      user_id: nextProps.selectedBill.user_id,
-      last_paid_date:nextProps.selectedBill.bills[0].last_paid_date,
-      bill_recurrence_id: nextProps.selectedBill.bills[0].bill_recurrence_id,
-      bill_recurrence_type: nextProps.selectedBill.bills[0].bill_recurrence[0].recurrence_type,
-      start_date: nextProps.selectedBill.bills[0].start_date,
-      end_date: nextProps.selectedBill.bills[0].end_date,
-      bill_categories: this.props.billRecurrenceTypes
-    });
+    if (nextProps.selectedBill.id !== undefined) {
+      this.setState({     
+        alert:nextProps.selectedBill.bills[0].alert,
+        amount:nextProps.selectedBill.bills[0].amount,
+        bill_category_id: nextProps.selectedBill.bills[0].bill_category[0].id,
+        bill_category_description: nextProps.selectedBill.bills[0].bill_category[0].name,
+        bill_status: nextProps.selectedBill.bills[0].bill_status, 
+        description:nextProps.selectedBill.bills[0].description,
+        due_date:nextProps.selectedBill.due_date,
+        bill_id: nextProps.selectedBill.bills[0].id,
+        id: nextProps.selectedBill.id,
+        paid: nextProps.selectedBill.paid,
+        paid_date: nextProps.selectedBill.paid_date,
+        user_id: nextProps.selectedBill.user_id,
+        last_paid_date:nextProps.selectedBill.bills[0].last_paid_date,
+        bill_recurrence_id: nextProps.selectedBill.bills[0].bill_recurrence_id,
+        bill_recurrence_type: nextProps.selectedBill.bills[0].bill_recurrence[0].recurrence_type,
+        start_date: nextProps.selectedBill.bills[0].start_date,
+        end_date: nextProps.selectedBill.bills[0].end_date,
+        bill_categories: this.props.billRecurrenceTypes
+      });
+    }
   }
+
+
 
   
   handleBillCategoryChange(e) {
@@ -156,12 +160,17 @@ class EditBillForm extends React.Component {
       end_date: this.state.end_date,
       last_paid_date: this.state.last_paid_date,
       bill_status: this.state.bill_status,
-      alert: this.state.alert,
+      alert: this.state.alert
     }
 
     this.props.UPDATE_BILL({ variables: updateBillVariables })
-      .then(({ data }) => {console.log('successfully updated bill in bills table', data)})
-      .catch(error => {console.log('error updating bill in bills table table', error)});
+      .then(({ data }) => {
+        console.log('successfully updated bill in bills table', data)
+        this.props.data.refetch();
+      })
+      .catch(error => {
+        console.log('error updating bill in bills table table', error)
+      });
 
   this.props.handleFormToggle();
 }
@@ -312,5 +321,12 @@ class EditBillForm extends React.Component {
 
 export default compose(
   graphql(CREATE_BILL_CATEGORY, { name: 'CREATE_BILL_CATEGORY' }), 
-  graphql(UPDATE_BILL, {name: 'UPDATE_BILL'})
+  graphql(UPDATE_BILL, {name: 'UPDATE_BILL'}),
+  graphql(BILL_PAYMENT_HISTORY_QUERY, {
+    options: props => ({
+      variables: {
+        user_id: window.localStorage.getItem('user_id'),
+      }
+    })
+  })
 )(EditBillForm);

@@ -3,7 +3,7 @@ import { Columns, Box, Button, Section, Heading, Paragraph, Table, TableHeader, 
 import styles from '../../../../public/main/jStyles';
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
-import {UPDATE_BILL, UPDATE_BILL_PAYMENT_HISTORY} from '../../../queries.js';
+import {UPDATE_BILL, UPDATE_BILL_PAYMENT_HISTORY, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
 
 class BillsPaidTableItem extends Component {
   constructor(props) {
@@ -19,11 +19,7 @@ class BillsPaidTableItem extends Component {
       paid_date: null,
     };
 
-    console.log()
-    this.props
-      .mutate({
-        variables: variables,
-      })
+    this.props.mutate({variables: variables})
       .then(({ data }) => {
         console.log('successfully updated bill to unpaid', data);
       })
@@ -53,6 +49,7 @@ class BillsPaidTableItem extends Component {
           })
           .then(({ data }) => {
             console.log('successfully updated the bills last_paid_date', data);
+            this.props.data.refetch();
           })
           .catch(error => {
             console.log('error updating the bills last_paid_date', error);
@@ -106,5 +103,12 @@ class BillsPaidTableItem extends Component {
 
 export default compose(
   graphql(UPDATE_BILL, { name: 'UPDATE_BILL' }),
-  graphql(UPDATE_BILL_PAYMENT_HISTORY, { name: 'UPDATE_BILL_PAYMENT_HISTORY' })
+  graphql(UPDATE_BILL_PAYMENT_HISTORY, { name: 'UPDATE_BILL_PAYMENT_HISTORY' }),
+  graphql(BILL_PAYMENT_HISTORY_QUERY, {
+    options: props => ({
+      variables: {
+        user_id: window.localStorage.getItem('user_id'),
+      }
+    })
+  })
 )(BillsPaidTableItem);

@@ -23,7 +23,7 @@ class BillsContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     var currentDate = new Date();
-  console.log('nextProps', nextProps);
+
     if (nextProps.data.getBillPaymentHistory) {
       var paidBills = nextProps.data.getBillPaymentHistory
         .filter(bill => bill.paid && bill.bills[0].bill_status);

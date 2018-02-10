@@ -47,6 +47,7 @@ class AddBillForm extends React.Component {
     this.handleRecurrenceChange = this.handleRecurrenceChange.bind(this);
   }
 
+
   handleBillCategoryChange(e) {
     let selectedCategoryName = e.value;
     let categoryID = this.props.billCategories.filter(
@@ -82,19 +83,15 @@ class AddBillForm extends React.Component {
   }
 
   handleStartDateChange(e) {
-    console.log('e on start date change', e);
     this.setState({ start_date: e });
   }
 
   handleEndDateChange(e) {
-    console.log('e on end date change', e);
     this.setState({ end_date: e });
   }
 
   handleAlertChange(e) {
-    this.setState({ alert: !this.state.alert }, () => {
-      console.log('this.state', this.state);
-    });
+    this.setState({ alert: !this.state.alert });
   }
 
   handleCancelAddClick(e) {
@@ -134,10 +131,7 @@ class AddBillForm extends React.Component {
     this.props
       .CREATE_BILL({ variables: variables })
       .then(({ data }) => {
-        console.log(
-          'successfully created bill in bills table',
-          data.createBill.id
-        );
+        console.log('successfully created bill in bills table', data.createBill.id);
         let billPaymentVariables = {
           bill_id: data.createBill.id,
           user_id: this.state.user_id,
@@ -149,7 +143,6 @@ class AddBillForm extends React.Component {
         this.props
           .CREATE_BILL_PAYMENT_HISTORY({ variables: billPaymentVariables })
           .then(({ data }) => {
-            console.log('successfully created bill in billPaymentHistory table', data);
             this.setState({
               user_id: window.localStorage.getItem('user_id'),
               bill_category_id: 0,
@@ -166,6 +159,7 @@ class AddBillForm extends React.Component {
               bill_categories: [],
               bill_descriptions: [],
             });
+            this.props.data.refetch();
           })
           .catch(error => {console.log('error saving new bill in billPaymentHistory table', error)});
       })
@@ -316,12 +310,14 @@ class AddBillForm extends React.Component {
   }
 }
 
-export default compose(
-  graphql(CREATE_BILL_PAYMENT_HISTORY, {
-    name: 'CREATE_BILL_PAYMENT_HISTORY',
-    options: {
-      refetchQueries: ['BILL_PAYMENT_HISTORY_QUERY'],
-    },
-  }),
-  graphql(CREATE_BILL, { name: 'CREATE_BILL' })
+export default compose(withApollo,
+  graphql(CREATE_BILL_PAYMENT_HISTORY, {name: 'CREATE_BILL_PAYMENT_HISTORY'}),
+  graphql(CREATE_BILL, { name: 'CREATE_BILL' }),
+  graphql(BILL_PAYMENT_HISTORY_QUERY, {
+    options: props => ({
+      variables: {
+        user_id: window.localStorage.getItem('user_id'),
+      }
+    })
+  })
 )(AddBillForm);

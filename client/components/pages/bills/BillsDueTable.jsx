@@ -145,8 +145,7 @@ class BillsDueTable extends Component {
                         bills={this.props.bills}
                         billCategories={this.props.billCategories}
                       />
-                    )
-                : null}
+                    ): null}
             </tbody>
           </Table>
         </Columns>
