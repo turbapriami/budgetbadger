@@ -54,6 +54,7 @@ class AdvancedChart extends React.Component {
   }; 
   
 
+  // console.log('this is motherfucking props', props)
   componentDidMount(){
     this.myChart();
   }
