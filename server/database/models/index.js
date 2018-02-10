@@ -12,6 +12,8 @@ const Goal = require('./goal.js')
 const GoalCategory = require('./goal_category.js')
 const GoalProgress = require('./goal_progress.js')
 const MonthlyBalance = require('./monthly_balance.js')
+const BillRecurrence = require('./bill_recurrence.js');
+const BillPaymentHistory = require('./bill_payment.js');
 
 module.exports = {
   Account,
@@ -27,5 +29,7 @@ module.exports = {
   Goal,
   GoalCategory,
   GoalProgress,
-  MonthlyBalance
+  MonthlyBalance,
+  BillRecurrence,
+  BillPaymentHistory
 }
