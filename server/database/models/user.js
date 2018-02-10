@@ -24,7 +24,10 @@ const User = db.Model.extend({
     return this.belongsToMany(School);
   },
   bill_category_id: () => {
-    return this.belongsToMany(BillCategory, 'id');
+    return this.belongsToMany(BillCategory);
+  },
+  bill_payment_history: () => {
+    return this.belongsToMany(BillPaymentHistory);
   }
 })
 
