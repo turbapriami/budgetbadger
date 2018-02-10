@@ -11,6 +11,7 @@ const Goals = (props) => {
       <Tiles
         fill={true}
         flush={false}
+        selectable={true}
       >
         {props.goals.map((goal => {
           return (
@@ -22,12 +23,14 @@ const Goals = (props) => {
                 <Meter 
                   type='bar'
                   size='medium'
+                  label={'$' + goal.goal_progress[goal.goal_progress.length - 1].amount + ' out of ' + '$' +  goal.amount}
                   value={goal.goal_progress[goal.goal_progress.length - 1].amount}
                   max={goal.amount}
                 />
-                Accounts: {goal.goal_accounts[0] || 'All'}
                 <br/>
-                Categories: {goal.goal_categories[0].name}
+                Accounts: {goal.goal_accounts.map(account => account.account[0].bank_name)}
+                <br/>
+                Categories: {goal.goal_categories.map(category => category.name)}
               </Card>
             </Tile>
           )
