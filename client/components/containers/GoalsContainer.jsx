@@ -10,18 +10,30 @@ import {GOALS_QUERY} from '../../queries.js';
 class GoalsContainer extends React.Component {
   constructor(props){
     super(props)
+    this.state = {
+      goalIndex: 0
+    }
+    this.handleClick = this.handleClick.bind(this)
   }
-  
-  componentDidUpdate() {
-    console.log(this.props.data.getGoals)
+
+  handleClick(e) {
+    this.setState({
+      goalIndex: e
+    })
   }
 
   render(){
+    let goalProgress = null
+    let goal = null
+    if (this.props.data.getGoals) {
+      goalProgress = this.props.data.getGoals[this.state.goalIndex].goal_progress
+      goal = this.props.data.getGoals[this.state.goalIndex]
+    }
     return(
       <div>
         <GoalForm />
-        <Goals goals={this.props.data.getGoals} />
-        <GoalHistory />
+        <Goals goals={this.props.data.getGoals} handleClick={this.handleClick} />
+        <GoalHistory goal={goal} goalProgress={goalProgress} />
       </div>
     )
   }

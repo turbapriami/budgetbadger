@@ -12,6 +12,7 @@ const Goals = (props) => {
         fill={true}
         flush={false}
         selectable={true}
+        onSelect={props.handleClick}
       >
         {props.goals.map((goal => {
           return (
