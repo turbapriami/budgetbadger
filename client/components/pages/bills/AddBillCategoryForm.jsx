@@ -37,7 +37,6 @@ class AddBillCategoryForm extends React.Component {
         console.log('successfully saved new bill category', data);
         this.props.data.refetch().then(data => {
           console.log('successfully fetched data after saving bill category', data);
-          this.props.handleAddBillCategoryFormToggle();
         });
       })
       .catch(error => {
@@ -50,7 +49,7 @@ class AddBillCategoryForm extends React.Component {
       return (
         <Layer
           closer="true"
-          onClose={this.props.handleCancelClick}
+          onClose={this.props.handleAddBillCategoryFormToggle}
           flush="true"
           overlayClose="true"
         >
@@ -58,34 +57,32 @@ class AddBillCategoryForm extends React.Component {
             <Header>
               <Heading tag="h3" strong="true">Add Bill Category</Heading>
             </Header>
-            <Heading tag="h4" margin="small">
-              Bill Category:
               <div>
                 <SearchInput
                   value={this.state.bill_category_description}
-                  placeHolder="Enter Description"
+                  placeHolder="Enter Category Name"
                   onDOMChange={this.handleBillCategoryType}
                 />
               </div>
+            <Heading tag="h4" strong="true" margin="small">
+              Current Bill Categories:
             </Heading>
-            <Heading tag="h4" margin="small">
-              Existing Bill Categories:
               <div>
                 <List>
                   {this.props.billCategories.map(billObj =>
                     <ListItem
                       justify="between"
                       separator="horizontal"
-                      style={{ fontSize: '16px' }}
+                      style={{ fontSize: '16px', textAlign:'center'}}
+                      align="center"
                     >
-                      <span>
+                      <span style={{textAlign:'center'}}>
                         {billObj.name}
                       </span>
                     </ListItem>
                   )}
                 </List>
               </div>
-            </Heading>
             <Footer pad={{ vertical: 'medium' }}>
               <Columns justify="center" size="small" maxCount="2">
                 <Box align="center" pad="small">

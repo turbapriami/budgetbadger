@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Columns, Box, Button, Section, Heading, Paragraph, Table, TableHeader, TableRow, Timestamp} from 'grommet';
+import { Columns, Box, Button, Section, Heading, Paragraph, Table, TableHeader, TableRow} from 'grommet';
 import styles from '../../../../public/main/jStyles';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -12,8 +12,16 @@ class BillsPaidTable extends Component {
       billFormToggle: false,
       sortIndex: 0,
       sortAscending: false,
+      selectedBill : {}
     };
     this.handleSortClick = this.handleSortClick.bind(this);
+    this.handleBillSelect = this.handleBillSelect.bind(this);
+  }
+
+
+    
+  handleBillSelect(bill) {
+    this.setState({selectedBill: bill});
   }
 
   handleSortClick(e) {
@@ -72,7 +80,13 @@ class BillsPaidTable extends Component {
                 ? this.props.bills
                     .filter(bill => bill.paid === true)
                     .map((bill, j) =>
-                      <BillsPaidTableItem key={j} bill={bill} />
+                      <BillsPaidTableItem 
+                        key={j} 
+                        bill={bill} 
+                        UserBillPaymentHistory={this.props.UserBillPaymentHistory}
+                        handleBillSelect = {this.handleBillSelect}
+                        selectedBill = {this.state.selectedBill}
+                      />
                     )
                 : null}
             </tbody>

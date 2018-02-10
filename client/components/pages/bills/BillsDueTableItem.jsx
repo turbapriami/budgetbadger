@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Actions, Anchor, Box, Button, CheckmarkIcon, Columns, EditIcon, Section, TrashIcon, Heading, Menu, MoreIcon, Paragraph, Table, TableHeader, TableRow, Timestamp, Toast} from 'grommet';
+import { Actions, Anchor, Box, Button, CheckmarkIcon,CircleInformationIcon, Columns, EditIcon, Section, TrashIcon, Heading,  Menu, MoreIcon, Paragraph, Table, TableHeader, TableRow, Toast} from 'grommet';
 import EditBillForm from '../bills/EditBillForm.jsx';
 import DeleteBillForm from './DeleteBillForm.jsx';
+import BillPaymentHistory from './BillPaymentHistory.jsx';
 import { graphql, compose, withApollo } from 'react-apollo';
 import {UPDATE_BILL, UPDATE_BILL_PAYMENT_HISTORY, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
-
+import moment from 'moment';
 
 class BillsDueTableItem extends Component {
   constructor(props) {
@@ -12,11 +13,13 @@ class BillsDueTableItem extends Component {
     this.state = {
       billEditFormToggle: false,
       deleteBillFormToggle: false,
+      billPaymentHistoryToggle: false,
     };
     this.onMarkPaidClick = this.onMarkPaidClick.bind(this);
     this.handleEditFormToggle = this.handleEditFormToggle.bind(this);
     this.handleDeleteBillFormToggle = this.handleDeleteBillFormToggle.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleBillHistoryToggle = this.handleBillHistoryToggle.bind(this);
   }
 
   onMarkPaidClick(bill) {
@@ -64,6 +67,12 @@ class BillsDueTableItem extends Component {
     this.setState({ deleteBillFormToggle: !this.state.deleteBillFormToggle });
   }
 
+  handleBillHistoryToggle() {
+    this.setState({
+      billPaymentHistoryToggle: !this.state.billPaymentHistoryToggle
+    });
+  }
+
   render() {
     return (
       <TableRow>
@@ -74,7 +83,7 @@ class BillsDueTableItem extends Component {
           {this.props.bill.bills[0].bill_category[0].name}
         </td>
         <td>
-          <Timestamp value={this.props.bill.due_date} fields="date" />
+          {moment(this.props.bill.due_date).format('MMMM D, YYYY')}
         </td>
         <td>
           ${this.props.bill.bills[0].amount}
@@ -86,8 +95,13 @@ class BillsDueTableItem extends Component {
             icon={<MoreIcon />}
           >
             <Anchor
+              icon={<CircleInformationIcon />}
+              onClick={this.handleBillHistoryToggle}
+            >
+              Bill Details
+            </Anchor>
+            <Anchor
               icon={<CheckmarkIcon />}
-              className="active"
               onClick={() => {
                 this.onMarkPaidClick(this.props.bill);
               }}
@@ -110,6 +124,13 @@ class BillsDueTableItem extends Component {
             handleDeleteBillFormToggle={this.handleDeleteBillFormToggle}
           />
         </td>
+        <BillPaymentHistory
+          UserBillPaymentHistory = {this.props.UserBillPaymentHistory}
+          billPaymentHistoryToggle={this.state.billPaymentHistoryToggle}
+          handleBillHistoryToggle={this.handleBillHistoryToggle}
+          selectedBill={this.props.selectedBill}
+          bills={this.props.bills}
+        />
         <EditBillForm
           billRecurrenceTypes={this.props.billRecurrenceTypes}
           selectedBill={this.props.selectedBill}

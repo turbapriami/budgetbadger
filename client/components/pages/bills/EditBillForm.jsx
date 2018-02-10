@@ -5,16 +5,7 @@ import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Fo
 import { graphql, compose, withApollo } from 'react-apollo';
 import {UPDATE_BILL, CREATE_BILL_CATEGORY, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
 import gql from 'graphql-tag';
-
-var convertDateFormat = date => {
-  let formattedDate = new Date(date);
-  return (formattedDate.getMonth() + 1) + '/' + formattedDate.getDate() + '/' +  formattedDate.getFullYear();
-};
-
-var getInputCategoryID = (value, billCategoryObjs) => {
-  let filteredCategories = billCategoryObjs.filter(billCategoryObj => billCategoryObj.name.toLowerCase() === value.toLowerCase());
-  return filteredCategories.length > 0 ? filteredCategories[0].id : 0;
-}
+import moment from 'moment';
 
 class EditBillForm extends React.Component {
   constructor(props) {
@@ -233,7 +224,7 @@ class EditBillForm extends React.Component {
                   format="M/D/YYYY"
                   step={5}
                   onChange={this.handleStartDateChange}
-                  value={convertDateFormat(this.state.start_date)}
+                  value={moment(this.state.start_date).format("M/D/YYYY")}
                 />
               </div>
             </Heading>
@@ -246,7 +237,7 @@ class EditBillForm extends React.Component {
                   format="M/D/YYYY"
                   step={5}
                   onChange={this.handleEndDateChange}
-                  value={convertDateFormat(this.state.end_date)}
+                  value={moment(this.state.end_date).format("M/D/YYYY")}
                 />
               </div>
             </Heading>

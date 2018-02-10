@@ -17,13 +17,13 @@ class BillsContainer extends Component {
       overdueBills: [],
       paidBills: [],
       unpaidBills: [],
+      UserBillPaymentHistory: []
     };
     this.sortBills = this.sortBills.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     var currentDate = new Date();
-
     if (nextProps.data.getBillPaymentHistory) {
       var paidBills = nextProps.data.getBillPaymentHistory
         .filter(bill => bill.paid && bill.bills[0].bill_status);
@@ -37,11 +37,14 @@ class BillsContainer extends Component {
       var overdueBills = nextProps.data.getBillPaymentHistory
         .filter(bill => !bill.paid && bill.bills[0].bill_status && (new Date(bill.due_date).setHours(0,0,0)+ 86400000 < currentDate.setHours(0,0,0)));
 
+      var UserBillPaymentHistory = nextProps.data.getBillPaymentHistory;
+
       this.setState({
         billsDueThisMonth,
         overdueBills,
         unpaidBills,
         paidBills,
+        UserBillPaymentHistory
       });
     }
   }
@@ -88,10 +91,12 @@ class BillsContainer extends Component {
           billCategories={this.props.data.getBillCategories}
           sortBills={this.sortBills}
           billRecurrenceTypes={this.props.data.getBillRecurrence}
+          UserBillPaymentHistory = {this.state.UserBillPaymentHistory}
         />
         <BillsPaidTable
           bills={this.state.paidBills}
           sortBills={this.sortBills}
+          UserBillPaymentHistory = {this.state.UserBillPaymentHistory}
         />
       </div>
     );

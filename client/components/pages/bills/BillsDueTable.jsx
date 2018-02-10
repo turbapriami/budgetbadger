@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Columns, Box, Button, Section, Heading, Paragraph, Split, Table, TableHeader, TableRow, Timestamp, Toast} from 'grommet';
+import {Columns, Box, Button, Section, Heading, Paragraph, Split, Table, TableHeader, TableRow, Toast} from 'grommet';
 import AddBillForm from '../bills/AddBillForm.jsx';
 import { gql, graphql } from 'react-apollo';
 import BillsDueTableItem from '../bills/BillsDueTableItem.jsx';
@@ -144,6 +144,7 @@ class BillsDueTable extends Component {
                         selectedBill = {this.state.selectedBill}
                         bills={this.props.bills}
                         billCategories={this.props.billCategories}
+                        UserBillPaymentHistory={this.props.UserBillPaymentHistory}
                       />
                     ): null}
             </tbody>
