@@ -45,7 +45,7 @@ const chooseDirectory = (req, res) => {
   }
 }
 
-const homeCheck = (req, res) => {
+const authCheck = (req, res) => {
   if (req.user) {
     res.redirect('/')
   } else {
@@ -84,8 +84,9 @@ graphqlExpress(req => ({
 }))
 );
 
+const unAuthenticatedRoutes = ['/home', '/SplashSignIn', '/SplashSignUp', '/PasswordRecovery']
 
-app.use('/home', homeCheck, express.static(path.join(__dirname, '../public/splash')));
+app.use(unAuthenticatedRoutes, authCheck, express.static(path.join(__dirname, '../public/splash')));
 
 app.use(chooseDirectory)
 
