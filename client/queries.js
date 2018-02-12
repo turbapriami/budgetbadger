@@ -226,6 +226,19 @@ const GET_USER_BALANCES = gql`
   }`
 
 
+const GET_USER_BALANCES = gql`
+  query GET_USER_BALANCES($id: Int!) {
+    getUser(id: $id) {
+      accounts {
+        bank_name
+        monthly_balance {
+          amount
+          date
+        }
+      }
+    }
+  }`
+
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,
