@@ -13,8 +13,24 @@ class GoalForm extends React.Component {
     super(props)
     this.state = {
       formActive: false,
-      dateField: ''
+      dateField: '',
+      accountField: [],
+      categoryField: []
     }
+    this.handleAccountField = this.handleAccountField.bind(this)
+    this.handleCategoryField = this.handleCategoryField.bind(this)
+  }
+
+  handleAccountField(e) {
+    this.setState({
+      accountField: [...this.state.accountField, e.value]
+    })
+  }
+
+  handleCategoryField(e) {
+    this.setState({
+      categoryField: [...this.state.categoryField, e.value]
+    })
   }
 
   render() {
@@ -51,9 +67,9 @@ class GoalForm extends React.Component {
                 inline={false}
                 multiple={false}
                 onSearch={false}
-                options={['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']}
-                value={undefined}
-                // onChange={...} 
+                options={['Plaid Checking', 'PlaidSavings', 'Plaid CD', 'Plaid Credit Card']}
+                value={this.state.accountField}
+                onChange={(e)=> {this.handleAccountField(e)}}
               />
             </FormField>
             <FormField>
@@ -62,9 +78,9 @@ class GoalForm extends React.Component {
                 inline={false}
                 multiple={false}
                 onSearch={false}
-                options={['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']}
-                value={undefined}
-                // onChange={...} 
+                options={['Food and Drink', 'Payment', 'Transfer', 'Travel']}
+                value={this.state.categoryField}
+                onChange={(e)=> {this.handleCategoryField(e)}}
               />
             </FormField>
           </Form>

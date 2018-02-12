@@ -112,7 +112,27 @@ module.exports = {
   BillRecurrence: {
     bills: ({ id }, args, { knex }) => 
       knex('bills').where({
-        bill_recurrence_id: id
+        bill_recurrence_id: id})},
+
+  Goal: {
+    goal_progress: ({ id }, args, { knex }) => 
+      knex('goal_progress').where({
+        goal_id: id
+      }),
+    goal_categories: ({ id }, args, { knex }) => 
+      knex('goal_categories').where({
+        goal_id: id
+      }),
+    goal_accounts: ({ id }, args, { knex }) => 
+      knex('goal_accounts').where({
+        goal_id: id
+      })
+  },
+
+  GoalAccount: {
+    account: ({ account_id }, args, { knex }) => 
+      knex('accounts').where({
+        id: account_id
       })
   },
 
@@ -130,12 +150,12 @@ module.exports = {
 
     getTransactions: (parent, { user_id }, {knex, user}) =>   
       knex('transactions').where({
-        user_id: user.user.id
+        user_id: user_id
       }), 
 
     getAccounts: (parent, { user_id }, { knex, user }) => 
       knex('accounts').where({
-        user_id: user.user.id
+        user_id: user_id
       }),
 
     getAccount: (parent, { account_id }, { knex }) =>
@@ -154,18 +174,18 @@ module.exports = {
       }),
     
     getBill: (parent, { id }, { knex }) => 
-    knex('bills').where({
-      id
-    }),
+      knex('bills').where({
+        id
+      }),
 
     getBills: (parent, { user_id }, { knex, user }) => 
       knex('bills').where({
-        user_id: user.user.id
+        user_id: user_id
       }),
 
     getLoans: (parent, { user_id }, { knex, user }) => 
       knex('loans').where({
-        user_id: user.user.id
+        user_id: user_id
       }),
     getLoanPayments: (parent, { loan_id }, { knex }) =>
       knex('loan_payments').where({
@@ -178,8 +198,16 @@ module.exports = {
       }),
 
     getBillRecurrence:  (parent, { id }, { knex }) =>
-      knex('bill_recurrence').where({})
-    },
+      knex('bill_recurrence').where({
+
+      }),
+      
+    getGoals: (parent, { user_id }, { knex }) => 
+      knex('goals').where({
+        user_id: user_id
+      }),
+    
+  },
 
   Mutation: {
     createBankAccount: (parent, { user_id, public_key }, { knex, models, user }) => {
@@ -402,6 +430,19 @@ module.exports = {
       })
     },
     deleteLoan: (parent, args, { knex }) => knex('loans').where(args).del(),
+
+    createGoal: async (parent, args, { models}) => {
+      return await new models.Goal(args).save(null, {method: 'insert'}).attributes;
+    },
+    createGoalProgress: async (parent, args, { models}) => {
+      return await new models.GoalProgress(args).save(null, {method: 'insert'}).attributes;
+    },
+    createGoalCategory: async (parent, args, { models}) => {
+      return await new models.GoalCategory(args).save(null, {method: 'insert'}).attributes;
+    },
+    createGoalAccount: async (parent, args, { models}) => {
+      return await new models.GoalAccount(args).save(null, {method: 'insert'}).attributes;
+    }
   }
 }
 
