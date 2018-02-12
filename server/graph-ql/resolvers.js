@@ -303,6 +303,7 @@ module.exports = {
       if (exists) {
         throw new Error('That email already exists');
       }
+      args.date = new Date();
       const user = await new models.User(args).save();
       const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
@@ -425,7 +426,7 @@ module.exports = {
     createLoanPayment: async (parent, args, { models }) => await new models.Loan_Payment(args).save(null, {method: 'insert'}),
     getPasswordRecoveryEmail: (parent, args, { knex, user }) => {
       knex('users').where(args).then((data) => {
-        sendgrid.sendEmail(data[0].first_name, data[0].email)
+        sendgrid.sendEmail(data[0].first_name, data[0].email, token)
       })
     },
     deleteLoan: (parent, args, { knex }) => knex('loans').where(args).del(),
