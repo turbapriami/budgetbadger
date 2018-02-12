@@ -158,10 +158,9 @@ knex.schema.hasTable('goals').then(exists => {
     knex.schema.createTable('goals', table => {
       table.increments('id').primary();
       table.integer('user_id').references('users.id');
-      table.string('account_id').references('accounts.id');
       table.string('description');
-      table.string('category');
       table.string('amount');
+      table.boolean('is_budget');
       table.date('start_date');
       table.date('end_date');
     }).then(() => console.log('created table goals'))
@@ -175,6 +174,16 @@ knex.schema.hasTable('goal_categories').then(exists => {
       table.integer('goal_id').references('goals.id');
       table.string('name');
     }).then(() => console.log('created table goal_categories'))
+  }
+})
+
+knex.schema.hasTable('goal_accounts').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goal_accounts', table => {
+      table.increments('id').primary();
+      table.integer('goal_id').references('goals.id');
+      table.string('account_id').references('accounts.id');
+    }).then(() => console.log('created table goal_accounts'))
   }
 })
 

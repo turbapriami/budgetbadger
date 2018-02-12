@@ -220,6 +220,32 @@ const DELETE_LOAN = gql`
   }`;
 
 
+const GOALS_QUERY = gql`
+  query GOALS_QUERY($user_id: Int!) {
+    getGoals(user_id: $user_id) {
+      id
+      description
+      amount
+      is_budget
+      start_date
+      end_date
+      goal_progress {
+        amount
+        date
+      }
+      goal_categories {
+        name
+      }
+      goal_accounts {
+        account {
+          bank_name
+          type
+          current_balance
+        }
+      }
+    }
+  }`;
+
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,
@@ -237,4 +263,5 @@ export {
   ADD_LOAN,
   LOANS_QUERY,
   DELETE_LOAN,
+  GOALS_QUERY
 };
