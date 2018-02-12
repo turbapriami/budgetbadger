@@ -44,6 +44,7 @@ const withMonthlyBalances = graphql(GET_USER_BALANCES, {
   })
 })
 
+
 class TransactionContainer extends Component {
   constructor() {
     super()
@@ -236,12 +237,12 @@ class TransactionContainer extends Component {
         <div style={{padding: '5px'}}>
           <HistoricalChartContainer
             balances={this.props.data.getUser[0].accounts}
-            accounts={this.props.data.getAccounts} 
-            transactions={this.state.transactions} 
-            summaryTransaction={this.state.summaryTransaction} 
-            categories={this.state.categoryBreakdown} 
+            accounts={this.props.data.getAccounts}
+            transactions={this.state.transactions}
+            summaryTransaction={this.state.summaryTransaction}
+            categories={this.state.categoryBreakdown}
             handleSummaryChart={this.handleSummaryChart}
-            displaySummary={this.state.displaySummaryChart} 
+            displaySummary={this.state.displaySummaryChart}
             summaryName={this.state.summaryName}/>
             <TransactionSummary
               transactions={this.state.transactions}
@@ -249,11 +250,11 @@ class TransactionContainer extends Component {
               display={this.state.displaySummary}
               handleSummary={this.handleSummary}
             />
-          <PieChart 
-            breakdown={this.state.categoryBreakdown} 
-            handleClose={this.handleModal} 
+          <PieChart
+            breakdown={this.state.categoryBreakdown}
+            handleClose={this.handleModal}
             displayModal={displayModal} />
-          <Split 
+          <Split
             fixed={false}
             separator={false}
             showOnResponsive='both'
@@ -262,7 +263,7 @@ class TransactionContainer extends Component {
             <Box>
               <h2>{this.state.selected}</h2>
               <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
-            </Box>  
+            </Box>
             <Box align="left">
               <Box flex={true}
                     justify='end'
@@ -283,20 +284,20 @@ class TransactionContainer extends Component {
                   </Anchor>
                 </Menu>
               </Box>
-              <NewTransaction 
-                handleForm={this.handleForm} 
-                accounts={this.props.data.getAccounts} 
-                submitForm={this.newTransaction} 
+              <NewTransaction
+                handleForm={this.handleForm}
+                accounts={this.props.data.getAccounts}
+                submitForm={this.newTransaction}
                 displayNewTransaction={this.state.displayNewTransaction}
                 handleNewTransaction={this.handleNewTransaction}
                 form={this.state.transactionForm}/>
               <TransactionList
-                displaySummary={this.handleSummary} 
-                sort={this.sortTransactions} 
-                sortIdx={this.state.sortIdx} 
-                dir={this.state.sorting[this.state.sortIdx]} 
-                transactions={this.state.transactions} 
-              />        
+                displaySummary={this.handleSummary}
+                sort={this.sortTransactions}
+                sortIdx={this.state.sortIdx}
+                dir={this.state.sorting[this.state.sortIdx]}
+                transactions={this.state.transactions}
+              />
             </Box>
           </Split>
         </div>
@@ -310,11 +311,3 @@ class TransactionContainer extends Component {
 }
 
 export default compose(withApollo, graphql(CREATE_TRANSACTION, {name: 'createNewTransaction'}), withTransactionsAndAccounts)(TransactionContainer);
-
-
-
-
-
-
-
-
