@@ -111,6 +111,7 @@ module.exports = `
     start_date: Date
     end_date: Date
     last_paid_date: Date
+    last_occurence_date: Date
     bill_status: Boolean
     alert: Boolean
     bill_category: [BillCategory!]
@@ -220,9 +221,9 @@ module.exports = `
         zip_code: String
         state: String
         phone: String): User
-    createBill(user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, bill_recurrence_id: Int!, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill!
+    createBill(user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, bill_recurrence_id: Int!, start_date: Date, end_date: Date, last_paid_date: Date, last_occurence_date: Date, bill_status: Boolean, alert: Boolean): Bill!
     deleteBill(id: Int!): Int!
-    updateBill(id: Int!, user_id: Int, bill_category_id: Int, description: String, amount: Float, bill_recurrence_id: Int, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill
+    updateBill(id: Int!, user_id: Int, bill_category_id: Int, description: String, amount: Float, bill_recurrence_id: Int, start_date: Date, end_date: Date, last_paid_date: Date, last_occurence_date: Date, bill_status: Boolean, alert: Boolean): Bill
     createBillCategory(name: String!, user_id: Int!): BillCategory!
     updateBillCategory(id: Int!, name: String!): BillCategory!
     deleteBillCategory(id: Int!): Int!

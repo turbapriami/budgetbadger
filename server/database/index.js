@@ -137,6 +137,7 @@ knex.schema.hasTable('bills').then(exists => {
       table.date('start_date');
       table.date('end_date');
       table.date('last_paid_date');
+      table.date('last_occurence_date');
       table.boolean('bill_status');
       table.boolean('alert');
     }).then(() => console.log('created table bills'))

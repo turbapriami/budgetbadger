@@ -85,6 +85,7 @@ const DASH_QUERY = gql`
         start_date
         end_date
         last_paid_date
+        last_occurence_date
         bill_status
         alert
         bill_category {
@@ -107,16 +108,16 @@ const DASH_QUERY = gql`
     }`;
 
 const CREATE_BILL = gql`
-  mutation createBill($user_id: Int!, $bill_category_id: Int!, $description: String!, $amount: Float!, $bill_recurrence_id: Int!, $start_date: Date!, $end_date: Date!, $last_paid_date: Date, $bill_status: Boolean, $alert: Boolean) {
-    createBill(user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, bill_recurrence_id: $bill_recurrence_id, start_date: $start_date, end_date: $end_date, last_paid_date: $last_paid_date, bill_status: $bill_status, alert: $alert) {
+  mutation createBill($user_id: Int!, $bill_category_id: Int!, $description: String!, $amount: Float!, $bill_recurrence_id: Int!, $start_date: Date!, $end_date: Date!, $last_paid_date: Date, $last_occurence_date: Date, $bill_status: Boolean, $alert: Boolean) {
+    createBill(user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, bill_recurrence_id: $bill_recurrence_id, start_date: $start_date, end_date: $end_date, last_paid_date: $last_paid_date, last_occurence_date: $last_occurence_date, bill_status: $bill_status, alert: $alert) {
       id
     }
   }`;
 
 
 const UPDATE_BILL = gql`
-  mutation updateBill($id: Int!, $user_id: Int, $bill_category_id: Int, $description: String, $amount: Float, $bill_recurrence_id: Int, $start_date: Date, $end_date: Date, $last_paid_date: Date, $bill_status: Boolean, $alert: Boolean) {
-    updateBill(id: $id, user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, bill_recurrence_id: $bill_recurrence_id, start_date: $start_date, end_date: $end_date, last_paid_date: $last_paid_date, bill_status: $bill_status, alert: $alert) {
+  mutation updateBill($id: Int!, $user_id: Int, $bill_category_id: Int, $description: String, $amount: Float, $bill_recurrence_id: Int, $start_date: Date, $end_date: Date, $last_paid_date: Date, $last_occurence_date: Date, $bill_status: Boolean, $alert: Boolean) {
+    updateBill(id: $id, user_id: $user_id, bill_category_id: $bill_category_id, description: $description, amount: $amount, bill_recurrence_id: $bill_recurrence_id, start_date: $start_date, end_date: $end_date, last_paid_date: $last_paid_date, last_occurence_date: $last_occurence_date, bill_status: $bill_status, alert: $alert) {
       id
     }
   }`;
@@ -152,6 +153,7 @@ query getBillPaymentHistory($user_id: Int!) {
       start_date
       end_date
       last_paid_date
+      last_occurence_date
       bill_status
       alert
       bill_category {

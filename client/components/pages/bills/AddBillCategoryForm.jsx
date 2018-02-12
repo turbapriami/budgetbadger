@@ -55,7 +55,7 @@ class AddBillCategoryForm extends React.Component {
         >
           <Form style={{ padding: '10%' }}>
             <Header>
-              <Heading tag="h3" strong="true">Add Bill Category</Heading>
+              <Heading tag="h3" strong="true">Add Bill Categories </Heading>
             </Header>
               <div>
                 <SearchInput

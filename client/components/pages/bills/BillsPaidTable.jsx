@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Columns, Box, Button, Section, Heading, Paragraph, Table, TableHeader, TableRow} from 'grommet';
+import moment from 'moment';
 import styles from '../../../../public/main/jStyles';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -69,7 +70,7 @@ class BillsPaidTable extends Component {
                 'Due Date',
                 'Paid Date',
                 'Amount',
-                'Action'
+                'Actions'
               ]}
               sortIndex={this.state.sortIndex}
               sortAscending={this.state.sortAscending}
@@ -78,7 +79,7 @@ class BillsPaidTable extends Component {
             <tbody>
               {this.props.bills
                 ? this.props.bills
-                    .filter(bill => bill.paid === true)
+                    .filter(bill => (bill.paid === true && moment(bill.paid_date) >= moment().subtract(2, 'months')))
                     .map((bill, j) =>
                       <BillsPaidTableItem 
                         key={j} 

@@ -76,7 +76,7 @@ class BillsPaidTableItem extends Component {
           {moment(this.props.bill.paid_date).format('MMMM D, YYYY')}
         </td>
         <td>
-          ${this.props.bill.bills[0].amount}
+          ${this.props.bill.amount_paid.toFixed(2)}
         </td>
         <td>
           <Menu

@@ -21,6 +21,7 @@ class EditBillForm extends React.Component {
       start_date: '',
       end_date: '',
       last_paid_date: null,
+      last_occurence_date: null,
       alert: false,
       bill_status: true,
       bill_categories: [],
@@ -55,6 +56,7 @@ class EditBillForm extends React.Component {
         paid_date: nextProps.selectedBill.paid_date,
         user_id: nextProps.selectedBill.user_id,
         last_paid_date:nextProps.selectedBill.bills[0].last_paid_date,
+        last_occurence_date: nextProps.selectedBill.bills[0].last_occurence_date, 
         bill_recurrence_id: nextProps.selectedBill.bills[0].bill_recurrence_id,
         bill_recurrence_type: nextProps.selectedBill.bills[0].bill_recurrence[0].recurrence_type,
         start_date: nextProps.selectedBill.bills[0].start_date,
@@ -131,6 +133,7 @@ class EditBillForm extends React.Component {
       start_date: '',
       end_date: '',
       last_paid_date: null,
+      last_occurence_date: null,
       alert: false,
       bill_status: true,
       bill_categories: [],
@@ -150,6 +153,7 @@ class EditBillForm extends React.Component {
       start_date: this.state.start_date,
       end_date: this.state.end_date,
       last_paid_date: this.state.last_paid_date,
+      last_occurence_date: this.state.last_occurence_date,
       bill_status: this.state.bill_status,
       alert: this.state.alert
     }
@@ -215,8 +219,8 @@ class EditBillForm extends React.Component {
                 />
               </div>
             </Heading>
-            <Heading tag="h4" margin="small">
-              Bill Start Date(First Due Date):
+            {/* <Heading tag="h4" margin="small">
+              Bill Start Date(Next Due Date):
               <div>
                 <DateTime
                   id="id"
@@ -227,7 +231,7 @@ class EditBillForm extends React.Component {
                   value={moment(this.state.start_date).format("M/D/YYYY")}
                 />
               </div>
-            </Heading>
+            </Heading> */}
             <Heading tag="h4" margin="small">
               Bill End Date(Last Due Date):
               <div>
@@ -241,10 +245,10 @@ class EditBillForm extends React.Component {
                 />
               </div>
             </Heading>
-            <Heading tag="h4" margin="small">
+            {/* <Heading tag="h4" margin="small">
               Recurrence:
               <div>
-                <Select
+                <Select  disabled ="true"
                   placeHolder="Select Recurrence Pattern"
                   options={this.props.billRecurrenceTypes.map(
                     (billRecurrenceType, i) =>
@@ -254,7 +258,7 @@ class EditBillForm extends React.Component {
                   onChange={this.handleRecurrenceChanges}
                 />
               </div>
-            </Heading>
+            </Heading> */}
             <Heading tag="h4" margin="small">
               Alert
               <div>
