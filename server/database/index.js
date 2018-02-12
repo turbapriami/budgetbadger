@@ -2,9 +2,9 @@ const knex = require('knex')({
   client: 'pg',
   connection: {
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    // password: process.env.DB_PASSWORD,
+    // host: process.env.DB_HOST,
+    // port: process.env.DB_PORT,
     database: 'bbadger',
     charset: 'utf8',
   }
@@ -129,13 +129,15 @@ knex.schema.hasTable('bills').then(exists => {
   if (!exists) {
     knex.schema.createTable('bills', table => {
       table.increments('id').primary();
-      table.integer('user_id');
-      table.integer('bill_category_id');
+      table.integer('user_id').references('users.id');
+      table.integer('bill_category_id').references('bill_categories.id');
       table.string('description');
       table.decimal('amount',14,2);
-      table.date('due_date');
-      table.boolean('paid');
-      table.date('paid_date');
+      table.integer('bill_recurrence_id').references('bill_recurrence.id');
+      table.date('start_date');
+      table.date('end_date');
+      table.date('last_paid_date');
+      table.boolean('bill_status');
       table.boolean('alert');
     }).then(() => console.log('created table bills'))
   }
@@ -146,9 +148,81 @@ knex.schema.hasTable('bill_categories').then(exists => {
     knex.schema.createTable('bill_categories', table => {
       table.increments('id').primary();
       table.string('name');
+      table.integer('user_id').references('users.id');
     }).then(() => console.log('created table bill_categories'))
   }
 })
+
+knex.schema.hasTable('goals').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goals', table => {
+      table.increments('id').primary();
+      table.integer('user_id').references('users.id');
+      table.string('account_id').references('accounts.id');
+      table.string('description');
+      table.string('category');
+      table.string('amount');
+      table.date('start_date');
+      table.date('end_date');
+    }).then(() => console.log('created table goals'))
+  }
+})
+
+knex.schema.hasTable('goal_categories').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goal_categories', table => {
+      table.increments('id').primary();
+      table.integer('goal_id').references('goals.id');
+      table.string('name');
+    }).then(() => console.log('created table goal_categories'))
+  }
+})
+
+knex.schema.hasTable('goal_progress').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('goal_progress', table => {
+      table.increments('id').primary();
+      table.integer('goal_id').references('goals.id');
+      table.string('amount');
+      table.date('date');
+    }).then(() => console.log('created table goal_progress'))
+  }
+})
+
+knex.schema.hasTable('monthly_balance').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('monthly_balance', table => {
+      table.increments('id').primary();
+      table.string('account_id').references('accounts.id');
+      table.string('amount');
+      table.date('date');
+    }).then(() => console.log('created table monthly_balance'))
+  }
+})
+knex.schema.hasTable('bill_recurrence').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('bill_recurrence', table => {
+      table.increments('id').primary();
+      table.string('recurrence_type');
+    }).then(() => console.log('created table bill_recurrence'))
+  }
+})
+
+knex.schema.hasTable('bill_payment_history').then(exists => {
+  if (!exists) {
+    knex.schema.createTable('bill_payment_history', table => {
+      table.increments('id').primary();
+      table.integer('bill_id').references('bills.id');
+      table.integer('user_id').references('users.id');
+      table.decimal('amount_paid',14,2);
+      table.date('paid_date');
+      table.date('due_date');
+      table.boolean('paid');
+    }).then(() => console.log('created table bill_payment_history'))
+  }
+})
+
+
 
 const db = require('bookshelf')(knex);
 

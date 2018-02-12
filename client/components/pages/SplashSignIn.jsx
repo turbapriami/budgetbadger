@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header, Heading, Label, Paragraph, TextInput, Tiles } from 'grommet';
+import { Anchor, Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header, Heading, Label, Paragraph, TextInput, Tiles, Layer, PasswordInput } from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import Cookies from 'universal-cookie'
+import Cookies from 'universal-cookie';
+import PasswordRecoveryModal from './PasswordRecoveryModal.jsx';
+import SplashSignUp from './SplashSignUp.jsx';
 
 class SplashSignIn extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       user_email: '',
-      password: ''
+      password: '',
+      layerActive: false
     }
     this._confirm = this._confirm.bind(this)
   }
@@ -47,28 +50,28 @@ class SplashSignIn extends Component {
               <FormFields style={{ width: "100%" }} >
                   <Label>Email</Label>
                   <TextInput onDOMChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
-  
                   <Label>Password</Label>
-                  <TextInput onDOMChange={e => this.setState({ password: e.target.value })} style={{ width: "100%" }} type="password" />
+                  <PasswordInput onChange={e => this.setState({ password: e.target.value })} style={{ width: "100%" }} />
               </FormFields>
             </Box>
             <CheckBox label="Remember me" pad="medium" />
             <Footer size="small" direction="column"
               align={'center' ? 'stretch' : 'start'}
               pad={{ vertical: "medium" }}>
-              <Button onClick={() => this._confirm()} primary={true} fill="center" label='Sign In'
-                primary={true} />
+              <Button onClick={() => this._confirm()} primary={true} fill="center" label='Sign In'/>
             </Footer>
           </Form>
           <div style={{ outline: "#E8E8E8 solid thin" }}></div>
           <Paragraph align="center" size="small" margin="small" >
-            I forgot my password
+            <Link to={'/PasswordRecovery'}>
+              <a style={{ color: "#000" }} class="grommetux-anchor">I forgot my password</a>
+            </Link>
           </Paragraph>
           <Router>
             <Paragraph align="center" size="small" margin="small" >
               New to Budget Badger?
               <Link to={'/SplashSignUp'}>
-                <a style={{ color: " #0000EE" }} > Create an account.</a>
+                <a style={{ color: " #0000EE" }} class="grommetux-anchor"> Create an account.</a>
               </Link>
             </Paragraph>
           </Router>

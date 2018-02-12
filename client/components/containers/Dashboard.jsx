@@ -3,7 +3,7 @@ import {Tiles, Tile} from 'grommet';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import BillsDueTable from '../pages/bills/BillsDueTable.jsx';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
-import AccountsTotals from '../pages/AccountsTotals.jsx'
+import AccountsTotals from '../pages/accounts/AccountsTotals.jsx'
 import Spinner from '../pages/Spinner.jsx'
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'

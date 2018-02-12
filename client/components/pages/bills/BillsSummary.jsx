@@ -39,7 +39,7 @@ class BillsSummary extends Component {
             <Paragraph size="xlarge" style={{ textAlign: 'center'}}>
               ${this.props.billsDueThisMonth
                 ? this.props.billsDueThisMonth
-                    .reduce((total, bill) => (total += bill.amount), 0)
+                    .reduce((total, bill) => (total += bill.bills[0].amount), 0)
                     .toFixed(2)
                 : 0}
             </Paragraph>
@@ -62,7 +62,7 @@ class BillsSummary extends Component {
             <Paragraph size="xlarge" style={{ textAlign: 'center'}}>
               ${this.props.overdueBills
                 ? this.props.overdueBills
-                    .reduce((total, bill) => (total += bill.amount), 0)
+                    .reduce((total, bill) => (total += bill.bills[0].amount), 0)
                     .toFixed(2)
                 : 0}
             </Paragraph>

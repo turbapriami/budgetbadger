@@ -17,6 +17,7 @@ module.exports = `
     accounts: [Account!]
     banks: [Bank!]
     bills: [Bill!]
+    goals: [Goal!]
   }
 
   type Loan {
@@ -82,6 +83,7 @@ module.exports = `
     type: String!
     current_balance: Int!
     transactions: [Transaction!]
+    monthly_balance: [MonthlyBalance!]
   }
 
   type School {
@@ -105,16 +107,71 @@ module.exports = `
     bill_category_id: Int!
     description: String!
     amount: Float!
-    due_date: Date!
-    paid: Boolean
-    paid_date: Date
+    bill_recurrence_id: Int!
+    start_date: Date
+    end_date: Date
+    last_paid_date: Date
+    bill_status: Boolean
     alert: Boolean
     bill_category: [BillCategory!]
+    bill_recurrence: [BillRecurrence!]
+    bill_payment_history: [BillPaymentHistory]
   }
 
   type BillCategory {
     id: Int!
     name: String!
+    bills: [Bill!]
+  }
+  
+  type Goal {
+    id: Int!
+    user_id: Int!
+    account_id: String
+    description: String!
+    goal_category_id: Int!
+    amount: String!
+    start_date: Date!
+    end_date: Date!
+    goal_progress: [GoalProgress!]
+    goal_categories: [GoalCategory!]
+  }
+
+  type GoalCategory {
+    id: Int!
+    goal_id: Int!
+    name: String!
+  }
+  
+  type GoalProgress {
+    id: Int!
+    goal_id: Int!
+    amount: String!
+    date: Date!
+  }
+  
+  type MonthlyBalance {
+    id: Int!
+    account_id: String!
+    amount: String!
+    date: Date!
+  }
+
+  type BillPaymentHistory {
+    id: Int!
+    bill_id: Int!
+    user_id: Int!
+    amount_paid: Float
+    paid_date: Date
+    due_date: Date
+    paid: Boolean
+    bills: [Bill!]
+    user: [User!]
+  }
+
+  type BillRecurrence {
+    id: Int!
+    recurrence_type : String!
     bills: [Bill!]
   }
 
@@ -126,9 +183,12 @@ module.exports = `
     getSchools(user_id: Int!): [School!]
     getBill(id: Int!): [Bill!]
     getBills(user_id: Int!): [Bill!]
-    getBillCategories(user_id: Int): [BillCategory!]
+    getBillCategories(user_id: Int!): [BillCategory!]
     getLoans(user_id: Int!): [Loan!]
     getLoanPayments(loan_id: Int!): [Loan_Payment!]
+    getGoals(user_id: Int!): [Goal!]
+    getBillPaymentHistory(user_id: Int!): [BillPaymentHistory!]
+    getBillRecurrence(id:Int): [BillRecurrence!]
   }
 
   type Mutation {
@@ -150,13 +210,30 @@ module.exports = `
       zip_code: String
       state: String
       phone: String): User
-    createBill(user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, due_date: Date!, paid: Boolean, paid_date: Date, alert: Boolean): Bill!
+      updateEmail(
+        id: Int!    
+        email: String
+        first_name: String
+        last_name: String
+        city: String
+        street: String
+        zip_code: String
+        state: String
+        phone: String): User
+    createBill(user_id: Int!, bill_category_id: Int!, description: String!, amount: Float!, bill_recurrence_id: Int!, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill!
     deleteBill(id: Int!): Int!
-    updateBill(id: Int!, user_id: Int!, bill_category_id: Int, description: String, amount: Float, due_date: Date, paid: Boolean, paid_date: Date, alert: Boolean): Bill
-    createBillCategory(name: String!): BillCategory!
+    updateBill(id: Int!, user_id: Int, bill_category_id: Int, description: String, amount: Float, bill_recurrence_id: Int, start_date: Date, end_date: Date, last_paid_date: Date, bill_status: Boolean, alert: Boolean): Bill
+    createBillCategory(name: String!, user_id: Int!): BillCategory!
     updateBillCategory(id: Int!, name: String!): BillCategory!
     deleteBillCategory(id: Int!): Int!
+    createBillRecurrence(recurrence_type: String!): BillRecurrence!
+    deleteBillRecurrence(id: Int!): Int!
+    createBillPaymentHistory(bill_id: Int!, user_id: Int!, amount_paid: Float, paid_date: Date, due_date: Date!, paid: Boolean): BillPaymentHistory!
+    updateBillPaymentHistory(id:Int!, user_id: Int,  bill_id: Int, amount_paid: Float, paid_date: Date, due_date: Date, paid: Boolean): BillPaymentHistory!
+    deleteBillPaymentHistory(id:Int!): Int!
     createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]
+    getPasswordRecoveryEmail(email: String!) : [User!]
+    createGoal(id: Int!, user_id: Int, description: String!, amount: String!, start_date: Date!, end_date: Date!): Goal!
   }
   `

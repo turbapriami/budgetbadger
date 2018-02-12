@@ -13,6 +13,7 @@ const resolvers = require('./graph-ql/resolvers.js');
 const db = require('./database/index.js');
 const APP_SECRET = process.env.APP_SECRET;
 const models = require('./database/models/index.js');
+const request = require('request');
 
 const port = process.env.PORT || 1337;
 
@@ -33,7 +34,6 @@ const getToken = async (req) => {
   } catch (err) {
     console.log(err);
   }
-  // req.user = 'user' // <= uncomment to dummy authenticate
   req.next()
 }
 
@@ -53,10 +53,8 @@ const homeCheck = (req, res) => {
   }
 }
 
-app.use(cors())
 
 app.use(morgan('dev'))
-
 app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
 app.use(/\/((?!graphql).)*/, bodyParser.json());
 // app.use(bodyParser.text({ type: 'text/plain' }));
@@ -69,22 +67,24 @@ app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
 
+app.use(getToken); // => uncomment to enable authentication
+
+
 app.use('/graphql',
-  bodyParser.json(), 
-  logger,
-  graphqlExpress(req => ({
-    schema: schema,
-    pretty: true,
-    context: {
-      user: req.user,
-      knex: db.knex,
-      APP_SECRET,
-      models
-    }
-  }))
+bodyParser.json(), 
+logger,
+graphqlExpress(req => ({
+  schema: schema,
+  pretty: true,
+  context: {
+    user: req.user,
+    knex: db.knex,
+    APP_SECRET,
+    models
+  }
+}))
 );
 
-app.use(getToken); // => uncomment to enable authentication
 
 app.use('/home', homeCheck, express.static(path.join(__dirname, '../public/splash')));
 

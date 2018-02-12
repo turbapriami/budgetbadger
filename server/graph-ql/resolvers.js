@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const _ = require('lodash')
 const plaid = require('../plaid.js')
+const sendgrid = require('../sendgrid.js');
 const moment = require('moment')
 const Promise = require('bluebird');
 const knex = require('../database/index.js').knex;
@@ -8,7 +9,7 @@ const knex = require('../database/index.js').knex;
 module.exports = {
 
   User: {
-    transactions: ({ id }, args, { knex }) => 
+    transactions: ({ id }, args, { knex, user }) => 
       knex('transactions').where({
         user_id: id
       }),
@@ -31,7 +32,7 @@ module.exports = {
     bills: ({ id }, args, { knex }) => 
       knex('bills').where({
         user_id: id
-      })
+      }),
   },
 
   Loan: {
@@ -72,14 +73,26 @@ module.exports = {
     transactions: ({ id }, args, { knex }) => 
       knex('transactions').where({
         account_id: id
+      }),
+    monthly_balance: ({ id }, args, { knex }) =>
+      knex('monthly_balance').where({
+        account_id: id
       })
   },
 
   Bill: {
     bill_category: ({ bill_category_id }, args, { knex }) => 
-    knex('bill_categories').where({
-      id: bill_category_id
-    })
+      knex('bill_categories').where({
+        id: bill_category_id
+      }), 
+    bill_recurrence: ({ bill_recurrence_id }, args, { knex }) => 
+      knex('bill_recurrence').where({
+        id: bill_recurrence_id
+      }),
+    bill_payment_history: ({ bill_id }, args, { knex }) => 
+      knex('bill_payment_history').where({
+        bill_id
+      })
   },
 
   BillCategory: {
@@ -89,25 +102,44 @@ module.exports = {
       })
   },
 
+  BillPaymentHistory: {
+    user: ({ user_id }, args, { knex }) => 
+    knex('users').where({
+      id: user_id
+    }),
+    bills: ({ bill_id }, args, { knex }) => 
+    knex('bills').where({
+      id: bill_id
+    })
+  },
+
+  BillRecurrence: {
+    bills: ({ id }, args, { knex }) => 
+      knex('bills').where({
+        bill_recurrence_id: id
+      })
+  },
+
 
   Query: {
-    getUser: (parent, args, { knex, user }) => 
+    getUser: (parent, args, { knex, user }) => { 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
-      // if (user) {
-        knex('users').where(args),
-      // } else {
-        // throw new Error('Not authenticated')
-      // }
-    // },
+      if (user) {
+        console.log('user', user)
+        return knex('users').where(args)
+      } else {
+        throw new Error('Not authenticated')
+      }
+    },
 
-    getTransactions: (parent, { user_id }, { knex }) => 
+    getTransactions: (parent, { user_id }, {knex, user}) =>   
       knex('transactions').where({
-        user_id
-      }),
+        user_id: user.user.id
+      }), 
 
-    getAccounts: (parent, { user_id }, { knex }) => 
+    getAccounts: (parent, { user_id }, { knex, user }) => 
       knex('accounts').where({
-        user_id
+        user_id: user.user.id
       }),
 
     getAccount: (parent, { account_id }, { knex }) =>
@@ -120,8 +152,9 @@ module.exports = {
         id
       }),
       
-    getBillCategories: (parent, { id }, { knex }) => 
+    getBillCategories: (parent, { user_id }, { knex }) => 
       knex('bill_categories').where({
+        user_id
       }),
     
     getBill: (parent, { id }, { knex }) => 
@@ -129,27 +162,35 @@ module.exports = {
       id
     }),
 
-    getBills: (parent, { user_id }, { knex }) => 
+    getBills: (parent, { user_id }, { knex, user }) => 
       knex('bills').where({
-        user_id
+        user_id: user.user.id
       }),
 
-    getLoans: (parent, { user_id }, { knex }) => 
+    getLoans: (parent, { user_id }, { knex, user }) => 
       knex('loans').where({
-        user_id
+        user_id: user.user.id
       }),
     getLoanPayments: (parent, { loan_id }, { knex }) =>
       knex('loan_payments').where({
         loan_id
-      })
+      }),
+
+    getBillPaymentHistory: (parent, { user_id }, { knex }) =>
+      knex('bill_payment_history').where({
+        user_id
+      }),
+
+    getBillRecurrence:  (parent, { id }, { knex }) =>
+      knex('bill_recurrence').where({})      
     },
 
   Mutation: {
-    createBankAccount: (parent, { user_id, public_key }, { knex, models }) => {
+    createBankAccount: (parent, { user_id, public_key }, { knex, models, user }) => {
       plaid.exchangeToken(public_key)
       .then(res => {
         new models.Bank({ 
-          user_id, 
+          user_id: user.user.id, 
           id: res.item_id, 
           access_token: res.access_token,
           last_updated: '1999-10-10'
@@ -157,8 +198,9 @@ module.exports = {
       })
     },
 
-    getUpdatedTransactions: (parent, { user_id }, { knex, models }) => {
-      knex.select('*').from('banks').where({user_id: user_id})
+    getUpdatedTransactions: (parent, { user_id }, { knex, models, user }) => {
+      console.log('')
+      knex.select('*').from('banks').where({user_id: user.user.id})
       .then(banks => {
         banks.forEach(bank => {
           new models.Bank(bank).fetch()
@@ -200,7 +242,7 @@ module.exports = {
             .then(response => {
               response.transactions.map(async transaction => {
                 const today = moment().format('YYYY-MM-DD');
-                let category = transaction.category ? transaction.category[0] : 'none';
+                let category = transaction.category ? transaction.category[0] : 'UNCATEGORIZED';
                 if (transaction.date !== today) {
                   return await new models.Transaction({
                     user_id: bank.user_id,
@@ -233,17 +275,16 @@ module.exports = {
 
     createUser: async (parent, args, { models, APP_SECRET }) => {
       const { email } = args;
-      const user = await new models.User({ email }).fetch();
-      if (user) {
+      const exists = await new models.User({ email }).fetch();
+      if (exists) {
         throw new Error('That email already exists');
       }
-      const newUser = await new models.User(args).save();
-      const token = jwt.sign({ newUser: _.pick(newUser.attributes, ['id', 'email'])}, APP_SECRET, {
+      const user = await new models.User(args).save();
+      const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
       })
-      console.log('uuuuuser',newUser.attributes.id)
-      console.log([token, newUser.attributes.id])
-      return [token, newUser.attributes.id]
+      
+      return [token, user.attributes.id]
     },
 
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
@@ -290,6 +331,19 @@ module.exports = {
       return updated.attributes
     },
 
+    updateEmail: async (parent, args, {models, knex}) => {
+      const { id } = args;
+      const user = await new models.User({id}).fetch();
+      const { email } = user;
+      for (let field in user.attributes) {
+        if (args[field]) {
+          user.attributes[field] = args[field]
+        }
+      }
+      let updated = await new models.User(user.attributes).save();
+      return updated.attributes
+    },
+
     createSchool: async (parent, args, { models }) => {
       const school = await new models.School(args).save(null, {method: 'insert'});
       return school.attributes;
@@ -304,22 +358,53 @@ module.exports = {
       const bill = await new models.Bill(args).save(null, {method: 'insert'});
       return bill.attributes;
      },
+
     updateBill: async (parent, args, { models }) => {
       const bill = await new models.Bill(args).save(null, {method: 'update'});
       return bill.attributes;
     },
+
     deleteBill: (parent, args, { knex }) => knex('bills').where(args).del(),
+
     createBillCategory: async (parent, args, { models }) => {
       const billCategory = await new models.BillCategory(args).save(null, {method: 'insert'});
       return billCategory.attributes;
     },
+
     updateBillCategory: async (parent, args, { models }) => {
       const billCategory = await new models.BillCategory(args).save(null, {method: 'update'});
       return billCategory.attributes;
     },
+
     deleteBillCategory: (parent, args, { knex }) => knex('bill_categories').where(args).del(),
+
+
+    createBillRecurrence: async (parent, args, { models }) => {
+      const billRecurrence = await new models.BillRecurrence(args).save(null, {method: 'insert'});
+      return billRecurrence.attributes;
+    },
+    
+    deleteBillRecurrence: async (parent, args, { knex }) => knex('bill_recurrence').where(args).del(),
+
+    createBillPaymentHistory: async (parent, args, { models }) => {
+      const billPaymentHistory = await new models.BillPaymentHistory(args).save(null, {method: 'insert'});
+      return billPaymentHistory.attributes;
+     },
+
+    updateBillPaymentHistory: async (parent, args, { models }) => {
+      const billPaymentHistory = await new models.BillPaymentHistory(args).save(null, {method: 'update'});
+      return billPaymentHistory.attributes;
+    },
+
+    deleteBillPaymentHistory: (parent, args, { knex }) => knex('bill_payment_history').where(args).del(),
+
     createLoan: async (parent, args, { models }) => await new models.Loan(args).save(null, {method:'insert'}),
     createLoanPayment: async (parent, args, { models }) => await new models.Loan_Payment(args).save(null, {method: 'insert'}),
+    getPasswordRecoveryEmail: (parent, args, { knex, user }) => {
+      knex('users').where(args).then((data) => {
+        sendgrid.sendEmail(data[0].first_name, data[0].email)
+      })
+    }
   }
 }
 
