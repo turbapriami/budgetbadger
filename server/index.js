@@ -13,13 +13,14 @@ const resolvers = require('./graph-ql/resolvers.js');
 const db = require('./database/index.js');
 const APP_SECRET = process.env.APP_SECRET;
 const models = require('./database/models/index.js');
-const request = require('request');
+const RateLimit = require('express-rate-limit');
 
 const port = process.env.PORT || 1337;
 
 const app = express();
 
 app.use(cookieParser())
+
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -37,8 +38,19 @@ const getToken = async (req) => {
   req.next()
 }
 
+// const checkDirectory = (req, res, next) => {
+//   if (req.originalUrl.slice(1, 18) == 'PasswordResetPage' && req.method === 'GET') {
+//     console.log('SUCCESSSSSSSS')
+
+//   }
+//   console.log('123', req.params)
+//   console.log('456', req.originalUrl.slice(1, 19))
+//   console.log('EIHAIDIOUASUDJUIDHAUIAHDIAD', req.baseUrl)
+//   next()
+// }
+
 const chooseDirectory = (req, res) => {
-  if (req.user) {
+  if (req.user || req.originalUrl.slice(1, 18) == 'PasswordResetPage' || req.originalUrl.slice(1, 13) == 'SplashSignIn') {
     req.next()
   } else {
     res.redirect('/home')
@@ -65,7 +77,7 @@ const logger = (req, res, next) => {
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
-
+// app.use(checkDirectory)
 app.use(getToken); // => uncomment to enable authentication
 
 
@@ -92,8 +104,10 @@ app.use(chooseDirectory)
 
 app.use(express.static(path.join(__dirname, '../public/main')));
 
+// app.get('*', res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
+
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'));
+  return res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'));
 })
 
 app.listen(port, (err) => {
