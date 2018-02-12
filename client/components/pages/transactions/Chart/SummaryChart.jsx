@@ -83,8 +83,9 @@ class HistoricalChart extends Component {
         ]
       }
     }
-    return (
-      <div>
+  
+  return (
+    <div>
         <div>
           <Line 
             data={this.props.chartData} 
@@ -128,6 +129,5 @@ class HistoricalChart extends Component {
       </div>
     )
   }
-}
 
 export default HistoricalChart

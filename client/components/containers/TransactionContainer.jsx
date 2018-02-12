@@ -44,7 +44,6 @@ const withMonthlyBalances = graphql(GET_USER_BALANCES, {
   })
 })
 
-
 class TransactionContainer extends Component {
   constructor() {
     super()

@@ -212,7 +212,6 @@ const GET_USER_BALANCES = gql`
     }
   }`
 
-
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,

@@ -18,6 +18,7 @@ class HistoricalChartContainer extends Component {
       filter: {},
       filteredTransactions: [],
       accounts: [],
+
       categories: [],
       annotations: {min: 0, max: 0},
       displayGoal: false
@@ -74,6 +75,7 @@ class HistoricalChartContainer extends Component {
     })
   }
 
+
   // adds or removes key-value pairs from filter object
   updateFilter(key, value, callback) {
     let { filter } = this.state;
@@ -119,6 +121,19 @@ class HistoricalChartContainer extends Component {
         min, max, center
       },
       displayGoal: !this.state.displayGoal
+    })
+  }
+
+  renderChart() {
+    const filteredTransactions = filterTransactionsByValue(this.props.transactions, this.state.filter);
+    // check current state of the chart
+    const chartData = this.state.displayAnnual ?
+    generateMonthlyData(filteredTransactions) :
+    generateDailyData(filteredTransactions, this.state.month);
+
+    this.setState({
+      filteredTransactions,
+      chartData
     })
   }
 
