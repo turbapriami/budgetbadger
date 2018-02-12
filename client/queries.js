@@ -72,6 +72,14 @@ const DASH_QUERY = gql`
       id
       name
     }
+    getLoans(user_id: $user_id) {
+      id
+      name
+      amount
+      interest_rate
+      inception_date
+      end_date
+    }
   }`;
 
   const BILLS_QUERY = gql`
@@ -133,6 +141,13 @@ const CREATE_BILL_CATEGORY = gql`
     }
   }`;
 
+const ADD_LOAN = gql`
+  mutation ADD_LOAN($name: String!, $amount: Float!, $interest_rate: Float!, $inception_date: String!, $end_date: String!, $user_id: Int!) {
+    createLoan(name: $name, amount: $amount, interest_rate: $interest_rate, inception_date: $inception_date, end_date: $end_date, user_id: $user_id) {
+      id
+    }
+  }`;
+
 const BILL_PAYMENT_HISTORY_QUERY = gql`
 query getBillPaymentHistory($user_id: Int!) {
   getBillPaymentHistory(user_id: $user_id) {
@@ -187,6 +202,23 @@ mutation updateBillPaymentHistory($id:Int!, $user_id: Int,  $bill_id: Int, $amou
     id
   }
 }`
+const LOANS_QUERY = gql`
+  query LOANS_QUERY($user_id: Int!){
+    getLoans(user_id: $user_id) {
+      id
+      name
+      amount
+      interest_rate
+      inception_date
+      end_date
+    }
+  }`;
+
+const DELETE_LOAN = gql`
+  mutation deleteLoan($id: Int!) {
+    deleteLoan(id: $id)
+  }`;
+
 
 export {
   TRANS_ACC_QUERY,
@@ -201,5 +233,8 @@ export {
   CREATE_BILL_CATEGORY,
   BILL_PAYMENT_HISTORY_QUERY,
   CREATE_BILL_PAYMENT_HISTORY,
-  UPDATE_BILL_PAYMENT_HISTORY
+  UPDATE_BILL_PAYMENT_HISTORY,
+  ADD_LOAN,
+  LOANS_QUERY,
+  DELETE_LOAN,
 };

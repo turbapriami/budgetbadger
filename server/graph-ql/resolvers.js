@@ -401,6 +401,7 @@ module.exports = {
         sendgrid.sendEmail(data[0].first_name, data[0].email)
       })
     },
+    deleteLoan: (parent, args, { knex }) => knex('loans').where(args).del(),
   }
 }
 
