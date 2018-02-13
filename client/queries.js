@@ -40,6 +40,22 @@ const NEW_BANK = gql`
     createBankAccount(user_id: $user_id, public_key: $public_key)
   }`;
 
+//REMOVED FROM DASHQUERY
+  // getBills(user_id: $user_id) {
+  //   id
+  //   user_id
+  //   bill_category_id
+  //   description
+  //   amount
+  //   due_date
+  //   paid
+  //   paid_date
+  //   alert
+  //   bill_category {
+  //     name
+  //   }
+  // }
+
 const DASH_QUERY = gql`
   query DASH_QUERY($user_id: Int!) {
     getTransactions(user_id: $user_id) {
@@ -53,20 +69,6 @@ const DASH_QUERY = gql`
       type
       bank_name
       current_balance
-    }
-    getBills(user_id: $user_id) {
-      id
-      user_id
-      bill_category_id
-      description
-      amount
-      due_date
-      paid
-      paid_date
-      alert
-      bill_category {
-        name
-      }
     }
     getBillCategories(user_id: $user_id) {
       id
