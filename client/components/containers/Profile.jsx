@@ -58,7 +58,7 @@ class Profile extends Component {
 
   componentWillReceiveProps(nextProps) {
     console.log("NEXT PROPS!!!!!!!!", nextProps.data);
-    if (nextProps.data.getUser) {
+    if (nextProps.data.getUser.length) {
       this.setState({
         first_name: nextProps.data.getUser[0].first_name,
         last_name: nextProps.data.getUser[0].last_name,
