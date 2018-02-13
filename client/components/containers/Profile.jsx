@@ -56,13 +56,6 @@ class Profile extends Component {
     this.handleChanges = this.handleChanges.bind(this);
     this.handleFormChanges = this.handleFormChanges.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    // this.updateFirstName = this.updateFirstName.bind(this);
-    // this.updateLastName = this.updateLastName.bind(this);
-    // this.updateStreet = this.updateStreet.bind(this);
-    // this.updateState = this.updateState.bind(this);
-    // this.updateZipCode = this.updateZipCode.bind(this);
-    // this.updatePhone = this.updatePhone.bind(this);
-    // this.updateEmail = this.updateEmail.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -91,10 +84,10 @@ class Profile extends Component {
 
   handleFormChanges(e) {
     let key = e.target.name;
-    let state = this.state;
-    state[key] = e.target.value;
+    let oldState = this.state;
+    oldState[key] = e.target.value;
     this.setState({
-      state
+      oldState
     })
   }
 
@@ -105,13 +98,13 @@ class Profile extends Component {
       variables: 
       this.state,
       user_id
-    })
+    }, this.editing())
   }
 
   render() {
     return (
       <div>
-        {this.state.edit ? <ProfileEdit handleForm={this.handleFormChanges} handleSubmit={this.handleSubmit}/> : <ProfileCard userInfo={this.state}  editing={this.editing} />}
+        {this.state.edit ? <ProfileEdit {...this.state} handleForm={this.handleFormChanges} handleSubmit={this.handleSubmit}/> : <ProfileCard userInfo={this.state}  editing={this.editing} />}
       </div>
     )
   }

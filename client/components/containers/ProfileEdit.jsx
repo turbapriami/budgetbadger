@@ -10,7 +10,6 @@ class ProfileEdit extends Component {
   }
 
   render() {
-    {console.log(this.props)}
     return (
       <Box full={true} align="center" pad="large" flex={true}>
         <Card label="User Info" alignSelf="center" style={{ height: "100%", width: "100%", outline: "#000 solid thin" }} >
@@ -37,9 +36,6 @@ class ProfileEdit extends Component {
               </Card>
             </Box>
             <Card label="Accounts" size={{ height: "medium", width: "medium" }} style={{ display: "inline" }} colorIndex="light-2" margin={{ vertical: "small", horizontal: "small" }}>
-              <Paragraph margin="small">
-                
-              </Paragraph>
             </Card>
           </Box>
         </Card>
