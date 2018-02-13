@@ -9,6 +9,7 @@ const TRANS_ACC_QUERY = gql`
         category
         date
         account {
+          id
           type
           bank_name
         }
@@ -17,6 +18,16 @@ const TRANS_ACC_QUERY = gql`
       type
       bank_name
       id
+    }
+    getUser(id: $user_id) {
+      accounts {
+        bank_name
+        id
+        monthly_balance {
+          amount
+          date
+        }
+      }
     }
   }`;
 
@@ -248,6 +259,21 @@ const GOALS_QUERY = gql`
     }
   }`;
 
+
+const GET_USER_BALANCES = gql`
+  query GET_USER_BALANCES($id: Int!) {
+    getUser(id: $id) {
+      accounts {
+        bank_name
+        monthly_balance {
+          amount
+          date
+        }
+      }
+    }
+  }`;
+
+
 export {
   TRANS_ACC_QUERY,
   UPDATE_TRANSACTIONS,
@@ -265,5 +291,6 @@ export {
   ADD_LOAN,
   LOANS_QUERY,
   DELETE_LOAN,
-  GOALS_QUERY
+  GOALS_QUERY,
+  GET_USER_BALANCES
 };

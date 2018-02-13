@@ -89,11 +89,15 @@ class TransactionContainer extends Component {
   // on the left-most sidebar
   filterTransactions(e, type) {
     let transactions;
-    console.log(type)
     type === 'all' ?
     transactions = this.props.data.getTransactions :
     transactions = this.props.data.getTransactions.filter(transaction => {
-      const acc = e.target.text === 'Debit' ? 'depository' : 'credit'
+      let acc;
+      if (type === 'type') {
+        acc = e.target.text === 'Debit' ? 'depository' : 'credit'
+      } else {
+        acc = e.target.text;
+      }
       return transaction.account[0][type] === acc;
     })
     this.setState({
