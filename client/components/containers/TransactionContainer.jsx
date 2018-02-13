@@ -89,6 +89,7 @@ class TransactionContainer extends Component {
   // on the left-most sidebar
   filterTransactions(e, type) {
     let transactions;
+    console.log(type)
     type === 'all' ?
     transactions = this.props.data.getTransactions :
     transactions = this.props.data.getTransactions.filter(transaction => {
