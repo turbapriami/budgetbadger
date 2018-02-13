@@ -345,7 +345,6 @@ module.exports = {
     updateUser: async (parent, args, {models, knex}) => {
       const { email } = args;
       const user = await new models.User({email}).fetch();
-      const { id } = user;
       for(let field in user.attributes) {
         if (args[field]) {
           user.attributes[field] = args[field]

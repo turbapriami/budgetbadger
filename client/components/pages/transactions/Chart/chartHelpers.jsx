@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 // Formats data in preparation for chart
-const generateChartDataObject = (labels, data) => {
+const generateChartDataObject = (labels, data, oldData) => {
   const chartData = {
     labels: labels, 
     datasets:[

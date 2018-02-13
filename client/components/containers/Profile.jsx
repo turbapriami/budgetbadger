@@ -22,10 +22,17 @@ const Get_User = gql`
   }
 `
 
+const UPDATE_USER = gql`mutation
+  updateUser($email: String!, $first_name: String, $last_name: String, $city: String, $street: String, $zip_code: String, $state: String, $phone: String) {
+   updateUser(email: $email, first_name: $first_name, last_name: $last_name, city: $city, street: $street, zip_code: $zip_code, state: $state, phone: $phone) {
+     email
+ }
+}`
+
 const currentUser = graphql(Get_User, {
   options: props => ({
     variables: {
-      id: 27
+      id: window.localStorage.getItem('user_id')
     },
     name: 'currentUser',
   })
@@ -47,18 +54,12 @@ class Profile extends Component {
     }
     this.editing = this.editing.bind(this);
     this.handleChanges = this.handleChanges.bind(this);
-    this.updateFirstName = this.updateFirstName.bind(this);
-    this.updateLastName = this.updateLastName.bind(this);
-    this.updateStreet = this.updateStreet.bind(this);
-    this.updateState = this.updateState.bind(this);
-    this.updateZipCode = this.updateZipCode.bind(this);
-    this.updatePhone = this.updatePhone.bind(this);
-    this.updateEmail = this.updateEmail.bind(this);
+    this.handleFormChanges = this.handleFormChanges.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("NEXT PROPS!!!!!!!!", nextProps.data);
-    if (nextProps.data.getUser) {
+    if (nextProps.data.getUser.length) {
       this.setState({
         first_name: nextProps.data.getUser[0].first_name,
         last_name: nextProps.data.getUser[0].last_name,
@@ -78,66 +79,38 @@ class Profile extends Component {
   }
 
   handleChanges() {
-    console.log("MUTATION QUERY");
     this.editing();
   }
 
-  updateFirstName(e) {
-    console.log("FIRST NAME",e.target.value);
+  handleFormChanges(e) {
+    let key = e.target.name;
+    let oldState = this.state;
+    oldState[key] = e.target.value;
     this.setState({
-      first_name: e.target.value
+      oldState
     })
   }
 
-  updateLastName(e) {
-    console.log("LAST NAME", e.target.value);
-    this.setState({
-      last_name: e.target.value
-    })
-  }
-
-  updateStreet(e) {
-    console.log("STREET", e.target.value);
-    this.setState({
-      street: e.target.value
-    })
-  }
-
-  updateState(e) {
-    console.log("STATE", e.target.value);
-    this.setState({
-      state: e.target.value
-    })
-  }
-
-  updateZipCode(e) {
-    console.log("ZIP CODE", e.target.value);
-    this.setState({
-      zip_code: e.target.value
-    })
-  }
-
-  updatePhone(e) {
-    console.log("PHONE", e.target.value);
-    this.setState({
-      phone: e.target.value
-    })
-  }
-
-  updateEmail(e) {
-    console.log("EMAIL", e.target.value);
-    this.setState({
-      email: e.target.value
-    })
+  handleSubmit(e) {
+    e.preventDefault();
+    const user_id = window.localStorage.getItem('user_id')
+    this.props.updateUserProfile({
+      variables: 
+      this.state,
+      user_id
+    }, this.editing())
   }
 
   render() {
     return (
       <div>
-        {this.state.edit ? <ProfileEdit userInfo={this.state} /> : <ProfileCard userInfo={this.state}  editing={this.editing} />}
+        {this.state.edit ? <ProfileEdit {...this.state} handleForm={this.handleFormChanges} handleSubmit={this.handleSubmit}/> : <ProfileCard userInfo={this.state}  editing={this.editing} />}
       </div>
     )
   }
 }
 
-export default compose(withApollo, currentUser)(Profile);
+export default compose(withApollo, graphql(UPDATE_USER, {name: "updateUserProfile"}), currentUser)(Profile);
+
+
+

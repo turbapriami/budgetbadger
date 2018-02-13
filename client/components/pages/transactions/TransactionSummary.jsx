@@ -1,8 +1,7 @@
-import { Split, Value, CurrencyIcon, Headline, Section, Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
+import { Value, CurrencyIcon, Headline, Section, Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, SearchInput, Select, TextInput} from 'grommet'
 import React, { Component } from 'react';
 import identity from 'lodash'
 import moment from 'moment';
-import SummaryChart from './SummaryChart.jsx';
 import TransactionPie from './TransactionPie.jsx'
 
 class TransactionSummary extends Component {
@@ -95,41 +94,88 @@ class TransactionSummary extends Component {
       flush={true}
       onClose={this.props.handleSummary}
       >
-      <Split>
-        <Box>
+      <Box
+        direction='row'
+        justify="center"
+        align='center'
+        wrap={true}
+        reverse={false}
+        pad='medium'
+        margin='small'>
+        <Box 
+            direction='row'
+            justify='center'
+            align='center'
+            wrap={true}
+            pad='medium'
+            margin='small'>
           <TransactionPie 
             data={[this.state.allTime, this.state.annual]} 
-            labels={['Total Spend', 'Annual: ' + this.props.summaryTransaction.name]}/>
+            labels={['Annual Total', 'Annual: ' + this.props.summaryTransaction.name]}/>
         </Box>
         <Box 
-          align='center'
-          justify='center'
-          pad='large'
-          margin='large'
-          colorIndex='light-2'>
+            direction='row'
+            justify='center'
+            align='center'
+            pad='medium'
+            colorIndex='light-2'
+            margin='small'
+            wrap={true}>
+          <Box wrap={false} 
+            direction='row' 
+            size='large' 
+            align='center' 
+            justify='center'>
           <Headline margin='none' align='center' style={{fontSize: "25px"}} >
-            Spending Summary: {this.state.selected}
-            <p />
+             Spending Summary:<strong> {this.state.selected} </strong>
           </Headline>
+          </Box>
+          <Box 
+            direction='row'
+            justify='center'
+            align='center'
+            wrap={false}
+            pad='small'
+            colorIndex='light-2'
+            margin='small'>
           <Value 
             value={this.state.monthly}
             icon={<CurrencyIcon />}
             label='Last 30 days'
             units='$' />
             <p />
+          </Box>
+          <Box 
+            direction='row'
+            justify='center'
+            align='center'
+            wrap={false}
+            pad='small'
+            colorIndex='light-2'
+            margin='small'>
           <Value 
             value={this.state.biAnnual}
             icon={<CurrencyIcon />}
             label='Last 6 months'
             units='$' />
             <p />
+            </Box>
+          <Box 
+            direction='row'
+            justify='center'
+            align='center'
+            wrap={false}
+            pad='small'
+            colorIndex='light-2'
+            margin='small'>
           <Value 
             value={this.state.annual}
             icon={<CurrencyIcon />}
             label='Last 12 Months'
             units='$' />
+          </Box>
         </Box>
-      </Split>
+      </Box>
       </Layer>:
       null
     )
