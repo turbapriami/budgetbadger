@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import styles from '../../../../public/main/jStyles.js';
-import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, RadioButton, SearchInput, Select, TextInput} from 'grommet';
+import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Footer, Header, Heading, Label, Layer, NumberInput, Paragraph, RadioButton, SearchInput, Select, TextInput} from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { CREATE_BILL, CREATE_BILL_PAYMENT_HISTORY, BILL_PAYMENT_HISTORY_QUERY } from '../../../queries.js';
 import gql from 'graphql-tag';
@@ -24,11 +24,13 @@ class AddBillForm extends React.Component {
       bill_category_description: '',
       description: '',
       amount: '',
+      amount_due: '',
       bill_recurrence_id: 1,
       bill_recurrence_type: '',
       start_date: '',
       end_date: '',
       last_paid_date: null,
+      last_occurence_date: null,
       alert: false,
       bill_status: true,
       bill_categories: [],
@@ -106,6 +108,7 @@ class AddBillForm extends React.Component {
       start_date: '',
       end_date: '',
       last_paid_date: null,
+      last_occurence_date: null,
       alert: false,
       bill_status: true,
       bill_categories: [],
@@ -124,18 +127,27 @@ class AddBillForm extends React.Component {
       start_date: this.state.start_date,
       end_date: this.state.end_date,
       last_paid_date: null,
+      last_occurence_date: this.state.start_date,
       alert: this.state.alert,
       bill_status: true,
     };
-
+    if(this.state.bill_category_id 
+      && this.state.description 
+      && this.state.amount > 0 
+      && this.state.bill_recurrence_id
+      && this.state.start_date
+      && this.state.end_date
+      && this.state.bill_category_id
+      && this.state.bill_category_description 
+    ) {
     this.props
       .CREATE_BILL({ variables: variables })
       .then(({ data }) => {
-        console.log('successfully created bill in bills table', data.createBill.id);
         let billPaymentVariables = {
           bill_id: data.createBill.id,
           user_id: this.state.user_id,
           amount_paid: null,
+          amount_due: this.state.amount,
           paid_date: null,
           due_date: this.state.start_date,
           paid: false,
@@ -154,6 +166,7 @@ class AddBillForm extends React.Component {
               start_date: '',
               end_date: '',
               last_paid_date: null,
+              last_occurence_date: null,
               alert: false,
               bill_status: true,
               bill_categories: [],
@@ -165,6 +178,9 @@ class AddBillForm extends React.Component {
       })
       .catch(error => {console.log('error saving new bill in bills table', error)});
     this.props.handleFormToggle();
+    }else{
+      console.log('Please enter all required fields');
+    }
   }
 
   render() {
@@ -217,7 +233,10 @@ class AddBillForm extends React.Component {
               </div>
             </Heading>
             <Heading tag="h4" margin="small">
-              Bill Start Date(First Due Date):
+              Bill Start Date(Next Due Date):
+              <Paragraph margin="none" size='small'>
+               *Cannot be modified after creation
+              </Paragraph>
               <div>
                 <DateTime
                   id="id"
@@ -244,6 +263,9 @@ class AddBillForm extends React.Component {
             </Heading>
             <Heading tag="h4" margin="small">
               Recurrence:
+              <Paragraph margin="none" size='small'>
+                *Cannot be modified after creation
+              </Paragraph>
               <div>
                 <Select
                   placeHolder="Select Recurrence Pattern"
