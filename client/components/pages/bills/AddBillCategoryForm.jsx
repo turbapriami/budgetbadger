@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button, Columns, Footer, Form, Header, Heading, Layer,List,ListItem, SearchInput} from 'grommet';
+import {Box, Button, Columns, Footer, Form, Header, Heading, Headline, Layer,List,ListItem, SearchInput} from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import {CREATE_BILL_CATEGORY, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
 
@@ -30,7 +30,7 @@ class AddBillCategoryForm extends React.Component {
       .CREATE_BILL_CATEGORY({
         variables: {
           name: this.state.billCategoryDescription,
-          user_id: this.state.user_id,
+          user_id: 1,
         },
       })
       .then(({ data }) => {
@@ -53,10 +53,10 @@ class AddBillCategoryForm extends React.Component {
           flush="true"
           overlayClose="true"
         >
-          <Form style={{ padding: '10%' }}>
-            <Header>
-              <Heading tag="h3" strong="true">Add Bill Categories </Heading>
-            </Header>
+          <Form style={{ padding: '10%', width:'500px', margin:'0 auto', textAlign:"center"}}>
+          <Headline size="small" strong={true}>
+          Add Bill Categories
+          </Headline>
               <div>
                 <SearchInput
                   value={this.state.bill_category_description}
@@ -64,7 +64,7 @@ class AddBillCategoryForm extends React.Component {
                   onDOMChange={this.handleBillCategoryType}
                 />
               </div>
-            <Heading tag="h4" strong="true" margin="small">
+            <Heading tag="h4" strong="true" margin="small" padding="small">
               Current Bill Categories:
             </Heading>
               <div>
@@ -76,7 +76,7 @@ class AddBillCategoryForm extends React.Component {
                       style={{ fontSize: '16px', textAlign:'center'}}
                       align="center"
                     >
-                      <span style={{textAlign:'center'}}>
+                      <span style={{textAlign:'center', margin: '0 auto'}}>
                         {billObj.name}
                       </span>
                     </ListItem>

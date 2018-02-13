@@ -13,16 +13,14 @@ class BillsPaidTable extends Component {
       billFormToggle: false,
       sortIndex: 0,
       sortAscending: false,
-      selectedBill : {}
+      selectedBill: {},
     };
     this.handleSortClick = this.handleSortClick.bind(this);
     this.handleBillSelect = this.handleBillSelect.bind(this);
   }
 
-
-    
   handleBillSelect(bill) {
-    this.setState({selectedBill: bill});
+    this.setState({ selectedBill: bill });
   }
 
   handleSortClick(e) {
@@ -51,17 +49,12 @@ class BillsPaidTable extends Component {
   render() {
     return (
       <div>
-        <Columns size="large" justify="center">
-          <Section style={{ width: '1030px' }}>
-            <Heading
-              align="left"
-              margin="small"
-              strong="true"
-              style={{ fontSize: '30px' }}
-            >
-              Paid
-            </Heading>
-          </Section>
+        <Box width="full" style={{ margin: '20px 20%' }}>
+          <Heading align="left" strong="true" style={{ fontSize: '30px' }}>
+            Paid
+          </Heading>
+        </Box>
+        <Box width="full" style={{ margin: '0 20%' }}>
           <Table responsive="true">
             <TableHeader
               labels={[
@@ -70,7 +63,7 @@ class BillsPaidTable extends Component {
                 'Due Date',
                 'Paid Date',
                 'Amount',
-                'Actions'
+                'Actions',
               ]}
               sortIndex={this.state.sortIndex}
               sortAscending={this.state.sortAscending}
@@ -79,20 +72,26 @@ class BillsPaidTable extends Component {
             <tbody>
               {this.props.bills
                 ? this.props.bills
-                    .filter(bill => (bill.paid === true && moment(bill.paid_date) >= moment().subtract(2, 'months')))
+                    .filter(
+                      bill =>
+                        bill.paid === true &&
+                        moment(bill.paid_date) >= moment().subtract(2, 'months')
+                    )
                     .map((bill, j) =>
-                      <BillsPaidTableItem 
-                        key={j} 
-                        bill={bill} 
-                        UserBillPaymentHistory={this.props.UserBillPaymentHistory}
-                        handleBillSelect = {this.handleBillSelect}
-                        selectedBill = {this.state.selectedBill}
+                      <BillsPaidTableItem
+                        key={j}
+                        bill={bill}
+                        UserBillPaymentHistory={
+                          this.props.UserBillPaymentHistory
+                        }
+                        handleBillSelect={this.handleBillSelect}
+                        selectedBill={this.state.selectedBill}
                       />
                     )
                 : null}
             </tbody>
           </Table>
-        </Columns>
+        </Box>
       </div>
     );
   }

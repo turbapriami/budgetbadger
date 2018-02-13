@@ -172,10 +172,10 @@ module.exports = {
         loan_id
       }),
 
-    getBillPaymentHistory: (parent, { user_id }, { knex }) =>
-      knex('bill_payment_history').where({
-        user_id
-      }),
+    getBillPaymentHistory: (parent, args, { knex }) =>
+      knex('bill_payment_history').where(
+        args
+      ),
 
     getBillRecurrence:  (parent, { id }, { knex }) =>
       knex('bill_recurrence').where({})

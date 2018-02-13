@@ -24,6 +24,7 @@ class AddBillForm extends React.Component {
       bill_category_description: '',
       description: '',
       amount: '',
+      amount_due: '',
       bill_recurrence_id: 1,
       bill_recurrence_type: '',
       start_date: '',
@@ -142,11 +143,11 @@ class AddBillForm extends React.Component {
     this.props
       .CREATE_BILL({ variables: variables })
       .then(({ data }) => {
-        console.log('successfully created bill in bills table', data.createBill.id);
         let billPaymentVariables = {
           bill_id: data.createBill.id,
           user_id: this.state.user_id,
           amount_paid: null,
+          amount_due: this.state.amount,
           paid_date: null,
           due_date: this.state.start_date,
           paid: false,

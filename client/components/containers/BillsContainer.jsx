@@ -17,7 +17,8 @@ class BillsContainer extends Component {
       overdueBills: [],
       paidBills: [],
       unpaidBills: [],
-      UserBillPaymentHistory: []
+      UserBillPaymentHistory: [],
+      billCategories: []
     };
     this.sortBills = this.sortBills.bind(this);
   }
@@ -39,12 +40,15 @@ class BillsContainer extends Component {
 
       var UserBillPaymentHistory = nextProps.data.getBillPaymentHistory;
 
+      var billCategories = nextProps.data.getBillCategories.sort((a, b) => a.name.localeCompare(b.name))
+
       this.setState({
         billsDueThisMonth,
         overdueBills,
         unpaidBills,
         paidBills,
-        UserBillPaymentHistory
+        UserBillPaymentHistory, 
+        billCategories
       });
     }
   }
@@ -88,7 +92,7 @@ class BillsContainer extends Component {
         />
         <BillsDueTable
           bills={this.state.unpaidBills}
-          billCategories={this.props.data.getBillCategories}
+          billCategories={this.state.billCategories}
           sortBills={this.sortBills}
           billRecurrenceTypes={this.props.data.getBillRecurrence}
           UserBillPaymentHistory = {this.state.UserBillPaymentHistory}

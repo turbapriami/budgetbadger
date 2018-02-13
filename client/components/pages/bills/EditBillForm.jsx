@@ -44,7 +44,7 @@ class EditBillForm extends React.Component {
     if (nextProps.selectedBill.id !== undefined) {
       this.setState({     
         alert:nextProps.selectedBill.bills[0].alert,
-        amount:nextProps.selectedBill.bills[0].amount,
+        amount:nextProps.selectedBill.bills[0].amount.toFixed(2),
         bill_category_id: nextProps.selectedBill.bills[0].bill_category[0].id,
         bill_category_description: nextProps.selectedBill.bills[0].bill_category[0].name,
         bill_status: nextProps.selectedBill.bills[0].bill_status, 
@@ -160,7 +160,7 @@ class EditBillForm extends React.Component {
 
     this.props.UPDATE_BILL({ variables: updateBillVariables })
       .then(({ data }) => {
-        console.log('successfully updated bill in bills table', data)
+        console.log('successfully updated bill in bills table', data);
         this.props.data.refetch();
       })
       .catch(error => {
@@ -219,19 +219,6 @@ class EditBillForm extends React.Component {
                 />
               </div>
             </Heading>
-            {/* <Heading tag="h4" margin="small">
-              Bill Start Date(Next Due Date):
-              <div>
-                <DateTime
-                  id="id"
-                  name="name"
-                  format="M/D/YYYY"
-                  step={5}
-                  onChange={this.handleStartDateChange}
-                  value={moment(this.state.start_date).format("M/D/YYYY")}
-                />
-              </div>
-            </Heading> */}
             <Heading tag="h4" margin="small">
               Bill End Date(Last Due Date):
               <div>
@@ -245,20 +232,6 @@ class EditBillForm extends React.Component {
                 />
               </div>
             </Heading>
-            {/* <Heading tag="h4" margin="small">
-              Recurrence:
-              <div>
-                <Select  disabled ="true"
-                  placeHolder="Select Recurrence Pattern"
-                  options={this.props.billRecurrenceTypes.map(
-                    (billRecurrenceType, i) =>
-                      billRecurrenceType.recurrence_type
-                  )}
-                  value={this.state.bill_recurrence_type}
-                  onChange={this.handleRecurrenceChanges}
-                />
-              </div>
-            </Heading> */}
             <Heading tag="h4" margin="small">
               Alert
               <div>

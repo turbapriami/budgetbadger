@@ -200,14 +200,27 @@ knex.schema.hasTable('monthly_balance').then(exists => {
     }).then(() => console.log('created table monthly_balance'))
   }
 })
+
 knex.schema.hasTable('bill_recurrence').then(exists => {
   if (!exists) {
-    knex.schema.createTable('bill_recurrence', table => {
-      table.increments('id').primary();
-      table.string('recurrence_type');
-    }).then(() => console.log('created table bill_recurrence'))
+    knex.schema
+      .createTable('bill_recurrence', table => {
+        table.increments('id').primary();
+        table.string('recurrence_type');
+      })
+      .then(() => {
+        console.log('created table bill_recurrence');
+        return knex('bill_recurrence').insert([
+          { id: 1, recurrence_type: 'None' },
+          { id: 2, recurrence_type: 'Weekly' },
+          { id: 3, recurrence_type: 'Biweekly'},
+          { id: 4, recurrence_type: 'Monthly' },
+          { id: 5, recurrence_type: 'Yearly' },
+        ]).then(()=> console.log('created recurrence types: None, Weekly, Biweekly, Monthly, Yearly'));
+      });
   }
-})
+});
+
 
 knex.schema.hasTable('bill_payment_history').then(exists => {
   if (!exists) {
@@ -216,6 +229,7 @@ knex.schema.hasTable('bill_payment_history').then(exists => {
       table.integer('bill_id').references('bills.id');
       table.integer('user_id').references('users.id');
       table.decimal('amount_paid',14,2);
+      table.decimal('amount_due',14,2);
       table.date('paid_date');
       table.date('due_date');
       table.boolean('paid');

@@ -101,6 +101,7 @@ const DASH_QUERY = gql`
         id
         bill_id
         amount_paid
+        amount_due
         paid_date
         paid
         user_id
@@ -135,14 +136,15 @@ const CREATE_BILL_CATEGORY = gql`
   }`;
 
 const BILL_PAYMENT_HISTORY_QUERY = gql`
-query getBillPaymentHistory($user_id: Int!) {
-  getBillPaymentHistory(user_id: $user_id) {
+query getBillPaymentHistory($user_id: Int!, $bill_id: Int) {
+  getBillPaymentHistory(user_id: $user_id, bill_id: $bill_id) {
     id
     user_id
     paid
     paid_date
     due_date
     amount_paid
+    amount_due
     bills {
       id
       user_id
@@ -177,15 +179,15 @@ query getBillPaymentHistory($user_id: Int!) {
 }`;
 
 const CREATE_BILL_PAYMENT_HISTORY = gql`
-mutation createBillPaymentHistory($bill_id: Int!, $user_id: Int!, $amount_paid: Float, $paid_date: Date, $due_date: Date!, $paid: Boolean!) {
-  createBillPaymentHistory(bill_id: $bill_id, user_id: $user_id , amount_paid: $amount_paid, paid_date: $paid_date, due_date: $due_date, paid: $paid) {
+mutation createBillPaymentHistory($bill_id: Int!, $user_id: Int!, $amount_paid: Float, $amount_due: Float, $paid_date: Date, $due_date: Date!, $paid: Boolean!) {
+  createBillPaymentHistory(bill_id: $bill_id, user_id: $user_id , amount_paid: $amount_paid, amount_due:$amount_due, paid_date: $paid_date, due_date: $due_date, paid: $paid) {
     id
   }
 }`;
 
 const UPDATE_BILL_PAYMENT_HISTORY = gql`
-mutation updateBillPaymentHistory($id:Int!, $user_id: Int,  $bill_id: Int, $amount_paid: Float, $paid_date: Date, $due_date: Date, $paid: Boolean) {
-  updateBillPaymentHistory(id:$id, user_id: $user_id,  bill_id: $bill_id, amount_paid: $amount_paid, paid_date: $paid_date, due_date: $due_date, paid: $paid) {
+mutation updateBillPaymentHistory($id:Int!, $user_id: Int,  $bill_id: Int, $amount_paid: Float, $amount_due: Float, $paid_date: Date, $due_date: Date, $paid: Boolean) {
+  updateBillPaymentHistory(id:$id, user_id: $user_id,  bill_id: $bill_id, amount_paid: $amount_paid, amount_due: $amount_due, paid_date: $paid_date, due_date: $due_date, paid: $paid) {
     id
   }
 }`

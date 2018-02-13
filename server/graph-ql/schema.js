@@ -163,6 +163,7 @@ module.exports = `
     bill_id: Int!
     user_id: Int!
     amount_paid: Float
+    amount_due: Float
     paid_date: Date
     due_date: Date
     paid: Boolean
@@ -188,7 +189,7 @@ module.exports = `
     getLoans(user_id: Int!): [Loan!]
     getLoanPayments(loan_id: Int!): [Loan_Payment!]
     getGoals(user_id: Int!): [Goal!]
-    getBillPaymentHistory(user_id: Int!): [BillPaymentHistory!]
+    getBillPaymentHistory(user_id: Int!, bill_id: Int): [BillPaymentHistory!]
     getBillRecurrence(id:Int): [BillRecurrence!]
   }
 
@@ -229,8 +230,8 @@ module.exports = `
     deleteBillCategory(id: Int!): Int!
     createBillRecurrence(recurrence_type: String!): BillRecurrence!
     deleteBillRecurrence(id: Int!): Int!
-    createBillPaymentHistory(bill_id: Int!, user_id: Int!, amount_paid: Float, paid_date: Date, due_date: Date!, paid: Boolean): BillPaymentHistory!
-    updateBillPaymentHistory(id:Int!, user_id: Int,  bill_id: Int, amount_paid: Float, paid_date: Date, due_date: Date, paid: Boolean): BillPaymentHistory!
+    createBillPaymentHistory(bill_id: Int!, user_id: Int!, amount_paid: Float, amount_due: Float, paid_date: Date, due_date: Date!, paid: Boolean): BillPaymentHistory!
+    updateBillPaymentHistory(id:Int!, user_id: Int,  bill_id: Int, amount_paid: Float, amount_due: Float, paid_date: Date, due_date: Date, paid: Boolean): BillPaymentHistory!
     deleteBillPaymentHistory(id:Int!): Int!
     createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]
