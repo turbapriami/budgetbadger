@@ -121,6 +121,10 @@ class Loans extends React.Component {
     this.handleAmort();
   };
 
+  componentWillReceiveProps(nextProps){
+    this.handleLoan();
+  };
+
   handleModal(){
     this.setState({
       modalToggle: !this.state.modalToggle
@@ -128,6 +132,7 @@ class Loans extends React.Component {
   };
 
   render(){
+    console.log("State of the Jewnion", this.state);
     return(
       <div>
         <Hero background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}

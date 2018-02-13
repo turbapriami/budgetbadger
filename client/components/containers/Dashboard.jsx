@@ -4,11 +4,12 @@ import TransactionList from '../pages/transactions/TransactionList.jsx';
 import BillsDueTable from '../pages/bills/BillsDueTable.jsx';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
 import AccountsTotals from '../pages/accounts/AccountsTotals.jsx'
+import LoansOnDashboard from '../pages/loans/LoansTotals.jsx';
 import Spinner from '../pages/Spinner.jsx'
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { DASH_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 const withDashQuery = graphql(DASH_QUERY, {
   options: (props) => ({
@@ -44,39 +45,42 @@ class DashBoard extends React.Component {
   render(){
     // make sure bills exist before rendering
     let billsDue = null
-    if (this.props.data.getBills) {
+    // if (this.props.data.getBills) {
       billsDue = <BillsSummary 
-        overdueBills={this.props.data.getBills.filter(bill => {
-          const dueDate = new Date(bill.due_date);
-          const currentDate = new Date();
-          return ((currentDate > dueDate) && !bill.paid);
-        })} 
-        billsDueThisMonth={this.props.data.getBills.filter(bill => {
-          const dueDate = new Date(bill.due_date);
-          const currentDate = new Date();
-          return ((currentDate.getMonth() === dueDate.getMonth()) && !bill.paid);
-        })}
+      // overdueBills={this.props.data.getBills.filter(bill => {
+      //   const dueDate = new Date(bill.due_date);
+      //   const currentDate = new Date();
+      //   return ((currentDate > dueDate) && !bill.paid);
+      // })} 
+      // billsDueThisMonth={this.props.data.getBills.filter(bill => {
+      //   const dueDate = new Date(bill.due_date);
+      //   const currentDate = new Date();
+      //   return ((currentDate.getMonth() === dueDate.getMonth()) && !bill.paid);
+      // })}
       />
-    } else {
-      const billsDue = <Spinner/>
-    }
+    // } else {
+    //   const billsDue = <Spinner/>
+    // }
     let totalBalance = null
-    if (this.props.data.getAccounts) {
+    // if (this.props.data.getAccounts) {
       totalBalance = <AccountsTotals accounts={this.props.data.getAccounts} />
-    } else {
-      totalBalance = <Spinner />
-    }
+    // } else {
+    //   totalBalance = <Spinner />
+    // }
+    console.log('fucking props',this.props)
     return(
       <div>
         <Tiles 
           flush={false}
-          fill={true}
-        >
+          fill={true}>
           <Tile>
             {totalBalance}
           </Tile>
           <Tile>
             {billsDue}
+          </Tile>
+          <Tile>
+            <LoansOnDashboard loans={this.props.data.getLoans} />
           </Tile>
         </Tiles>
       </div>
