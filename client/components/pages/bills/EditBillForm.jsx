@@ -5,16 +5,7 @@ import {Box, Button, CheckBox, CloseIcon, Columns, DateTime, Form, FormField, Fo
 import { graphql, compose, withApollo } from 'react-apollo';
 import {UPDATE_BILL, CREATE_BILL_CATEGORY, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
 import gql from 'graphql-tag';
-
-var convertDateFormat = date => {
-  let formattedDate = new Date(date);
-  return (formattedDate.getMonth() + 1) + '/' + formattedDate.getDate() + '/' +  formattedDate.getFullYear();
-};
-
-var getInputCategoryID = (value, billCategoryObjs) => {
-  let filteredCategories = billCategoryObjs.filter(billCategoryObj => billCategoryObj.name.toLowerCase() === value.toLowerCase());
-  return filteredCategories.length > 0 ? filteredCategories[0].id : 0;
-}
+import moment from 'moment';
 
 class EditBillForm extends React.Component {
   constructor(props) {
@@ -30,6 +21,7 @@ class EditBillForm extends React.Component {
       start_date: '',
       end_date: '',
       last_paid_date: null,
+      last_occurence_date: null,
       alert: false,
       bill_status: true,
       bill_categories: [],
@@ -52,7 +44,7 @@ class EditBillForm extends React.Component {
     if (nextProps.selectedBill.id !== undefined) {
       this.setState({     
         alert:nextProps.selectedBill.bills[0].alert,
-        amount:nextProps.selectedBill.bills[0].amount,
+        amount:nextProps.selectedBill.bills[0].amount.toFixed(2),
         bill_category_id: nextProps.selectedBill.bills[0].bill_category[0].id,
         bill_category_description: nextProps.selectedBill.bills[0].bill_category[0].name,
         bill_status: nextProps.selectedBill.bills[0].bill_status, 
@@ -64,6 +56,7 @@ class EditBillForm extends React.Component {
         paid_date: nextProps.selectedBill.paid_date,
         user_id: nextProps.selectedBill.user_id,
         last_paid_date:nextProps.selectedBill.bills[0].last_paid_date,
+        last_occurence_date: nextProps.selectedBill.bills[0].last_occurence_date, 
         bill_recurrence_id: nextProps.selectedBill.bills[0].bill_recurrence_id,
         bill_recurrence_type: nextProps.selectedBill.bills[0].bill_recurrence[0].recurrence_type,
         start_date: nextProps.selectedBill.bills[0].start_date,
@@ -140,6 +133,7 @@ class EditBillForm extends React.Component {
       start_date: '',
       end_date: '',
       last_paid_date: null,
+      last_occurence_date: null,
       alert: false,
       bill_status: true,
       bill_categories: [],
@@ -159,13 +153,14 @@ class EditBillForm extends React.Component {
       start_date: this.state.start_date,
       end_date: this.state.end_date,
       last_paid_date: this.state.last_paid_date,
+      last_occurence_date: this.state.last_occurence_date,
       bill_status: this.state.bill_status,
       alert: this.state.alert
     }
 
     this.props.UPDATE_BILL({ variables: updateBillVariables })
       .then(({ data }) => {
-        console.log('successfully updated bill in bills table', data)
+        console.log('successfully updated bill in bills table', data);
         this.props.data.refetch();
       })
       .catch(error => {
@@ -225,19 +220,6 @@ class EditBillForm extends React.Component {
               </div>
             </Heading>
             <Heading tag="h4" margin="small">
-              Bill Start Date(First Due Date):
-              <div>
-                <DateTime
-                  id="id"
-                  name="name"
-                  format="M/D/YYYY"
-                  step={5}
-                  onChange={this.handleStartDateChange}
-                  value={convertDateFormat(this.state.start_date)}
-                />
-              </div>
-            </Heading>
-            <Heading tag="h4" margin="small">
               Bill End Date(Last Due Date):
               <div>
                 <DateTime
@@ -246,21 +228,7 @@ class EditBillForm extends React.Component {
                   format="M/D/YYYY"
                   step={5}
                   onChange={this.handleEndDateChange}
-                  value={convertDateFormat(this.state.end_date)}
-                />
-              </div>
-            </Heading>
-            <Heading tag="h4" margin="small">
-              Recurrence:
-              <div>
-                <Select
-                  placeHolder="Select Recurrence Pattern"
-                  options={this.props.billRecurrenceTypes.map(
-                    (billRecurrenceType, i) =>
-                      billRecurrenceType.recurrence_type
-                  )}
-                  value={this.state.bill_recurrence_type}
-                  onChange={this.handleRecurrenceChanges}
+                  value={moment(this.state.end_date).format("M/D/YYYY")}
                 />
               </div>
             </Heading>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button, Columns, Footer, Form, Header, Heading, Layer,List,ListItem, SearchInput} from 'grommet';
+import {Box, Button, Columns, Footer, Form, Header, Heading, Headline, Layer,List,ListItem, SearchInput} from 'grommet';
 import { graphql, compose, withApollo } from 'react-apollo';
 import {CREATE_BILL_CATEGORY, BILL_PAYMENT_HISTORY_QUERY} from '../../../queries.js';
 
@@ -30,14 +30,13 @@ class AddBillCategoryForm extends React.Component {
       .CREATE_BILL_CATEGORY({
         variables: {
           name: this.state.billCategoryDescription,
-          user_id: this.state.user_id,
+          user_id: 1,
         },
       })
       .then(({ data }) => {
         console.log('successfully saved new bill category', data);
         this.props.data.refetch().then(data => {
           console.log('successfully fetched data after saving bill category', data);
-          this.props.handleAddBillCategoryFormToggle();
         });
       })
       .catch(error => {
@@ -50,42 +49,40 @@ class AddBillCategoryForm extends React.Component {
       return (
         <Layer
           closer="true"
-          onClose={this.props.handleCancelClick}
+          onClose={this.props.handleAddBillCategoryFormToggle}
           flush="true"
           overlayClose="true"
         >
-          <Form style={{ padding: '10%' }}>
-            <Header>
-              <Heading tag="h3" strong="true">Add Bill Category</Heading>
-            </Header>
-            <Heading tag="h4" margin="small">
-              Bill Category:
+          <Form style={{ padding: '10%', width:'500px', margin:'0 auto', textAlign:"center"}}>
+          <Headline size="small" strong={true}>
+          Add Bill Categories
+          </Headline>
               <div>
                 <SearchInput
                   value={this.state.bill_category_description}
-                  placeHolder="Enter Description"
+                  placeHolder="Enter Category Name"
                   onDOMChange={this.handleBillCategoryType}
                 />
               </div>
+            <Heading tag="h4" strong="true" margin="small" padding="small">
+              Current Bill Categories:
             </Heading>
-            <Heading tag="h4" margin="small">
-              Existing Bill Categories:
               <div>
                 <List>
                   {this.props.billCategories.map(billObj =>
                     <ListItem
                       justify="between"
                       separator="horizontal"
-                      style={{ fontSize: '16px' }}
+                      style={{ fontSize: '16px', textAlign:'center'}}
+                      align="center"
                     >
-                      <span>
+                      <span style={{textAlign:'center', margin: '0 auto'}}>
                         {billObj.name}
                       </span>
                     </ListItem>
                   )}
                 </List>
               </div>
-            </Heading>
             <Footer pad={{ vertical: 'medium' }}>
               <Columns justify="center" size="small" maxCount="2">
                 <Box align="center" pad="small">
