@@ -13,8 +13,46 @@ const TransactionPie = ({ data, labels }) => {
       backgroundColor: ["rgb(71, 255, 178)", "rgba(95, 0, 96, 0.8)"]
     }]
   }
+  // const options = {
+  //     responsive: true,
+  //     title: {
+  //       display: true,
+  //       text: 'Transaction Summary'
+  //     },
+  //     tooltips: {
+  //       mode: 'label'
+  //     },
+  //     hover: {
+  //       mode: 'dataset'
+  //     },
+  //     scales: {
+  //       xAxes: [
+  //         {
+  //           display: true,
+  //           scaleLabel: {
+  //             show: true,
+  //             labelString: 'Month'
+  //           }
+  //         }
+  //       ],
+  //       yAxes: [
+  //         {
+  //           id: 'y-axis-0',
+  //           display: true,
+  //           scaleLabel: {
+  //             show: true,
+  //             labelString: 'Value'
+  //           },
+  //           ticks: {
+  //             suggestedMin: 0,
+  //             suggestedMax: 5000
+  //           }
+  //         }
+  //       ]
+  //     }
+  //   }
   return (
-    <Doughnut data={chartData} />
+    <Doughnut width="300" height="300" data={chartData}/>
   )
 }
 

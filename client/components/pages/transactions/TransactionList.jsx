@@ -8,7 +8,6 @@ import Transaction from './Transaction.jsx';
 const TransactionList = ({ transactions, sort, dir, sortIdx, displaySummary }) => (
       <Table
         selectable={true}
-        onSelect={(value) => displaySummary(transactions[value - 1])}
         reponsive={true}>
         <TableHeader
           labels={['Date', 'Type', 'Category','Description', 'Amount']}
@@ -22,7 +21,7 @@ const TransactionList = ({ transactions, sort, dir, sortIdx, displaySummary }) =
         {
           transactions ? 
           transactions.map((transaction, idx) => {
-            return <Transaction displaySummary={displaySummary} {...transaction} key={idx}/>
+            return <Transaction displaySummary={displaySummary} transaction={transaction} idx={idx} handleClick={displaySummary} {...transaction} key={idx}/>
         }): 
           null
         }
