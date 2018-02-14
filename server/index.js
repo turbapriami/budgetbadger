@@ -33,7 +33,7 @@ const getToken = async (req) => {
     const { user_id, token } = JSON.parse(req.cookies.user)
     req.user = { user } = await jwt.verify(token, APP_SECRET);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
   req.next()
 }
@@ -53,15 +53,44 @@ const chooseDirectory = (req, res) => {
   if (req.user || req.originalUrl.slice(1, 18) == 'PasswordResetPage' || req.originalUrl.slice(1, 13) == 'SplashSignIn') {
     req.next()
   } else {
-    res.redirect('/home')
+    res.redirect('/about')
   }
 }
 
-const authCheck = (req, res) => {
+const authCheck = (req, res, next) => {
   if (req.user) {
     res.redirect('/')
   } else {
-    req.next()
+    next()
+  }
+}
+
+const resetCheck = (req, res) => {
+  let token = '';
+  let userToken = '';
+  let tokenMatch = false;
+  if (req.baseUrl.includes('passwordresetpage')) {
+    token = req.baseUrl.slice(19);
+    db.knex.select('*').from('users').where({
+      token: token
+    }).then(data => {
+      if (data[0] === undefined) {
+        console.log('no');
+      } else if (data !== undefined || data[0] !== undefined) {
+        userToken = data[0].token;
+        if (userToken === token) {
+          tokenMatch = true;
+        }
+      }
+    }).then(() => {
+      if (tokenMatch === true) {
+        req.next();
+      } else {
+        res.redirect('/about')
+      }
+    })
+  } else {
+    req.next();
   }
 }
 
@@ -96,9 +125,9 @@ graphqlExpress(req => ({
 }))
 );
 
-const unAuthenticatedRoutes = ['/home', '/SplashSignIn', '/SplashSignUp', '/PasswordRecovery']
+const unAuthenticatedRoutes = ['/about', '/signin', '/signup', '/passwordrecovery', '/passwordresetpage/:id'];
 
-app.use(unAuthenticatedRoutes, authCheck, express.static(path.join(__dirname, '../public/splash')));
+app.use(unAuthenticatedRoutes, [authCheck, resetCheck], express.static(path.join(__dirname, '../public/splash')));
 
 app.use(chooseDirectory)
 
@@ -107,7 +136,7 @@ app.use(express.static(path.join(__dirname, '../public/main')));
 // app.get('*', res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
 
 app.get('*', (req, res) => {
-  return res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'));
 })
 
 app.listen(port, (err) => {

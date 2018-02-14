@@ -13,6 +13,7 @@ module.exports = `
     state: String
     phone: String
     date: [String]
+    token: String
     transactions: [Transaction!]
     school: [School!]
     accounts: [Account!]
@@ -223,6 +224,7 @@ module.exports = `
       street: String
       zip_code: String
       state: String
+      token: String
       phone: String): User
       updateEmail(
         id: Int!    
@@ -252,5 +254,8 @@ module.exports = `
     createGoalProgress(goal_id: Int!, amount: String!, date: Date!): GoalProgress!
     createGoalCategory(goal_id: Int!, name: String!): GoalCategory!
     createGoalAccount(goal_id: Int!, account_id: String!): GoalAccount!
+    updatePassword(
+      email: String!
+      password: String!): [String!]
   }
   `

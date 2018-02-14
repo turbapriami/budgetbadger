@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router';
 import { Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer, Header, Heading, Label, Paragraph, TextInput, Tiles, Layer, PasswordInput } from 'grommet';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -13,7 +12,7 @@ class PasswordResetPage extends Component {
       passwordCopy: '',
       passwordsMatch: false,
       layerActive: false,
-      match: '',
+      token: '',
       location: '',
       history: ''
     }
@@ -22,9 +21,10 @@ class PasswordResetPage extends Component {
     this.writePassToState = this.writePassToState.bind(this);
     this.writeCopyToState = this.writeCopyToState.bind(this);
   }
-
-  componentDidMount() {
-    console.log('MATCH LOCATION AND HISTORY FROM PASSWORD RESET PAGE!!!!', this.state.match, this.state.location, this.state.history);
+  componentWillReceiveProps() {
+    this.setState({
+      token: this.props.match.params.id
+    })
   }
 
   submitPassword() {
@@ -71,8 +71,8 @@ class PasswordResetPage extends Component {
     return (
       <Box full={false} alignSelf="center" pad="small" size={{ height: "large", width: "large" }} pad="medium">
         {layer}
-        <div>You are now at {location.pathname}</div>
-        <Paragraph align="center">Please enter your password in the form below, then re-enter it again in the second form to make sure you entered the correct password.</Paragraph>
+        <div>You are now at {location.hash}</div>
+        <Paragraph align="center">Please enter your password and email in the forms below; be sure to re-enter your password again in the second form to make sure you entered the correct one, then click "Submit". </Paragraph>
         <Box margin={{ vertical: "small" }}>
           <PasswordInput onChange={this.writePassToState} />
         </Box>
@@ -84,6 +84,7 @@ class PasswordResetPage extends Component {
         </Box>
         <Box size={{ height: "10%", width: "15%" }} alignSelf="center" margin={{ top: "medium" }} >
           <Button label='Submit'
+            // type="submit"
             href='#'
             primary={false}
             secondary={false}

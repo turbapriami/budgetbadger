@@ -5,7 +5,9 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 const sendEmail = (userName, userEmail, userHash) => {
-  let passwordRecoveryLink = `<a href="localhost:1337/PasswordResetPage/${userHash}">reset your password here</a>`
+  console.log('USER HASHHHH!!!!', userHash);
+  let passwordRecoveryLink = `<a href="localhost:1337/passwordresetpage/${userHash}">reset your password here</a>`
+  console.log('PASSWORD RECOVERY LINK!!!!!', passwordRecoveryLink);
   const msg = {
     to: userEmail,
     from: 'sender@example.org',

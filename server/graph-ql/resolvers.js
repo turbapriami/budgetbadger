@@ -140,12 +140,13 @@ module.exports = {
   Query: {
     getUser: (parent, args, { knex, user }) => { 
       // ADD THE BELOW LOGIC TO ANY PRIVATE ROUTES
-      if (user) {
+      console.log('ARGS!!!', args);
+      // if (user) {
         console.log('user', user)
         return knex('users').where(args)
-      } else {
-        throw new Error('Not authenticated')
-      }
+      // } else {
+      //   throw new Error('Not authenticated')
+      // }
     },
 
     getTransactions: (parent, { user_id }, {knex, user}) =>   
@@ -423,11 +424,41 @@ module.exports = {
     deleteBillPaymentHistory: (parent, args, { knex }) => knex('bill_payment_history').where(args).del(),
 
     createLoan: async (parent, args, { models }) => await new models.Loan(args).save(null, {method:'insert'}),
+
     createLoanPayment: async (parent, args, { models }) => await new models.Loan_Payment(args).save(null, {method: 'insert'}),
-    getPasswordRecoveryEmail: (parent, args, { knex, user }) => {
+
+    getPasswordRecoveryEmail: async (parent, args, { knex, models, APP_SECRET }) => {
+      let { email } = args;
+      let user = await new models.User({email}).fetch();
+      if (!user) {
+        throw new Error('Unable to match the provided credentials');
+      }
+      let token = jwt.sign({ user: _.pick(user.attributes, ['date', 'id'])}, APP_SECRET, {
+        expiresIn: 360*60
+      })
+      token = token.split('').map(item => {
+        if (item === '.') {
+          return '_'
+        } else {
+          return item;
+        }
+      }).join('');
+      console.log("USER.ATTRIBUTES", user.attributes, token);
+      user.attributes['token'] = token;
+      let updated = await new models.User(user.attributes).save();
       knex('users').where(args).then((data) => {
         sendgrid.sendEmail(data[0].first_name, data[0].email, token)
       })
+    },
+    updatePassword: async (parent, args, { models, knex }) => {
+      console.log('MADE IT TO UPDATE PASSWORD');
+      const { email } = args;
+      const { password } = args;
+      const user = await new models.User({email}).fetch();
+      user.attributes['token'] = null;
+      user.attributes['password'] = password;
+      user.hashPassword();
+      let updated = await new models.User(user.attributes).save();
     },
     deleteLoan: (parent, args, { knex }) => knex('loans').where(args).del(),
 
