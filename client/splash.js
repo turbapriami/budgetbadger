@@ -9,7 +9,6 @@ import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
-import PasswordRecoveryModal from './components/pages/PasswordRecoveryModal.jsx';
 
 const httpLink = new HttpLink();
 
@@ -66,9 +65,6 @@ class SplashHome extends Component {
               )} />
               <Route exact={true} path="/SplashSignUp" render={() => (
                 <SplashSignUp client={client} />
-              )} />
-              <Route exact={true} path="/PasswordRecovery" render={() => (
-                <PasswordRecoveryModal />
               )} />
             </div>
           </BrowserRouter>

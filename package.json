@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon server/index.js",
-    "start": "nodemon server/index.js",
+    "start": "nodemon app/server/index.js",
     "build": "webpack --watch",
-    "worker": "nodemon server/worker/index.js",
     "budget-worker": "nodemon server/budget-worker/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "webpack"
@@ -49,6 +47,7 @@
     "bookshelf": "^0.12.1",
     "c3": "^0.4.18",
     "chart.js": "^2.7.1",
+    "chartjs-plugin-annotation": "^0.5.7",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "css-loader": "^0.28.9",

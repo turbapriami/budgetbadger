@@ -4,7 +4,6 @@ import { Anchor, Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer,
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Cookies from 'universal-cookie';
-import PasswordRecoveryModal from './PasswordRecoveryModal.jsx';
 import SplashSignUp from './SplashSignUp.jsx';
 
 class SplashSignIn extends Component {
@@ -62,11 +61,6 @@ class SplashSignIn extends Component {
             </Footer>
           </Form>
           <div style={{ outline: "#E8E8E8 solid thin" }}></div>
-          <Paragraph align="center" size="small" margin="small" >
-            <Link to={'/PasswordRecovery'}>
-              <a style={{ color: "#000" }} class="grommetux-anchor">I forgot my password</a>
-            </Link>
-          </Paragraph>
           <Router>
             <Paragraph align="center" size="small" margin="small" >
               New to Budget Badger?
