@@ -130,6 +130,18 @@ class GoalForm extends React.Component {
       goalProperties.end_date = this.state.dateField
     }
     this.props.handleSubmit(goalProperties, this.state.categoryField, this.state.accountField)
+    this.setState({
+      formActive: false,
+      dateActive: false,
+      descriptionField: '',
+      amountField: '',
+      dateField: '',
+      accountField: [],
+      categoryField: [],
+      freqField: '',
+      typeField: '',
+      monthlyAmount: ''
+    })
   }
 
   render() {
@@ -207,7 +219,7 @@ class GoalForm extends React.Component {
                 inline={false}
                 multiple={false}
                 onSearch={false}
-                options={['Plaid Checking', 'PlaidSavings', 'Plaid CD', 'Plaid Credit Card']}
+                options={this.props.accounts}
                 value={this.state.accountField}
                 onChange={(e)=> {this.handleAccountField(e)}}
               />
@@ -219,7 +231,7 @@ class GoalForm extends React.Component {
                 inline={false}
                 multiple={false}
                 onSearch={false}
-                options={['Food and Drink', 'Payment', 'Transfer', 'Travel']}
+                options={this.props.categories}
                 value={this.state.categoryField}
                 onChange={(e)=> {this.handleCategoryField(e)}}
               />
