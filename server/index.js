@@ -14,6 +14,8 @@ const db = require('./database/index.js');
 const APP_SECRET = process.env.APP_SECRET;
 const models = require('./database/models/index.js');
 const RateLimit = require('express-rate-limit');
+const request = require('request');
+const config = require('../webpack.config.js')
 
 const port = process.env.PORT || 1337;
 

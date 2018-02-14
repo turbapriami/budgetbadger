@@ -5,8 +5,8 @@ const Promise = require('bluebird');
 const cors = require('cors');
 const moment = require('moment')
 const port = process.env.WORKER_PORT || 8002;
-const knex = require('../database/index.js').knex;
-const models = require('../database/models/index.js');
+const knex = require('./database/index.js').knex;
+const models = require('./database/models/index.js');
 const schedule = require('node-schedule')
 
 const app = express();

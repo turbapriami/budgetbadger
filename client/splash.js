@@ -9,8 +9,11 @@ import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
+<<<<<<< HEAD
 import PasswordRecoveryModal from './components/pages/PasswordReset/PasswordRecoveryModal.jsx';
 import PasswordResetPage from './components/pages/PasswordReset/PasswordResetPage.jsx';
+=======
+>>>>>>> set up docker
 
 const httpLink = new HttpLink();
 
@@ -61,6 +64,7 @@ class SplashHome extends Component {
                   </Box>
                 </div>
               </Header>
+<<<<<<< HEAD
               <Switch>
                 <Route exact={true} path="/about" render={() => (
                   <Splash client={client} />
@@ -76,6 +80,17 @@ class SplashHome extends Component {
                 )} />
                 <Route path='/passwordresetpage/:id' component={PasswordResetPage}/>
               </Switch>
+=======
+              <Route exact={true} path="/home" render={() => (
+                <Splash client={client} />
+              )} />
+              <Route exact={true} path="/SplashSignIn" render={() => (
+                <SplashSignIn client={client} />
+              )} />
+              <Route exact={true} path="/SplashSignUp" render={() => (
+                <SplashSignUp client={client} />
+              )} />
+>>>>>>> set up docker
             </div>
           </Router>
         </App>

@@ -1,0 +1,29 @@
+version: '2.1'
+
+services:
+  webb-service:
+    container_name: webb-service
+    build: ./
+    volumes:
+      - './:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - '3007:3006' # expose ports - HOST:CONTAINER
+  transaction-service:  
+    container_name: transaction-service
+    build: './server/worker'
+    volumes:
+      - './server/worker:/usr/src/app'
+      - './server/worker/package.json:/usr/src/package.json'
+      - './server/worker:/usr/src/app/node_modules'
+    ports:
+      - '3000:3000' # expose ports - HOST:CONTAINER
+  budget-service:  
+      container_name: budget-service
+      build: './server/budget-worker'
+      volumes:
+        - './server/budget-worker:/usr/src/app'
+        - './server/budget-worker/package.json:/usr/src/package.json'
+        - './server/budget-worker:/usr/src/app/node_modules'
+      ports:
+        - '7080:7080' # expose ports - HOST:CONTAINER

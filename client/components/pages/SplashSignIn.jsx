@@ -77,11 +77,6 @@ class SplashSignIn extends Component {
             </Footer>
           </Form>
           <div style={{ outline: "#E8E8E8 solid thin" }}></div>
-          <Paragraph align="center" size="small" margin="small" >
-            <Link to={'/PasswordRecovery'}>
-              <a style={{ color: "#000" }} class="grommetux-anchor">I forgot my password</a>
-            </Link>
-          </Paragraph>
           <Router>
             <Paragraph align="center" size="small" margin="small" >
               New to Budget Badger?
