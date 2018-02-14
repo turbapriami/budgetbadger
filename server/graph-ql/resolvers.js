@@ -460,15 +460,6 @@ module.exports = {
         })
       )
       return newGoal
-    },
-    createGoalProgress: async (parent, args, { models}) => {
-      return await new models.GoalProgress(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalCategory: async (parent, args, { models}) => {
-      return await new models.GoalCategory(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalAccount: async (parent, args, { models}) => {
-      return await new models.GoalAccount(args).save(null, {method: 'insert'}).attributes;
     }
   }
 }
