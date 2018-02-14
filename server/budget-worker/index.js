@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
+const Promise = require('bluebird');
 const cors = require('cors');
 const moment = require('moment')
 const port = process.env.WORKER_PORT || 8002;
@@ -34,68 +35,98 @@ app.use(bodyParser.json());
 //   })
 // })
 
-// const calculateGoalProgress = schedule.scheduleJob('30 * * * *', (id, category) => {
-//   knex('transactions').where({
-//     user_id: id,
-//     category: category
-//   }).then(found => {
-//     // filter for transactions from the current month and reduce to total amount
-//     return found.filter((item) => {
-//       // using last month as a placeholder for sandbox data
-//       if (moment(item.date).format('YYYY-MM') === moment('2018-01').format('YYYY-MM')) {
-//         return item
-//       }
-//     }).reduce((acc, elem) => {
-//       return acc + Number(elem.amount)
-//     }, 0)
-//   }).then(total => {
-//     updateGoalProgress(total)
-//   })
-// })
-
-// refactor to check all transactions if account/category provided >><<<<
-const calculateGoalProgress = (id, category, account) => {
-  knex('transactions').where({
-    user_id: id,
-    category: category
-  }).then(found => {
-    // filter for transactions from the current month and reduce to total amount
-    return found.filter((item) => {
-      // using last month as a placeholder for sandbox data
-      if (moment(item.date).format('YYYY-MM') === moment('2018-01').format('YYYY-MM')) {
-        return item
-      }
-    }).reduce((acc, elem) => {
-      return acc + Number(elem.amount)
-    }, 0)
-  }).then(total => {
-    updateGoalProgress(total)
-  })
-}
-
-const updateGoalProgress = (total) => {
-  console.log(total)
-  knex('goals').then(res => {
-    res.forEach((goal) => {
-      knex('goal_progress').where({
-        goal_id: goal.id,
-        date: moment().format('YYYY-MM-DD')
-      }).then(found => {
-        if (found.length === 0) {
-          new models.GoalProgress({
-            goal_id: goal.id,
-            amount: total,
-            date: moment().format('YYYY-MM-DD')
-          }).save()
-        } else {
-          console.log('wait until the next half hour')
-        }
+const checkGoals = () => {
+  knex('goals').then(goals => {
+    goals.forEach(goal => {
+      knex('goal_accounts').where({
+        goal_id: goal.id
+      })
+      .then(accounts => {
+        knex('goal_categories').where({
+          goal_id: goal.id
+        })
+        .then(categories => {
+          // console.log(goal.id, accounts, categories)
+          accounts = accounts.filter(account => {
+            if (account.goal_id === goal.id) {
+              return account
+            }
+          })
+          categories = categories.filter(category => {
+            if (category.goal_id === goal.id) {
+              return category
+            }
+          })
+          // console.log('GOAL ID', goal)
+          // console.log('ACCOUNTS', accounts)
+          // console.log('CATS', categories)
+          calculateGoalProgress(goal, accounts, categories)
+        })
       })
     })
   })
 }
 
-calculateGoalProgress(1, 'Food and Drink')
+const calculateGoalProgress = (goal, accounts, categories) => {
+  // operate on each account's transactions based on categories
+  allAccountsTotal = 0
+  Promise.all(
+    accounts.map(async account => {
+      return await knex('transactions').where({
+        user_id: goal.user_id,
+        account_id: account.account_id
+      }).then(transactions => {
+        // filter transactions by category and date
+        transactionsTotal = transactions.filter(transaction => {
+          for (let category of categories) {
+            if (
+              transaction.category === category.name &&
+              moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')
+            ) {
+              return transaction
+            }
+          }
+        }).reduce((acc, elem) => {
+          return acc + Number(elem.amount)
+        }, 0)
+        // reduce transactions to single total and add to allAccountsTotal
+        allAccountsTotal += transactionsTotal
+      })
+    })
+  )
+  console.log(allAccountsTotal)
+  updateGoalProgress(allAccountsTotal, goal)
+}
+
+const updateGoalProgress = (total, goal) => {
+  knex('goal_progress').where({
+    goal_id: goal.id,
+    date: moment().format('YYYY-MM')
+  }).then(found => {
+    if (found.length === 0) {
+      new models.GoalProgress({
+        goal_id: goal.id,
+        amount: total,
+        date: moment().format('YYYY-MM')
+      }).save()
+    } else {
+      new models.GoalProgress({
+        id: found[0].id
+      })
+      .save({
+        amount: total
+      }, {
+        patch: true
+      })
+    }
+  })
+}
+
+checkGoals()
+
+const goalProgressSchedule = schedule.scheduleJob('30 * * * *', () => {
+  checkGoals()
+})
 
 const trackBalance = () => {
   knex('accounts').then(res => {
@@ -119,7 +150,7 @@ const trackBalance = () => {
   })
 }
 
-trackBalance()
+// trackBalance()
 
 app.listen(port, () => {
   console.log('BUDGET TRACKER running on port ' + port)
