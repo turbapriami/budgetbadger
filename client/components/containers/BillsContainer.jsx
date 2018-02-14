@@ -24,7 +24,6 @@ class BillsContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
     var currentDate = new Date();
     if (nextProps.data.getBillPaymentHistory) {
       var paidBills = nextProps.data.getBillPaymentHistory
@@ -85,6 +84,7 @@ class BillsContainer extends Component {
   }
 
   render() {
+    console.log('this.props', this.props);
     return (
       <div>
         <BillsSummary

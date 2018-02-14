@@ -22,11 +22,6 @@ const withDashQuery = graphql(DASH_QUERY, {
 })
 
 const withUpdateTransactions = graphql(UPDATE_TRANSACTIONS, {
-  // options: {
-  //   refetchQueries: [{
-  //     query: DASH_QUERY
-  //   }]
-  // }
   options: (props) => ({
     variables: {
       user_id: window.localStorage.getItem('user_id')
@@ -53,7 +48,7 @@ class DashBoard extends React.Component {
     if (this.props.data.getBillPaymentHistory) {
       let currentDate = new Date();
       var unpaidBills = this.props.data.getBillPaymentHistory
-        .filter(bill => !bill.paid && bill.bills[0].bill_status)
+        .filter(bill => !bill.paid && bill.bills[0].bill_status).sort((a,b) => {return new Date(a.due_date) - new Date(b.due_date)})
       var billsDue = <BillsOnDashboard unpaidBills={unpaidBills}/>
     } else {
       var billsDue = <Spinner/>
