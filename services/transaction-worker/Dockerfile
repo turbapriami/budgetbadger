@@ -6,9 +6,9 @@ COPY package.json /tmp/
 RUN npm install
 
 #Create working directory and build bundle
-COPY . server/worker/usr/src/app/
-RUN cp -a /tmp/node_modules /services/transaction-worker/usr/src/app/
-WORKDIR /services/transaction-worker/usr/src/app/
+COPY . services/transaction-worker/usr/src/app/
+RUN cp -a /tmp/node_modules services/transaction-worker/usr/src/app/
+WORKDIR services/transaction-worker/usr/src/app/
 
 ENV NODE_ENV=production
 

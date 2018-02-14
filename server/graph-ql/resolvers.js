@@ -327,11 +327,9 @@ module.exports = {
         throw new Error('Unable to match the password');
       }
       const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
-        expiresIn: 360*60
+        expiresIn: 360*60*60
       })
-      // user.token = token;
       return [token, user.attributes.id]
-      // return {id, token};
     },
 
     createTransaction: async (parent, args, { models }) => {
