@@ -34,9 +34,23 @@ class GoalsContainer extends React.Component {
       goalProgress = this.props.data.getGoals[this.state.goalIndex].goal_progress
       goal = this.props.data.getGoals[this.state.goalIndex]
     }
+    let accounts = []
+    let categories = []
+    if (this.props.data.getAccounts) {
+      accounts = this.props.data.getAccounts.map(account => {
+        return account.bank_name
+      })
+      categories = [...new Set(this.props.data.getTransactions.map(transaction => {
+        return transaction.category
+      }))]
+    }
     return(
       <div>
-        <GoalForm handleSubmit = {this.handleSubmit} />
+        <GoalForm 
+          handleSubmit = {this.handleSubmit}
+          accounts = {accounts}
+          categories = {categories}
+        />
         <Goals goals={this.props.data.getGoals} handleClick={this.handleClick} />
         <GoalHistory goal={goal} goalProgress={goalProgress} />
       </div>

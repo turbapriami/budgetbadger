@@ -244,6 +244,12 @@ const GOALS_QUERY = gql`
         }
       }
     }
+    getAccounts(user_id: $user_id) {
+      bank_name
+    }
+    getTransactions(user_id: $user_id) {
+      category
+    }
   }`;
 
 export {
