@@ -57,10 +57,6 @@ class BillsContainer extends Component {
         return totalCash;
       },0);
 
-
-
-      console.log('creditAvailable', creditAvailable);
-      console.log('cashAvailable', cashAvailable);
       this.setState({
         billsDueThisMonth,
         overdueBills,
@@ -105,7 +101,6 @@ class BillsContainer extends Component {
   }
 
   render() {
-    console.log('this.props', this.props);
     return (
       <div>
         <BillsSummary
