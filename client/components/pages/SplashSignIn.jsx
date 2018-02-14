@@ -20,6 +20,7 @@ class SplashSignIn extends Component {
 
   async _confirm() {
     const { user_email, password } = this.state;
+    console.log(this.state)
     try {
       const result = await this.props.mutate({
         variables: {

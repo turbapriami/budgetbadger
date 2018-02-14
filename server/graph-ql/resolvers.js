@@ -316,7 +316,6 @@ module.exports = {
     deleteUser: (parent, args, { knex }) => knex('users').where(args).del(),
 
     loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
-      console.log("SERVER, CALLING LOGIN")
       const user = await new models.User({ email }).fetch();
       if (!user) {
         throw new Error('Unable to match the provided credentials');
