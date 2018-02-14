@@ -43,7 +43,7 @@ class GoalsContainer extends React.Component {
   render(){
     let goalProgress = null
     let goal = null
-    if (this.props.data.getGoals) {
+    if (this.props.data.getGoals && this.props.data.getGoals.length > 0) {
       goalProgress = this.props.data.getGoals[this.state.goalIndex].goal_progress
       goal = this.props.data.getGoals[this.state.goalIndex]
     }
