@@ -87,12 +87,18 @@ class GoalForm extends React.Component {
 
   handleFreqField(e) {
     let dateToggle = true
+    let monthlyAmount = this.state.monthlyAmount
+    let dateField = this.state.dateField
     if (e.value === 'Repeat Monthly') {
       dateToggle = false
+      monthlyAmount = ''
+      dateField = ''
     }
     this.setState({
       freqField: e.value,
-      dateActive: dateToggle
+      dateActive: dateToggle,
+      monthlyAmount: monthlyAmount,
+      dateField: dateField
     })
   }
 
@@ -135,7 +141,7 @@ class GoalForm extends React.Component {
           closer={true}
           onClose={()=> {this.setState({formActive: false})}}
         >
-          <Form pad='medium'>
+          <Form pad='medium' onSubmit={this.props.handleSubmit}>
             <Label>Description</Label>
             <FormField>
               <TextInput 
@@ -207,7 +213,6 @@ class GoalForm extends React.Component {
               label='Submit'
               type='submit'
               primary={true}
-              // onClick={...} 
             />
           </Form>
         </Layer>

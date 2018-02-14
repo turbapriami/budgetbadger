@@ -14,12 +14,17 @@ class GoalsContainer extends React.Component {
       goalIndex: 0
     }
     this.handleClick = this.handleClick.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleClick(e) {
     this.setState({
       goalIndex: e
     })
+  }
+
+  handleSubmit(e) {
+
   }
 
   render(){
@@ -31,7 +36,7 @@ class GoalsContainer extends React.Component {
     }
     return(
       <div>
-        <GoalForm />
+        <GoalForm handleSubmit = {this.handleSubmit} />
         <Goals goals={this.props.data.getGoals} handleClick={this.handleClick} />
         <GoalHistory goal={goal} goalProgress={goalProgress} />
       </div>

@@ -7,14 +7,10 @@ import Meter from 'grommet/components/Meter'
 
 const Goals = (props) => {
   if (props.goals) {
-    return (
-      <Tiles
-        fill={true}
-        flush={false}
-        selectable={true}
-        onSelect={props.handleClick}
-      >
-        {props.goals.map((goal => {
+    let goalsTiles = null
+    if (props.goals.length > 0) {
+      goalsTiles = (
+        props.goals.map((goal => {
           return (
             <Tile>
               <Card
@@ -35,7 +31,17 @@ const Goals = (props) => {
               </Card>
             </Tile>
           )
-        }))}
+        }))
+      )
+    }
+    return (
+      <Tiles
+        fill={true}
+        flush={false}
+        selectable={true}
+        onSelect={props.handleClick}
+      >
+        {goalsTiles}
       </Tiles>
     )
   } else {
