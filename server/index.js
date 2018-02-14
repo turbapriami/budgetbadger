@@ -14,6 +14,7 @@ const db = require('./database/index.js');
 const APP_SECRET = process.env.APP_SECRET;
 const models = require('./database/models/index.js');
 const RateLimit = require('express-rate-limit');
+const Promise = require('bluebird');
 
 const port = process.env.PORT || 1337;
 
@@ -33,35 +34,53 @@ const getToken = async (req) => {
     const { user_id, token } = JSON.parse(req.cookies.user)
     req.user = { user } = await jwt.verify(token, APP_SECRET);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
   req.next()
 }
 
-// const checkDirectory = (req, res, next) => {
-//   if (req.originalUrl.slice(1, 18) == 'PasswordResetPage' && req.method === 'GET') {
-//     console.log('SUCCESSSSSSSS')
-
-//   }
-//   console.log('123', req.params)
-//   console.log('456', req.originalUrl.slice(1, 19))
-//   console.log('EIHAIDIOUASUDJUIDHAUIAHDIAD', req.baseUrl)
-//   next()
-// }
-
 const chooseDirectory = (req, res) => {
-  if (req.user || req.originalUrl.slice(1, 18) == 'PasswordResetPage' || req.originalUrl.slice(1, 13) == 'SplashSignIn') {
+  if (req.user) {
     req.next()
   } else {
-    res.redirect('/home')
+    res.redirect('/about')
   }
 }
 
-const authCheck = (req, res) => {
+const authCheck = (req, res, next) => {
   if (req.user) {
     res.redirect('/')
   } else {
-    req.next()
+    next()
+  }
+}
+
+const resetCheck = (req, res) => {
+  let token = '';
+  let userToken = '';
+  let tokenMatch = false;
+  if (req.baseUrl.includes('passwordresetpage')) {
+    token = req.baseUrl.slice(19);
+    db.knex.select('*').from('users').where({
+      token: token
+    }).then(data => {
+      if (data[0] === undefined) {
+        console.log('no');
+      } else if (data !== undefined || data[0] !== undefined) {
+        userToken = data[0].token;
+        if (userToken === token) {
+          tokenMatch = true;
+        }
+      }
+    }).then(() => {
+      if (tokenMatch === true) {
+        req.next();
+      } else {
+        res.redirect('/about')
+      }
+    })
+  } else {
+    req.next();
   }
 }
 
@@ -77,7 +96,7 @@ const logger = (req, res, next) => {
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }));
-// app.use(checkDirectory)
+
 app.use(getToken); // => uncomment to enable authentication
 
 
@@ -96,18 +115,16 @@ graphqlExpress(req => ({
 }))
 );
 
-const unAuthenticatedRoutes = ['/home', '/SplashSignIn', '/SplashSignUp', '/PasswordRecovery']
+const unAuthenticatedRoutes = ['/about', '/signin', '/signup', '/passwordrecovery', '/passwordresetpage/:id'];
 
-app.use(unAuthenticatedRoutes, authCheck, express.static(path.join(__dirname, '../public/splash')));
+app.use(unAuthenticatedRoutes, [authCheck, resetCheck], express.static(path.join(__dirname, '../public/splash')));
 
 app.use(chooseDirectory)
 
 app.use(express.static(path.join(__dirname, '../public/main')));
 
-// app.get('*', res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
-
 app.get('*', (req, res) => {
-  return res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'));
 })
 
 app.listen(port, (err) => {

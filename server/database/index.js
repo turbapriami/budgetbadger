@@ -16,6 +16,7 @@ knex.schema.hasTable('users').then(exists => {
       table.increments('id').primary();
       table.string('email');
       table.string('password');
+      table.string('token');
       table.string('first_name');
       table.string('last_name');
       table.string('street');
