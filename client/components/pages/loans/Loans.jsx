@@ -96,13 +96,14 @@ class Loans extends React.Component {
   };
 
   handleLoan(e){
-    e.preventDefault();
+    // e.preventDefault();
     var currLoan = {};
     this.props.loans.forEach((loan) => {
       if(loan.id === parseInt(e.target.name)) {
         currLoan = loan;
       }
     });
+
     currLoan.datesArr = moment(currLoan.inception_date).twix(currLoan.end_date, {allDay: true}).toArray('months').map((date) => { return date.format('L') });
     
     this.setState({
@@ -121,9 +122,13 @@ class Loans extends React.Component {
     this.handleAmort();
   };
 
-  componentWillReceiveProps(nextProps){
-    this.handleLoan();
-  };
+  // componentWillReceiveProps(nextProps){
+  //   console.log("THIS PROPS ",this.props);
+  //   console.log("NeXT PROPS ",nextProps);
+  //   if (this.props){
+  //     this.handleLoan(nextProps);
+  //   }
+  // };
 
   handleModal(){
     this.setState({
@@ -197,11 +202,15 @@ class Loans extends React.Component {
               <Button icon={<AddIcon />}
                 onClick={this.handleModal}
                 href='#' 
-                align='right'/>
+                align='right' 
+                label='Add Loans'
+                plain={true}/>
               <Button icon={<LineChartIcon />}
                 onClick={this.toggleChart}
                 href='#' 
-                align='right'/>
+                align='right'
+                label='Advanced Chart'
+                plain={true}/>
                 </Box>
                 { this.state.modalToggle && 
                   <AddLoanForm handleModal={this.handleModal} 

@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import Navigation from '../pages/transactions/Navigation.jsx';
-import Search from '../pages/transactions/Search.jsx'
-import PieChart from '../pages/transactions/PieChart.jsx'
-import SearchFilter from '../pages/transactions/SearchFilters.jsx'
-import { Box, Split } from 'grommet'
+import Search from '../pages/transactions/Search.jsx';
+import PieChart from '../pages/transactions/PieChart.jsx';
+import SearchFilter from '../pages/transactions/SearchFilters.jsx';
+import { Box, Split } from 'grommet';
 import Spinner from '../pages/Spinner.jsx';
-import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
-import { graphql, compose, withApollo } from 'react-apollo'
+import sortingFuncs from '../pages/transactions/sortingFunctions.jsx';
+import { graphql, compose, withApollo } from 'react-apollo';
 import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS } from '../../queries.js';
-import NewTransaction from '../pages/transactions/NewTransaction.jsx'
-import SummaryChartContainer from '../pages/transactions/Chart/TransactionsSummary.jsx'
+import NewTransaction from '../pages/transactions/NewTransaction.jsx';
+import SummaryChartContainer from '../pages/transactions/Chart/TransactionsSummary.jsx';
 import Modal from 'react-responsive-modal';
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   options: (props) => ({

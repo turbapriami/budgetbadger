@@ -26,7 +26,9 @@ class LoansOnDashboard extends React.Component {
         intSum += loan.interest_rate;
         counter++;
       })
-      intSum = intSum/counter;
+      if(counter > 0){
+        intSum = intSum/counter;
+      };
       this.setState({
         TotalLoanDebt: debtSum,
         AvgIntRate: intSum
