@@ -4,7 +4,7 @@ import { Anchor, Box, Button, Card, Columns, CheckBox, Form, FormFields, Footer,
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Cookies from 'universal-cookie';
-import PasswordRecoveryModal from './PasswordRecoveryModal.jsx';
+import PasswordRecoveryModal from './PasswordReset/PasswordRecoveryModal.jsx';
 import SplashSignUp from './SplashSignUp.jsx';
 
 class SplashSignIn extends Component {
@@ -49,7 +49,7 @@ class SplashSignIn extends Component {
             <Box pad={{ vertical: "small", width: "100%" }} >
               <FormFields style={{ width: "100%" }} >
                   <Label>Email</Label>
-                  <TextInput onChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
+                  <TextInput onDOMChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
                   <Label>Password</Label>
                   <PasswordInput onChange={e => this.setState({ password: e.target.value })} style={{ width: "100%" }} />
               </FormFields>

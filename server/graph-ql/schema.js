@@ -12,6 +12,8 @@ module.exports = `
     city: String
     state: String
     phone: String
+    date: [String]
+    token: String
     transactions: [Transaction!]
     school: [School!]
     accounts: [Account!]
@@ -205,7 +207,7 @@ module.exports = `
 
   type Mutation {
     createTransaction(user_id: Int!, amount: Float!, date: String!, category: String!, name: String!, account_id: String!, street: String, zip_code: String, state: String ): Transaction
-    createUser(email: String!, password: String!): [String!]
+    createUser(email: String!, password: String!, date: String): [String!]
     createAccount(id: String!, user_id: Int!, bank_name: String!, bank_id: String!, type: String!, current_balance: Int!): Account!
     createSchool(name: String!): School!
     createLoan(name: String!, amount: Float!, interest_rate: Float!, inception_date: String!, end_date: String!, user_id: Int!): Loan
@@ -222,6 +224,7 @@ module.exports = `
       street: String
       zip_code: String
       state: String
+      token: String
       phone: String): User
       updateEmail(
         id: Int!    
@@ -251,5 +254,8 @@ module.exports = `
     createGoalProgress(goal_id: Int!, amount: String!, date: Date!): GoalProgress!
     createGoalCategory(goal_id: Int!, name: String!): GoalCategory!
     createGoalAccount(goal_id: Int!, account_id: String!): GoalAccount!
+    updatePassword(
+      email: String!
+      password: String!): [String!]
   }
   `
