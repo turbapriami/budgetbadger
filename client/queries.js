@@ -195,6 +195,7 @@ query getBillPaymentHistory($user_id: Int!, $bill_id: Int) {
     bank_name
     type
     current_balance
+    limit
   }
 }`;
 
