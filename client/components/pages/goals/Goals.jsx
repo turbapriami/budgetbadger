@@ -11,6 +11,12 @@ const Goals = (props) => {
     if (props.goals.length > 0) {
       goalsTiles = (
         props.goals.map((goal => {
+          let progressLabel = '$0 out of ' + goal.amount
+          let progressValue = 0
+          if (goal.goal_progress.length > 0) {
+            progressLabel = '$' + goal.goal_progress[goal.goal_progress.length - 1].amount + ' out of ' + '$' +  goal.amount
+            progressValue = goal.goal_progress[goal.goal_progress.length - 1].amount
+          }
           return (
             <Tile>
               <Card
@@ -20,8 +26,8 @@ const Goals = (props) => {
                 <Meter 
                   type='bar'
                   size='medium'
-                  label={'$' + goal.goal_progress[goal.goal_progress.length - 1].amount + ' out of ' + '$' +  goal.amount}
-                  value={goal.goal_progress[goal.goal_progress.length - 1].amount}
+                  label={progressLabel}
+                  value={progressValue}
                   max={goal.amount}
                 />
                 <br/>

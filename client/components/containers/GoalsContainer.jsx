@@ -5,7 +5,7 @@ import Goals from '../pages/goals/Goals.jsx'
 import GoalHistory from '../pages/goals/GoalHistory.jsx'
 import GoalForm from '../pages/goals/GoalForm.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
-import {GOALS_QUERY} from '../../queries.js';
+import {GOALS_QUERY, CREATE_GOAL} from '../../queries.js';
 
 class GoalsContainer extends React.Component {
   constructor(props){
@@ -23,8 +23,21 @@ class GoalsContainer extends React.Component {
     })
   }
 
-  handleSubmit(goalProperties, categories, accounts) {
-    console.log(goalProperties, categories, accounts)
+  handleSubmit(goalProperties) {
+    goalProperties.user_id = window.localStorage.getItem('user_id')
+    // replace account names with account id
+    let fullAccounts = this.props.data.getAccounts
+    for (let i = 0; i < goalProperties.accounts.length; i++) {
+      for (let k = 0; k < goalProperties.accounts.length; k++) {
+        if (goalProperties.accounts[i] === fullAccounts[k].bank_name) {
+          goalProperties.accounts[i] = fullAccounts[k].id
+        }
+      }
+    }
+    console.log(goalProperties)
+    this.props.CREATE_GOAL({
+      variables: goalProperties
+    })
   }
 
   render(){
@@ -67,4 +80,4 @@ const withGoalsQuery = graphql(GOALS_QUERY, {
   })
 })
 
-module.exports = compose(withApollo, withGoalsQuery)(GoalsContainer);
+module.exports = compose(withApollo, withGoalsQuery, graphql(CREATE_GOAL, {name: 'CREATE_GOAL'}))(GoalsContainer);
