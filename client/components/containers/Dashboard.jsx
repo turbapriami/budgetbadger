@@ -46,9 +46,9 @@ class DashBoard extends React.Component {
 
   render(){
     if (this.props.data.getBillPaymentHistory) {
-      let currentDate = new Date();
       var unpaidBills = this.props.data.getBillPaymentHistory
-        .filter(bill => !bill.paid && bill.bills[0].bill_status).sort((a,b) => {return new Date(a.due_date) - new Date(b.due_date)})
+        .filter(bill => !bill.paid && bill.bills[0].bill_status)
+        .sort((a,b) => {return new Date(a.due_date) - new Date(b.due_date)})
       var billsDue = <BillsOnDashboard unpaidBills={unpaidBills}/>
     } else {
       var billsDue = <Spinner/>

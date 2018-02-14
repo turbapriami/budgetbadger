@@ -77,7 +77,7 @@ import styles from '../../../../public/main/jStyles';
                   Cash Available
                 </Heading>
                 <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
-                  Need Data
+                  ${props.cashAvailable ? props.cashAvailable.toFixed(2) : 0}
                 </Paragraph>
               </Box>
               <Box
@@ -96,7 +96,7 @@ import styles from '../../../../public/main/jStyles';
                   Credit Available
                 </Heading>
                 <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
-                  Need Data
+                  ${props.creditAvailable ? props.creditAvailable.toFixed(2) : 0}
                 </Paragraph>
               </Box>
           </Columns>

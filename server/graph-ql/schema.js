@@ -82,7 +82,7 @@ module.exports = `
     bank_name: String!
     type: String!
     current_balance: Int!
-    limit: Int!
+    limit: Int
     transactions: [Transaction!]
     monthly_balance: [MonthlyBalance!]
   }
