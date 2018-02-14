@@ -23,8 +23,8 @@ class GoalsContainer extends React.Component {
     })
   }
 
-  handleSubmit(e) {
-
+  handleSubmit(goalProperties, categories, accounts) {
+    console.log(goalProperties, categories, accounts)
   }
 
   render(){

@@ -31,6 +31,7 @@ class GoalForm extends React.Component {
     this.handleAccountField = this.handleAccountField.bind(this)
     this.handleCategoryField = this.handleCategoryField.bind(this)
     this.calculateMonthlyAmount = this.calculateMonthlyAmount.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   calculateMonthlyAmount(dateInput, amountInput) {
@@ -116,6 +117,21 @@ class GoalForm extends React.Component {
     })
   }
 
+  handleSubmit(e) {
+    e.preventDefault()
+    let goalProperties = {
+      amount: this.state.amountField,
+      description: this.state.descriptionField,
+      is_budget: this.state.typeField,
+      start_date: moment().format('YYYY-MM-DD')
+    }
+    if (this.state.dateField !== '') {
+      goalProperties.amount = this.state.monthlyAmount
+      goalProperties.end_date = this.state.dateField
+    }
+    this.props.handleSubmit(goalProperties, this.state.categoryField, this.state.accountField)
+  }
+
   render() {
     if (this.state.formActive) {
       let dateField = null
@@ -141,7 +157,7 @@ class GoalForm extends React.Component {
           closer={true}
           onClose={()=> {this.setState({formActive: false})}}
         >
-          <Form pad='medium' onSubmit={this.props.handleSubmit}>
+          <Form pad='medium' onSubmit={this.handleSubmit}>
             <Label>Description</Label>
             <FormField>
               <TextInput 
