@@ -84,8 +84,8 @@ class PasswordResetPage extends Component {
         </Box>
         <Box size={{ height: "10%", width: "15%" }} alignSelf="center" margin={{ top: "medium" }} >
           <Button label='Submit'
-            // type="submit"
-            href='#'
+            type="submit"
+            href='/signin'
             primary={false}
             secondary={false}
             accent={false}
