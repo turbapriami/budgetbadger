@@ -7,7 +7,7 @@ import BillsPaidTable from '../pages/bills/BillsPaidTable.jsx';
 import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import billSortingFunctions from '../pages/bills/billSortingFunctions.jsx';
-import {BILL_PAYMENT_HISTORY_QUERY} from '../../queries.js';
+import {BILL_PAYMENT_HISTORY_QUERY, ACCOUNTS_QUERY} from '../../queries.js';
 
 class BillsContainer extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ class BillsContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps);
     var currentDate = new Date();
     if (nextProps.data.getBillPaymentHistory) {
       var paidBills = nextProps.data.getBillPaymentHistory
@@ -107,14 +108,33 @@ class BillsContainer extends Component {
   }
 }
 
+// const withBills = graphql(BILL_PAYMENT_HISTORY_QUERY, {
+//   options: props => ({
+//     variables: {
+//       user_id: window.localStorage.getItem('user_id'),
+//     },
+//     name: 'AllUserBills',
+//   }),
+// });
+// const withAccountsQuery = graphql(ACCOUNTS_QUERY, {
+//   options: (props) => ({
+//     variables: {
+//       user_id: window.localStorage.getItem('user_id')
+//     },
+//     name: 'Accounts Data'
+//   })
+// })
 
-const withBills = graphql(BILL_PAYMENT_HISTORY_QUERY, {
-  options: props => ({
-    variables: {
-      user_id: window.localStorage.getItem('user_id'),
-    },
-    name: 'AllUserBills',
-  }),
-});
+// export default compose(withApollo, withBills)(BillsContainer);
 
-export default compose(withApollo, withBills)(BillsContainer);
+
+export default compose(
+  graphql(BILL_PAYMENT_HISTORY_QUERY, {
+    options: props => ({
+      variables: {
+        user_id: window.localStorage.getItem('user_id'),
+      },
+      name: 'BILL PAYMENT DATA'
+    }),
+  })
+)(BillsContainer);

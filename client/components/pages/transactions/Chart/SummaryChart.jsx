@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Line, Chart } from 'react-chartjs-2';
 import { Layer, Select, CheckBox } from 'grommet';
-import 'chartjs-plugin-annotation'
+// import 'chartjs-plugin-annotation'
 
 class HistoricalChart extends Component {
   constructor() {

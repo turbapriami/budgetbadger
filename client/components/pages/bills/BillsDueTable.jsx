@@ -52,7 +52,6 @@ class BillsDueTable extends Component {
   }
 
   handleFormToggle() {
-    console.log('this.props on bill category click', this.props);
     if (this.props.billCategories.length === 0) {
       this.setState({AddCategoryWarningToggle: !this.state.AddCategoryWarningToggle})
     }else{
