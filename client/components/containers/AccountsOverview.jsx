@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Spinner from '../pages/Spinner.jsx'
 import AccountsTable from '../pages/accounts/AccountsTable.jsx'
 import AccountsTotals from '../pages/accounts/AccountsTotals.jsx'
+import {ACCOUNTS_QUERY} from '../../queries.js';
 import { graphql, compose, withApollo } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -27,16 +28,7 @@ class AccountsOverview extends React.Component {
   }
 };
 
-const accountsQuery = gql`
-  query accountsQuery($user_id: Int!) {
-    getAccounts(user_id: $user_id) {
-      bank_name
-      type
-      current_balance
-    }
-  }`
-
-const withAccountsQuery = graphql(accountsQuery, {
+const withAccountsQuery = graphql(ACCOUNTS_QUERY, {
   options: (props) => ({
     variables: {
       user_id: window.localStorage.getItem('user_id')

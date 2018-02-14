@@ -31,6 +31,16 @@ const TRANS_ACC_QUERY = gql`
     }
   }`;
 
+
+const ACCOUNTS_QUERY = gql`
+query accountsQuery($user_id: Int!) {
+  getAccounts(user_id: $user_id) {
+    bank_name
+    type
+    current_balance
+  }
+}`
+
 const UPDATE_TRANSACTIONS = gql`
   mutation UPDATE_TRANSACTIONS($user_id: Int!){
     getUpdatedTransactions(user_id: $user_id) {
@@ -51,22 +61,6 @@ const NEW_BANK = gql`
     createBankAccount(user_id: $user_id, public_key: $public_key)
   }`;
 
-//REMOVED FROM DASHQUERY
-  // getBills(user_id: $user_id) {
-  //   id
-  //   user_id
-  //   bill_category_id
-  //   description
-  //   amount
-  //   due_date
-  //   paid
-  //   paid_date
-  //   alert
-  //   bill_category {
-  //     name
-  //   }
-  // }
-
 const DASH_QUERY = gql`
   query DASH_QUERY($user_id: Int!) {
     getTransactions(user_id: $user_id) {
@@ -81,10 +75,6 @@ const DASH_QUERY = gql`
       bank_name
       current_balance
     }
-    getBillCategories(user_id: $user_id) {
-      id
-      name
-    }
     getLoans(user_id: $user_id) {
       id
       name
@@ -93,16 +83,21 @@ const DASH_QUERY = gql`
       inception_date
       end_date
     }
-  }`;
-
-  const BILLS_QUERY = gql`
-    query BILLS_QUERY($user_id: Int!) {    
-      getBills(user_id:$user_id) {
+    getBillPaymentHistory(user_id: $user_id) {
+      id
+      user_id
+      paid
+      paid_date
+      due_date
+      amount_paid
+      amount_due
+      bills {
         id
         user_id
+        bill_category_id
         description
         amount 
-        due_date
+        bill_recurrence_id 
         start_date
         end_date
         last_paid_date
@@ -118,16 +113,8 @@ const DASH_QUERY = gql`
           recurrence_type
         }
       }
-      getBillPaymentHistory(user_id:$user_id) {
-        id
-        bill_id
-        amount_paid
-        amount_due
-        paid_date
-        paid
-        user_id
-      }
-    }`;
+    }
+  }`;
 
 const CREATE_BILL = gql`
   mutation createBill($user_id: Int!, $bill_category_id: Int!, $description: String!, $amount: Float!, $bill_recurrence_id: Int!, $start_date: Date!, $end_date: Date!, $last_paid_date: Date, $last_occurence_date: Date, $bill_status: Boolean, $alert: Boolean) {
@@ -203,6 +190,12 @@ query getBillPaymentHistory($user_id: Int!, $bill_id: Int) {
   getBillRecurrence(id: 0) {
     id
     recurrence_type
+  }
+  getAccounts(user_id: $user_id) {
+    bank_name
+    type
+    current_balance
+    limit
   }
 }`;
 
@@ -280,11 +273,11 @@ const GET_USER_BALANCES = gql`
 
 export {
   TRANS_ACC_QUERY,
+  ACCOUNTS_QUERY,
   UPDATE_TRANSACTIONS,
   CREATE_TRANSACTION,
   NEW_BANK,
   DASH_QUERY,
-  BILLS_QUERY,
   UPDATE_BILL,
   DELETE_BILL,
   CREATE_BILL,
