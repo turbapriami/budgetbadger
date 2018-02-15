@@ -57,10 +57,15 @@ const checkGoals = () => {
               return category
             }
           })
-          // console.log('GOAL ID', goal)
-          // console.log('ACCOUNTS', accounts)
-          // console.log('CATS', categories)
-          calculateGoalProgress(goal, accounts, categories)
+          if (accounts.length === 0) {
+            knex('accounts').where({
+              user_id: goal.user_id
+            }).then(allUserAccounts => {
+              calculateGoalProgress(goal, allUserAccounts, categories)
+            })
+          } else {
+            calculateGoalProgress(goal, accounts, categories)
+          }
         })
       })
     })
@@ -71,25 +76,34 @@ const calculateGoalProgress = (goal, accounts, categories) => {
   // operate on each account's transactions based on categories
   allAccountsTotal = 0
   Promise.all(
-    accounts.map(async account => {
-      return await knex('transactions').where({
+    accounts.map(account => {
+      return knex('transactions').where({
         user_id: goal.user_id,
-        account_id: account.account_id
+        account_id: account.account_id || account.id
       }).then(transactions => {
-        // filter transactions by category and date
-        transactionsTotal = transactions.filter(transaction => {
-          for (let category of categories) {
-            if (
-              transaction.category === category.name &&
-              moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')
-            ) {
+        // filter transactions by date and category if specified
+        if (categories.length === 0) {
+          transactions = transactions.filter(transaction => {
+            if (moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')) {
               return transaction
             }
-          }
-        }).reduce((acc, elem) => {
+          })
+        } else {
+          transactions = transactions.filter(transaction => {
+            for (let category of categories) {
+              if (
+                transaction.category === category.name &&
+                moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')
+              ) {
+                return transaction
+              }
+            }
+          })
+        }
+        // reduce transactions to single total and add to allAccountsTotal
+        transactionsTotal = transactions.reduce((acc, elem) => {
           return acc + Number(elem.amount)
         }, 0)
-        // reduce transactions to single total and add to allAccountsTotal
         allAccountsTotal += transactionsTotal
       })
     })
