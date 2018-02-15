@@ -124,15 +124,18 @@ class GoalForm extends React.Component {
       description: this.state.descriptionField,
       start_date: moment().format('YYYY-MM-DD'),
       categories: this.state.categoryField,
-      is_budget: false,
+      is_budget: true,
       accounts: this.state.accountField
     }
-    if (this.state.typeField === 'budget') {
-      goalProperties.is_budget = true
+    if (this.state.typeField === 'Savings') {
+      goalProperties.is_budget = false
     }
     if (this.state.dateField !== '') {
       goalProperties.amount = this.state.monthlyAmount
       goalProperties.end_date = this.state.dateField
+    }
+    if (this.state.accountField.length === 0) {
+      goalProperties.accounts = this.props.accounts
     }
     this.props.handleSubmit(goalProperties)
     this.setState({
