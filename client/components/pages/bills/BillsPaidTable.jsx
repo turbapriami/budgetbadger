@@ -51,7 +51,7 @@ class BillsPaidTable extends Component {
       <div>
         <Box width="full" style={{ margin: '20px 20%' }}>
           <Heading align="left" strong="true" style={{ fontSize: '30px' }}>
-            Paid
+            Recently Paid
           </Heading>
         </Box>
         <Box width="full" style={{ margin: '0 20%' }}>

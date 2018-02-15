@@ -28,14 +28,8 @@ import styles from '../../../../public/main/jStyles';
                 Bills Due
               </Heading>
               <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
-                ${props.billsDueThisMonth
-                  ? props.billsDueThisMonth
-                      .reduce(
-                        (total, bill) => (total += bill.bills[0].amount),
-                        0
-                      )
-                      .toFixed(2)
-                  : 0}
+                ${props.billsDue
+                  ? props.billsDue.reduce((total, bill) => (total += bill.bills[0].amount),0).toFixed(2) : "0.00"}
               </Paragraph>
             </Box>
               <Box
@@ -56,9 +50,9 @@ import styles from '../../../../public/main/jStyles';
                 <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
                   ${props.overdueBills
                     ? props.overdueBills
-                        .reduce((total, bill) => (total += bill.bills[0].amount),0)
+                        .reduce((total, bill) => (total += bill.bills[0].amount),0.00)
                         .toFixed(2)
-                    : 0}
+                    : "0.00"}
                 </Paragraph>
               </Box>
               <Box
@@ -77,7 +71,7 @@ import styles from '../../../../public/main/jStyles';
                   Cash Available
                 </Heading>
                 <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
-                  ${props.cashAvailable ? props.cashAvailable.toFixed(2) : 0}
+                  ${props.cashAvailable ? props.cashAvailable.toFixed(2) : "0.00"}
                 </Paragraph>
               </Box>
               <Box
@@ -96,7 +90,7 @@ import styles from '../../../../public/main/jStyles';
                   Credit Available
                 </Heading>
                 <Paragraph size="xlarge" style={{ textAlign: 'center' }}>
-                  ${props.creditAvailable ? props.creditAvailable.toFixed(2) : 0}
+                  ${props.creditAvailable ? props.creditAvailable.toFixed(2) : "0.00"}
                 </Paragraph>
               </Box>
           </Columns>
