@@ -10,7 +10,7 @@ import { ApolloLink, concat } from 'apollo-link'
 import App from './components/pages/App.jsx'
 import Cookies from 'universal-cookie';
 
-const httpLink = new HttpLink({ uri: 'http://localhost:1337/graphql', withCredentials: true, credentials: 'same-origin' });
+const httpLink = new HttpLink({ withCredentials: true, credentials: 'same-origin' });
 
 
 // const middlewareLink = setContext(() => ({

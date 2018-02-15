@@ -1,4 +1,4 @@
-import React, { Component } from 'React';
+import React, { Component } from 'react';
 import { Anchor, Box, Button, Paragraph, TextInput } from 'grommet';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
