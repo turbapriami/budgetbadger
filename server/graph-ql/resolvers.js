@@ -463,16 +463,34 @@ module.exports = {
     deleteLoan: (parent, args, { knex }) => knex('loans').where(args).del(),
 
     createGoal: async (parent, args, { models}) => {
-      return await new models.Goal(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalProgress: async (parent, args, { models}) => {
-      return await new models.GoalProgress(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalCategory: async (parent, args, { models}) => {
-      return await new models.GoalCategory(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalAccount: async (parent, args, { models}) => {
-      return await new models.GoalAccount(args).save(null, {method: 'insert'}).attributes;
+      let goalProperties = {
+        user_id: args.user_id,
+        description: args.description,
+        amount: args.amount,
+        is_budget: args.is_budget,
+        start_date: args.start_date
+      }
+      if (args.end_date) {
+        goalProperties.end_date = args.end_date
+      }
+      let newGoal = await new models.Goal(goalProperties).save(null, {method: 'insert'});
+      Promise.all(
+        args.categories.map(async category => {     
+          return await new models.GoalCategory({
+            goal_id: newGoal.attributes.id,
+            name: category
+          }).save(null, {method: 'insert'});
+        })
+      )
+      Promise.all(
+        args.accounts.map(async account => {     
+          return await new models.GoalAccount({
+            goal_id: newGoal.attributes.id,
+            account_id: account
+          }).save(null, {method: 'insert'});
+        })
+      )
+      return newGoal
     }
   }
 }

@@ -254,6 +254,38 @@ const GOALS_QUERY = gql`
         }
       }
     }
+    getAccounts(user_id: $user_id) {
+      id
+      bank_name
+    }
+    getTransactions(user_id: $user_id) {
+      category
+    }
+  }`;
+
+const CREATE_GOAL = gql`
+  mutation CREATE_GOAL(
+    $user_id: Int!,
+    $description: String!,
+    $amount: String!,
+    $is_budget: Boolean!,
+    $start_date: Date!,
+    $end_date: Date,
+    $accounts: [String],
+    $categories: [String]
+  ) {
+    createGoal(
+      user_id: $user_id,
+      description: $description,
+      amount: $amount,
+      is_budget: $is_budget,
+      start_date: $start_date,
+      end_date: $end_date,
+      accounts: $accounts,
+      categories: $categories
+    ) {
+      id
+    }
   }`;
 
 
@@ -289,5 +321,6 @@ export {
   LOANS_QUERY,
   DELETE_LOAN,
   GOALS_QUERY,
-  GET_USER_BALANCES
+  GET_USER_BALANCES,
+  CREATE_GOAL
 };

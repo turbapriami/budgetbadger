@@ -196,7 +196,7 @@ knex.schema.hasTable('goal_progress').then(exists => {
       table.increments('id').primary();
       table.integer('goal_id').references('goals.id');
       table.string('amount');
-      table.date('date');
+      table.string('date');
     }).then(() => console.log('created table goal_progress'))
   }
 })
