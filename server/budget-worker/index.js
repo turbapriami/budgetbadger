@@ -46,26 +46,7 @@ const checkGoals = () => {
           goal_id: goal.id
         })
         .then(categories => {
-          // console.log(goal.id, accounts, categories)
-          accounts = accounts.filter(account => {
-            if (account.goal_id === goal.id) {
-              return account
-            }
-          })
-          categories = categories.filter(category => {
-            if (category.goal_id === goal.id) {
-              return category
-            }
-          })
-          if (accounts.length === 0) {
-            knex('accounts').where({
-              user_id: goal.user_id
-            }).then(allUserAccounts => {
-              calculateGoalProgress(goal, allUserAccounts, categories)
-            })
-          } else {
-            calculateGoalProgress(goal, accounts, categories)
-          }
+          calculateGoalProgress(goal, accounts, categories)
         })
       })
     })
@@ -74,40 +55,42 @@ const checkGoals = () => {
 
 const calculateGoalProgress = (goal, accounts, categories) => {
   // operate on each account's transactions based on categories
-  allAccountsTotal = 0
   Promise.all(
     accounts.map(account => {
       return knex('transactions').where({
         user_id: goal.user_id,
-        account_id: account.account_id || account.id
-      }).then(transactions => {
-        // filter transactions by date and category if specified
-        if (categories.length === 0) {
-          transactions = transactions.filter(transaction => {
-            if (moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')) {
-              return transaction
-            }
-          })
-        } else {
-          transactions = transactions.filter(transaction => {
-            for (let category of categories) {
-              if (
-                transaction.category === category.name &&
-                moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')
-              ) {
-                return transaction
-              }
-            }
-          })
-        }
-        // reduce transactions to single total and add to allAccountsTotal
-        transactionsTotal = transactions.reduce((acc, elem) => {
-          return acc + Number(elem.amount)
-        }, 0)
-        allAccountsTotal += transactionsTotal
+        account_id: account.account_id
       })
     })
-  ).then(fin => {
+  )
+  .then(transactionsByAccount => {
+    let allAccountsTotal = 0;
+    transactionsByAccount.forEach(transactions => {
+      // filter transactions by date and category if specified
+      if (categories.length === 0) {
+        transactions = transactions.filter(transaction => {
+          if (moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')) {
+            return transaction
+          }
+        })
+      } else {
+        transactions = transactions.filter(transaction => {
+          for (let category of categories) {
+            if (
+              transaction.category === category.name &&
+              moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')
+            ) {
+              return transaction
+            }
+          }
+        })
+      }
+      // reduce transactions to single total and add to allAccountsTotal
+      transactionsTotal = transactions.reduce((acc, elem) => {
+        return acc + Number(elem.amount)
+      }, 0)
+      allAccountsTotal += transactionsTotal
+    })
     updateGoalProgress(allAccountsTotal, goal)
   })
 }
