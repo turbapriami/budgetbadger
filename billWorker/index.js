@@ -13,16 +13,16 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-billworker.fetchExpiredBills();
-billworker.deactivateExpiredBills();
-billworker.fetchActiveRecurringBills();
-billworker.createBillOccurence();
-//SCHEDULE FUNCTIOns
 
+const deactivateExpiredBills = schedule.scheduleJob('0 0 * * *', () => {
+  console.log('BILL WORKER - Deactivating Expired Bills');
+  billworker.deactivateExpiredBills();
+});
 
-
-
-
+const createBillOccurence = schedule.scheduleJob('0 0 * * *', () => {
+  console.log('BILL WORKER - Create Bill Occurence');
+  billworker.createBillOccurence();
+});
 
 app.listen(port, () => {
   console.log('BILL WORKER running on port ' + port)

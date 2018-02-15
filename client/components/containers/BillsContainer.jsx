@@ -14,7 +14,7 @@ class BillsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      billsDueThisMonth: [],
+      billsDue: [],
       overdueBills: [],
       paidBills: [],
       unpaidBills: [],
@@ -33,7 +33,7 @@ class BillsContainer extends Component {
       var unpaidBills = nextProps.data.getBillPaymentHistory
         .filter(bill => !bill.paid && bill.bills[0].bill_status);
 
-      var billsDueThisMonth = nextProps.data.getBillPaymentHistory
+      var billsDue = nextProps.data.getBillPaymentHistory
         .filter(bill => !bill.paid && bill.bills[0].bill_status && (new Date(bill.due_date).getMonth() === currentDate.getMonth()));
 
       var overdueBills = nextProps.data.getBillPaymentHistory
@@ -58,7 +58,7 @@ class BillsContainer extends Component {
       },0);
 
       this.setState({
-        billsDueThisMonth,
+        billsDue,
         overdueBills,
         unpaidBills,
         paidBills,
@@ -105,7 +105,7 @@ class BillsContainer extends Component {
       <div>
         <BillsSummary
           overdueBills={this.state.overdueBills}
-          billsDueThisMonth={this.state.billsDueThisMonth}
+          billsDue={this.state.unpaidBills}
           creditAvailable = {this.state.creditAvailable}
           cashAvailable = {this.state.cashAvailable}
         />
@@ -125,26 +125,6 @@ class BillsContainer extends Component {
     );
   }
 }
-
-// const withBills = graphql(BILL_PAYMENT_HISTORY_QUERY, {
-//   options: props => ({
-//     variables: {
-//       user_id: window.localStorage.getItem('user_id'),
-//     },
-//     name: 'AllUserBills',
-//   }),
-// });
-// const withAccountsQuery = graphql(ACCOUNTS_QUERY, {
-//   options: (props) => ({
-//     variables: {
-//       user_id: window.localStorage.getItem('user_id')
-//     },
-//     name: 'Accounts Data'
-//   })
-// })
-
-// export default compose(withApollo, withBills)(BillsContainer);
-
 
 export default compose(
   graphql(BILL_PAYMENT_HISTORY_QUERY, {
