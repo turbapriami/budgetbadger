@@ -9,12 +9,8 @@ import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
-<<<<<<< HEAD
 import PasswordRecoveryModal from './components/pages/PasswordReset/PasswordRecoveryModal.jsx';
 import PasswordResetPage from './components/pages/PasswordReset/PasswordResetPage.jsx';
-=======
->>>>>>> set up docker
-
 const httpLink = new HttpLink();
 
 const client = new ApolloClient({

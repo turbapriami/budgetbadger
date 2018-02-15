@@ -1,9 +1,10 @@
-version: '2.1'
+version: '2'
 
 services:
   web-application:
     container_name: web-application
     build: ./
+    image: gustafb/web-application
     volumes:
       - './:/usr/src/app'
       - '/usr/src/app/node_modules'
@@ -12,6 +13,7 @@ services:
   transaction-service:  
     container_name: transaction-service
     build: './services/transaction-worker'
+    image: gustafb/transaction-service
     volumes:
       - './services/transaction-worker:/usr/src/app'
       - './services/transaction-worker/package.json:/usr/src/package.json'
@@ -21,6 +23,7 @@ services:
   budget-service:  
       container_name: budget-service
       build: './services/budget-worker'
+      image: gustafb/budget-service
       volumes:
         - './services/budget-worker:/usr/src/app'
         - './services/budget-worker/package.json:/usr/src/package.json'
