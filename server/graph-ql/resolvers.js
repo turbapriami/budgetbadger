@@ -4,6 +4,7 @@ const plaid = require('../plaid.js')
 const sendgrid = require('../sendgrid.js');
 const moment = require('moment')
 const Promise = require('bluebird');
+const bcrypt = require('bcrypt');
 const knex = require('../database/index.js').knex;
 
 module.exports = {
@@ -319,11 +320,11 @@ module.exports = {
       console.log("SERVER, CALLING LOGIN")
       const user = await new models.User({ email }).fetch();
       if (!user) {
-        throw new Error('Unable to match the provided credentials');
+        throw new Error('Unable to match the email');
       }
       const match = await user.comparePassword(password);
       if (!match) {
-        throw new Error('Unable to match the provided credentials');
+        throw new Error('Unable to match the password');
       }
       const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60
@@ -345,14 +346,21 @@ module.exports = {
     },
 
     updateUser: async (parent, args, {models, knex}) => {
-      const { email } = args;
-      const user = await new models.User({email}).fetch();
+      const { id } = args;
+      const user = await new models.User({id}).fetch();
+      const { email } = user;
+
       for(let field in user.attributes) {
+        console.log("ARGS[FIELD]", args[field], field);
+        console.log("USER ATTRIBUTES AND FIELD", user.attributes[field], field);
         if (args[field]) {
           user.attributes[field] = args[field]
         }
       }
+      console.log("args:", args);
+      console.log('USER.ATTRIBUTES:', user.attributes);
       let updated = await new models.User(user.attributes).save();
+      console.log("UPDATED:", updated);
       return updated.attributes
     },
 
@@ -443,7 +451,6 @@ module.exports = {
           return item;
         }
       }).join('');
-      console.log("USER.ATTRIBUTES", user.attributes, token);
       user.attributes['token'] = token;
       let updated = await new models.User(user.attributes).save();
       knex('users').where(args).then((data) => {
@@ -451,14 +458,18 @@ module.exports = {
       })
     },
     updatePassword: async (parent, args, { models, knex }) => {
-      console.log('MADE IT TO UPDATE PASSWORD');
       const { email } = args;
       const { password } = args;
       const user = await new models.User({email}).fetch();
-      user.attributes['token'] = null;
-      user.attributes['password'] = password;
-      user.hashPassword();
-      let updated = await new models.User(user.attributes).save();
+      let hasher = Promise.promisify(bcrypt.hash);
+      hasher(password, 10).bind(this)
+           .then(async hash => {
+              user.attributes['token'] = null;
+              user.attributes['password'] = hash;
+              let updated = await new models.User(user.attributes).save();
+           })
+           .catch(err => console.log(err));
+
     },
     deleteLoan: (parent, args, { knex }) => knex('loans').where(args).del(),
 
