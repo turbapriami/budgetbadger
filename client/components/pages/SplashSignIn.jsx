@@ -49,7 +49,7 @@ class SplashSignIn extends Component {
             <Box pad={{ vertical: "small", width: "100%" }} >
               <FormFields style={{ width: "100%" }} >
                   <Label>Email</Label>
-                  <TextInput onChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
+                  <TextInput onDOMChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
                   <Label>Password</Label>
                   <PasswordInput onChange={e => this.setState({ password: e.target.value })} style={{ width: "100%" }} />
               </FormFields>

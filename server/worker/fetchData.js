@@ -1,4 +1,4 @@
-]const knex = require('../database/index.js').knex;
+const knex = require('../database/index.js').knex;
 const models = require('../database/index.js');
 const Promise = require('bluebird');
 const plaid = require('../plaid.js');
