@@ -31,9 +31,9 @@ const Goals = (props) => {
                   max={goal.amount}
                 />
                 <br/>
-                Accounts: {goal.goal_accounts.map(account => account.account[0].bank_name)}
+                Accounts: {goal.goal_accounts.map(account => account.account[0].bank_name).join(', ')}
                 <br/>
-                Categories: {goal.goal_categories.map(category => category.name)}
+                Categories: {goal.goal_categories.length > 0? goal.goal_categories.map(category => category.name).join(', ') : 'All'}
               </Card>
             </Tile>
           )
