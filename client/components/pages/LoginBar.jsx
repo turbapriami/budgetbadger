@@ -29,7 +29,7 @@ class LoginBar extends Component {
   }
   render() {
     return (
-      <Header pad={{horizontal: 'none', vertical: "none", between:"small"}} colorIndex="neutral-4">
+      <Header pad={{horizontal: 'none', vertical: "none", between:"small"}} style={{background: '#ffb39e'}}>
         <ReactPlaidLink
           clientName="Your app name"
           env="sandbox"
