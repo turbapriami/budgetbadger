@@ -34,7 +34,7 @@ class Main extends Component {
     setTimeout(()=> {
       if (this.props.location.pathname === '/profile') {
         this.setState({
-          activeIndex: 5
+          activeIndex: 6
         })
       }
     }, 1)
