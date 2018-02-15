@@ -54,7 +54,7 @@ const checkGoals = () => {
 }
 
 const calculateGoalProgress = (goal, accounts, categories) => {
-  // operate on each account's transactions based on categories
+  // get array of transactions from each user account
   Promise.all(
     accounts.map(account => {
       return knex('transactions').where({
@@ -66,30 +66,34 @@ const calculateGoalProgress = (goal, accounts, categories) => {
   .then(transactionsByAccount => {
     let allAccountsTotal = 0;
     transactionsByAccount.forEach(transactions => {
-      // filter transactions by date and category if specified
-      if (categories.length === 0) {
-        transactions = transactions.filter(transaction => {
-          if (moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')) {
-            return transaction
-          }
-        })
-      } else {
+      // filter transactions by date
+      transactions = transactions.filter(transaction => {
+        if (moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')) {
+          return transaction
+        }
+      })
+      // filter transaction by category if specified
+      if (categories.length > 0) {
         transactions = transactions.filter(transaction => {
           for (let category of categories) {
-            if (
-              transaction.category === category.name &&
-              moment(transaction.date).format('YYYY-MM') === moment().format('YYYY-MM')
-            ) {
+            if (transaction.category === category.name) {
               return transaction
             }
           }
         })
       }
+      // if goal type is savings, filter for negative transactions
+      if (!goal.is_budget) {
+        transactions = transactions.filter(transaction => {
+          if (transaction.amount < 0) {
+            return transaction
+          }
+        })
+      }
       // reduce transactions to single total and add to allAccountsTotal
-      transactionsTotal = transactions.reduce((acc, elem) => {
+      allAccountsTotal += transactions.reduce((acc, elem) => {
         return acc + Number(elem.amount)
       }, 0)
-      allAccountsTotal += transactionsTotal
     })
     updateGoalProgress(allAccountsTotal, goal)
   })
