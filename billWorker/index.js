@@ -24,6 +24,11 @@ const createBillOccurence = schedule.scheduleJob('0 0 * * *', () => {
   billworker.createBillOccurence();
 });
 
+const fetchUnpaidBillsDueNextWeek = schedule.scheduleJob('30 * * * * *', () => {
+  billworker.fetchUnpaidBillsDueNextWeek();
+  billworker.fetchOverdueBills();
+});
+
 app.listen(port, () => {
   console.log('BILL WORKER running on port ' + port)
 })
