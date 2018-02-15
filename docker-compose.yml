@@ -1,0 +1,27 @@
+version: '2.1'
+
+services:
+  webb-service:
+    container_name: webb-service
+    build: ./
+    volumes:
+      - './:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - '3007:3006' # expose ports - HOST:CONTAINER
+  transaction-service:  
+    container_name: transaction-service
+    build: './server/worker'
+    volumes:
+      - './server/worker:/usr/src/app'
+      - './server/worker/package.json:/usr/src/package.json'
+    ports:
+      - '3000:3000' # expose ports - HOST:CONTAINER
+    environment:
+      - DB_URL=bbadger-dev.co5fs6aarz0m.us-east-2.rds.amazonaws.com
+      - DB_USER=gustafbrostedt
+      - DB_PASSWORD=54jak3art
+      - PLAID_CLIENT_ID=5a68f22b8d923949212aacd3
+      - PLAID_SECRET=61a37942b39f4f5f1cf10927311f32
+      - PLAID_PUBLIC_KEY=10ae69c4cbf11d018cfde3ddba55e7
+      - APP_SECRET=cats-are-awesome
