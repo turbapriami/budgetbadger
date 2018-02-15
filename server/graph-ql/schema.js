@@ -216,8 +216,9 @@ module.exports = `
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): [String!]
     addBank(id: String!, access_token: String!, user_id: Int!, last_updated: String): Bank
-    updateUser(    
-      email: String!
+    updateUser(
+      id: Int!
+      email: String
       first_name: String
       last_name: String
       city: String

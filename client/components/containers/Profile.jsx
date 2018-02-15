@@ -3,7 +3,6 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Bank from './BankContainer.jsx';
 import ProfileCard from './ProfileCard.jsx';
-import ProfileEdit from './ProfileEdit.jsx';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import { App, Header, Section, Footer, Article, Title, Box, Paragraph, Menu, Anchor, Card, TextInput } from 'grommet';
 
@@ -23,9 +22,9 @@ const Get_User = gql`
 `
 
 const UPDATE_USER = gql`mutation
-  updateUser($email: String!, $first_name: String, $last_name: String, $city: String, $street: String, $zip_code: String, $state: String, $phone: String) {
-   updateUser(email: $email, first_name: $first_name, last_name: $last_name, city: $city, street: $street, zip_code: $zip_code, state: $state, phone: $phone) {
-     email
+  updateUser($id: Int!, $email: String, $first_name: String, $last_name: String, $city: String, $street: String, $zip_code: String, $state: String, $phone: String) {
+   updateUser(id: $id, email: $email, first_name: $first_name, last_name: $last_name, city: $city, street: $street, zip_code: $zip_code, state: $state, phone: $phone) {
+     id
  }
 }`
 
@@ -42,6 +41,7 @@ class Profile extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      id: window.localStorage.getItem('user_id'),
       first_name: '',
       last_name: '',
       street: '',
@@ -50,12 +50,20 @@ class Profile extends Component {
       phone: '',
       email: '',
       banks: ["J.P. Morgan and Chase", "TD Bank", "Citi Bank", "Bank of America", "Wells Fargo"],
-      edit: false
+      editName: false,
+      editLastName: false,
+      editAddress: false,
+      editEmail: false,
+      editPhone: false
     }
-    this.editing = this.editing.bind(this);
-    this.handleChanges = this.handleChanges.bind(this);
+    this.turnOffEditing = this.turnOffEditing.bind(this);
     this.handleFormChanges = this.handleFormChanges.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.editName = this.editName.bind(this);
+    this.editLastName = this.editLastName.bind(this);
+    this.editAddress = this.editAddress.bind(this);
+    this.editEmail = this.editEmail.bind(this);
+    this.editPhone = this.editPhone.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,14 +80,46 @@ class Profile extends Component {
     }
   }
 
-  editing() {
+  editName() {
     this.setState({
-      edit: !this.state.edit
+      editName: !this.state.editName
     })
   }
 
-  handleChanges() {
-    this.editing();
+  editLastName() {
+    this.setState({
+      editLastName: !this.state.editLastName
+    })
+  }
+
+  editAddress() {
+    this.setState({
+      editAddress: !this.state.editAddress
+    })
+  }
+
+  editEmail() {
+    this.setState({
+      editEmail: !this.state.editEmail
+    })
+  }
+
+  editPhone() {
+    this.setState({
+      editPhone: !this.state.editPhone
+    })
+  }
+
+  turnOffEditing() {
+    let editing = this.state;
+    for (let i in editing) {
+      if (editing[i] === true) {
+        editing[i] = false;
+      }
+    }
+    this.setState({
+      edit: editing
+    })
   }
 
   handleFormChanges(e) {
@@ -94,17 +134,28 @@ class Profile extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const user_id = window.localStorage.getItem('user_id')
+    
     this.props.updateUserProfile({
-      variables: 
+      variables:
       this.state,
       user_id
-    }, this.editing())
+    }, this.turnOffEditing()).then(() => {
+      window.location.reload();
+    })
   }
 
   render() {
     return (
       <div>
-        {this.state.edit ? <ProfileEdit {...this.state} handleForm={this.handleFormChanges} handleSubmit={this.handleSubmit}/> : <ProfileCard userInfo={this.state}  editing={this.editing} />}
+        <ProfileCard userInfo={this.state}
+          handleForm={this.handleFormChanges}
+          handleSubmit={this.handleSubmit}
+          editName={this.editName}
+          editAddress={this.editAddress}
+          editEmail={this.editEmail}
+          editPhone={this.editPhone}
+          turnOffEditing={this.turnOffEditing}
+         />
       </div>
     )
   }
