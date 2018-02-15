@@ -93,9 +93,9 @@ const calculateGoalProgress = (goal, accounts, categories) => {
         allAccountsTotal += transactionsTotal
       })
     })
-  )
-  console.log(allAccountsTotal)
-  updateGoalProgress(allAccountsTotal, goal)
+  ).then(fin => {
+    updateGoalProgress(allAccountsTotal, goal)
+  })
 }
 
 const updateGoalProgress = (total, goal) => {
