@@ -11,6 +11,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 import PasswordRecoveryModal from './components/pages/PasswordReset/PasswordRecoveryModal.jsx';
 import PasswordResetPage from './components/pages/PasswordReset/PasswordResetPage.jsx';
+>>>>>>> docker
 
 const httpLink = new HttpLink();
 
