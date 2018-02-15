@@ -132,7 +132,7 @@ class Profile extends Component {
   }
 
   handleSubmit(e) {
-    e.preventDefault();
+    // e.preventDefault();
     const user_id = window.localStorage.getItem('user_id')
     
     this.props.updateUserProfile({
