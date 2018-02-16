@@ -13,7 +13,7 @@ import Spinner from '../pages/Spinner.jsx';
 import sortingFuncs from '../pages/transactions/sortingFunctions.jsx';
 import { graphql, compose, withApollo } from 'react-apollo';
 import NewTransaction from '../pages/transactions/NewTransaction.jsx';
-import SummaryChartContainer from '../pages/transactions/Chart/TransactionsSummary.jsx';
+import SummaryChartContainer from '../pages/transactions/TransactionSummary.jsx';
 import Modal from 'react-responsive-modal';
 import gql from 'graphql-tag';
 
@@ -244,8 +244,10 @@ class TransactionContainer extends Component {
     const { displayModal } = this.state;
     if (this.props.data.getAccounts) {
       return (
-        <div style={{padding: '5px'}}>
-          <Hero background={<Image src={'https://1dib1q3k1s3e11a5av3bhlnb-wpengine.netdna-ssl.com/wp-content/uploads/2017/08/NYC-aerial-view.jpg'}
+        <div>
+          <Hero 
+            style = {{marginTop: "-12px", marginBottom: "12px"}}
+            background={<Image src={'https://1dib1q3k1s3e11a5av3bhlnb-wpengine.netdna-ssl.com/wp-content/uploads/2017/08/NYC-aerial-view.jpg'}
             fit='cover'
             full={true} />}
             backgroundColorIndex='dark'
@@ -265,71 +267,73 @@ class TransactionContainer extends Component {
               </Box>
             </Box>
           </Hero>
-          <HistoricalChartContainer
-            balances={this.props.data.getUser[0].accounts}
-            accounts={this.props.data.getAccounts}
-            transactions={this.state.transactions}
-            summaryTransaction={this.state.summaryTransaction}
-            categories={this.state.categoryBreakdown}
-            handleSummaryChart={this.handleSummaryChart}
-            displaySummary={this.state.displaySummaryChart}
-            summaryName={this.state.summaryName}/>
-            <TransactionSummary
+          <div style={{paddingLeft: "10px", paddingRight: "10px"}}>
+            <HistoricalChartContainer
+              balances={this.props.data.getUser[0].accounts}
+              accounts={this.props.data.getAccounts}
               transactions={this.state.transactions}
               summaryTransaction={this.state.summaryTransaction}
-              display={this.state.displaySummary}
-              handleSummary={this.handleSummary}
-            />
-          <PieChart
-            breakdown={this.state.categoryBreakdown}
-            handleClose={this.handleModal}
-            displayModal={displayModal} />
-          <Split
-            fixed={false}
-            separator={false}
-            showOnResponsive='both'
-            flex="right"
-            priority="right">
-            <Box>
-              <h2>{this.state.selected}</h2>
-              <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
-            </Box>
-            <Box align="left">
-              <Box flex={true}
-                    justify='end'
-                    direction='row'
-                    responsive={false}>
-                <Search inline={true} transactions={this.state.transactions} search={this.handleSearch}/>
-                <Menu icon={<ActionsIcon/>}
-                  dropAlign={{"right": "right"}}>
-                  <Anchor onClick={this.handleModal}
-                    className='active'>
-                    Category Breakdown
-                  </Anchor>
-                  <Anchor onClick={this.handleSummaryChart}>
-                    Transaction Chart
-                  </Anchor>
-                  <Anchor onClick={this.handleNewTransaction}>
-                    New Transaction
-                  </Anchor>
-                </Menu>
-              </Box>
-              <NewTransaction
-                handleForm={this.handleForm}
-                accounts={this.props.data.getAccounts}
-                submitForm={this.newTransaction}
-                displayNewTransaction={this.state.displayNewTransaction}
-                handleNewTransaction={this.handleNewTransaction}
-                form={this.state.transactionForm}/>
-              <TransactionList
-                displaySummary={this.handleSummary}
-                sort={this.sortTransactions}
-                sortIdx={this.state.sortIdx}
-                dir={this.state.sorting[this.state.sortIdx]}
+              categories={this.state.categoryBreakdown}
+              handleSummaryChart={this.handleSummaryChart}
+              displaySummary={this.state.displaySummaryChart}
+              summaryName={this.state.summaryName}/>
+              <TransactionSummary
                 transactions={this.state.transactions}
+                summaryTransaction={this.state.summaryTransaction}
+                display={this.state.displaySummary}
+                handleSummary={this.handleSummary}
               />
-            </Box>
-          </Split>
+            <PieChart
+              breakdown={this.state.categoryBreakdown}
+              handleClose={this.handleModal}
+              displayModal={displayModal} />
+            <Split
+              fixed={false}
+              separator={false}
+              showOnResponsive='both'
+              flex="right"
+              priority="right">
+              <Box>
+                <h2>{this.state.selected}</h2>
+                <Navigation accounts={this.props.data.getAccounts} filter={this.filterTransactions}/>
+              </Box>
+              <Box align="left">
+                <Box flex={true}
+                      justify='end'
+                      direction='row'
+                      responsive={false}>
+                  <Search inline={true} transactions={this.state.transactions} search={this.handleSearch}/>
+                  <Menu icon={<ActionsIcon/>}
+                    dropAlign={{"right": "right"}}>
+                    <Anchor onClick={this.handleModal}
+                      className='active'>
+                      Category Breakdown
+                    </Anchor>
+                    <Anchor onClick={this.handleSummaryChart}>
+                      Transaction Chart
+                    </Anchor>
+                    <Anchor onClick={this.handleNewTransaction}>
+                      New Transaction
+                    </Anchor>
+                  </Menu>
+                </Box>
+                <NewTransaction
+                  handleForm={this.handleForm}
+                  accounts={this.props.data.getAccounts}
+                  submitForm={this.newTransaction}
+                  displayNewTransaction={this.state.displayNewTransaction}
+                  handleNewTransaction={this.handleNewTransaction}
+                  form={this.state.transactionForm}/>
+                <TransactionList
+                  displaySummary={this.handleSummary}
+                  sort={this.sortTransactions}
+                  sortIdx={this.state.sortIdx}
+                  dir={this.state.sorting[this.state.sortIdx]}
+                  transactions={this.state.transactions}
+                />
+              </Box>
+            </Split>
+          </div>
         </div>
       )
     } else {

@@ -16,7 +16,9 @@ class AccountsOverview extends React.Component {
     if (this.props.data.getAccounts) {
       return(
         <div>
-          <Hero background={<Image src={'https://image.freepik.com/free-photo/education-concept-student-studying-and-brainstorming-campus-concept-close-up-of-students-discussing-their-subject-on-books-or-textbooks-selective-focus_1418-627.jpg'}
+          <Hero 
+            style = {{marginTop: "-12px", marginBottom: "12px"}}
+            background={<Image src={'https://image.freepik.com/free-photo/education-concept-student-studying-and-brainstorming-campus-concept-close-up-of-students-discussing-their-subject-on-books-or-textbooks-selective-focus_1418-627.jpg'}
             fit='cover'
             full={true} />}
             backgroundColorIndex='dark'

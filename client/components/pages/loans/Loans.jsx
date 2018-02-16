@@ -124,7 +124,9 @@ class Loans extends React.Component {
   render(){
     return(
       <div>
-        <Hero background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}
+        <Hero 
+          style = {{marginTop: "-12px", marginBottom: "12px"}}
+          background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}
           fit='cover'
           full={true} />}
           backgroundColorIndex='dark'
