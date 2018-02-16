@@ -11,15 +11,24 @@ class GoalsContainer extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      goalIndex: 0
+      goalIndex: 0,
+      chartActive: false
     }
     this.handleClick = this.handleClick.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.hideChart = this.hideChart.bind(this)
   }
 
   handleClick(e) {
     this.setState({
-      goalIndex: e
+      goalIndex: e,
+      chartActive: true
+    })
+  }
+
+  hideChart() {
+    this.setState({
+      chartActive: false
     })
   }
 
@@ -65,7 +74,7 @@ class GoalsContainer extends React.Component {
           categories = {categories}
         />
         <Goals goals={this.props.data.getGoals} handleClick={this.handleClick} />
-        <GoalHistory goal={goal} goalProgress={goalProgress} />
+        <GoalHistory goal={goal} goalProgress={goalProgress} chartActive={this.state.chartActive} hideChart={this.hideChart} />
       </div>
     )
   }

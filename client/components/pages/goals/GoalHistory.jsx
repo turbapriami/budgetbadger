@@ -1,37 +1,45 @@
 import React, { Component } from 'react';
 import Chart, {Axis, Grid, Bar, HotSpots, Marker, MarkerLabel, Base, Layers} from 'grommet/components/chart/Chart';
+import Layer from 'grommet/components/Layer'
 
 const GoalHistory = (props) => {
-  if (props.goalProgress) {
+  if (props.goalProgress && props.chartActive) {
     return (
-      <Chart>
-        <Axis  
-          count={5}
-          labels={[{"index": 2, "label": props.goal.amount / 2}, {"index": 4, "label": props.goal.amount}]}
-          vertical={true} 
-        />
-        <Chart vertical={true}>
-          <Base 
-            height='medium'
-            width='medium' 
+      <Layer 
+        overlayClose={true}
+        flush={false}
+        closer={true}
+        onClose={props.hideChart}
+      >
+        <Chart>
+          <Axis  
+            count={5}
+            labels={[{"index": 2, "label": props.goal.amount / 2}, {"index": 4, "label": props.goal.amount}]}
+            vertical={true} 
           />
-          <Layers>
-            <Grid 
-              rows={5}
-              columns={3} 
+          <Chart vertical={true}>
+            <Base 
+              height='medium'
+              width='medium' 
             />
-            <Bar 
-              values={props.goalProgress.map(progress => progress.amount)}
-              colorIndex='graph-2'
-              max={props.goal.amount}
+            <Layers>
+              <Grid 
+                rows={5}
+                columns={3} 
+              />
+              <Bar 
+                values={props.goalProgress.map(progress => progress.amount)}
+                colorIndex='graph-2'
+                max={props.goal.amount}
+              />
+            </Layers>
+            <Axis 
+              count={2}
+              labels={[{"index": 0, "label": props.goal.start_date}, {"index": 1, "label": props.goal.end_date}]} 
             />
-          </Layers>
-          <Axis 
-            count={2}
-            labels={[{"index": 0, "label": props.goal.start_date}, {"index": 1, "label": props.goal.end_date}]} 
-          />
+          </Chart>
         </Chart>
-      </Chart>
+      </Layer>
     )
   } else {
     return null
