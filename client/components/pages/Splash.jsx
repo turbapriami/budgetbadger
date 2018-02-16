@@ -12,9 +12,9 @@ const Splash = ({ match, location, history }) => {
               <Box direction="row" justify="center" align="center">
                 <Box basis="1/2" align="end" pad="medium" />
                 <Box basis="1/2" align="start" pad={{horizontal: "large", vertical: "large", between: "medium"}}>
-                  <Label margin="none" size="medium" uppercase={true}>Learn to Manage Your Money</Label>
-                  <h1>Accelerate your wallet with Budget Badger</h1>
-                  <Paragraph margin="medium" size="large">Budget Badger can help you benefit now, just sign up and start having more control over your money</Paragraph>
+                  <Label margin="none" size="medium" uppercase={true}>Learn to Life</Label>
+                  <h1>Accelerate your wallet with Budget Badger, he got yo back</h1>
+                  <Paragraph margin="medium" size="large">Budget Badger can help you benefit now, just sign up and stop spending so much $$$</Paragraph>
                 </Box>
               </Box>
             </Hero>
@@ -31,126 +31,130 @@ const Splash = ({ match, location, history }) => {
 
           <Box align="center"
             announce={false}
-            colorIndex="light-1"
+            colorIndex="light-2"
             direction="column"
             focusable={true}
-            size={{ vertical: "small" }}
-            pad="none"
+            pad={{ vertical: "small" }}
             responsive={true}
             wrap={true}>
             <h1>Meet The Devs</h1>
-                            <div className="grommetux-columns grommetux-columns--justify-center grommetux-columns--margin-medium grommetux-columns--responsive grommetux-columns--small">                                <Card size="small" colorIndex="light-1" margin="small"
-                                  contentPad="none"
-                                  direction="column"
-                                  headingStrong={true}
-                                  margin="small"
-                                  textSize="small">
-                                    <Image src="https://media.licdn.com/media/AAEAAQAAAAAAAAacAAAAJGNjYWY1NWExLTlmYzgtNGE5Ni05NjczLWZlYTQ0NTQ4ZmE0Yw.jpg"
-                                      fit="contain" />
-                                    <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--margin-small grommetux-box--wrap grommetux-box--width-medium grommetux-box--size grommetux-background-color-index-light-1 grommetux-background-color-index--light"
-                                      ariaLabel="Card"
-                                      role="group"
-                                      tabIndex={0}>
-                                            <Label size="medium"
-                                              margin="none"
-                                              uppercase={true}>
-                                              <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Product Owner</label>
-                                            </Label>
-                                            <Heading tag="h3">
-                                              <a href="http://linkedin.com/in/gustafbrostedt/" target="_blank" style={{ color: "#000" }} >Gustaf Brostedt</a>
-                                            </Heading>
-                                      </div>
-                                  </Card>
-                                  <Card size="small" colorIndex="light-1" margin="small"
-                                  contentPad="none"
-                                  direction="column"
-                                  headingStrong={true}
-                                  margin="small"
-                                  textSize="small">
-                                  <Image src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAMAAQDuAAgAAQAAAAAAABG_AAAAJGE2MWZmM2RjLWU1NDgtNDFlYi05MjdhLWUxNzRjZTM4Y2UyYQ.bin"
-                                      fit="contain" />
-                                    <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--margin-small grommetux-box--wrap grommetux-box--width-medium grommetux-box--size grommetux-background-color-index-light-1 grommetux-background-color-index--light"
-                                      ariaLabel="Card"
-                                      role="group"
-                                      tabIndex={0}>
-                                            <Label size="medium"
-                                              margin="none"
-                                              uppercase={true}>
-                                              <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
-                                            </Label>
-                                            <Heading tag="h3">
-                                              <a href="http://www.linkedin.com/in/afriedman1991/" target="_blank" style={{ color: "#000" }} >Alex Friedman</a>
-                                            </Heading>
-                                      </div>
-                                  </Card>
-                              <Card size="small" colorIndex="light-1" margin="small"
-                                  contentPad="none"
-                                  direction="column"
-                                  headingStrong={true}
-                                  margin="small"
-                                  textSize="small">
-                                  <Image src="https://media.licdn.com/media/AAEAAQAAAAAAAAdoAAAAJDU1ZjhiZmUxLTFjMDQtNGYyZS05Y2E1LTY3YzIzYWM4NDc1ZQ.jpg"
-                                      fit="contain" />
-                                    <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--margin-small grommetux-box--wrap grommetux-box--width-medium grommetux-box--size grommetux-background-color-index-light-1 grommetux-background-color-index--light"
-                                      ariaLabel="Card"
-                                      role="group"
-                                      tabIndex={0}>
-                                            <Label size="medium"
-                                              margin="none"
-                                              uppercase={true}>
-                                              <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
-                                            </Label>
-                                            <Heading tag="h3">
-                                              <a href="http://www.linkedin.com" target="_blank" style={{ color: "#000" }} >Andrew Lichtenstein</a>
-                                            </Heading>
-                                      </div>                                      
-                                  </Card>
-                              <Card size="small" colorIndex="light-1" margin="small"
-                                  contentPad="none"
-                                  direction="column"
-                                  headingStrong={true}
-                                  margin="small"
-                                  textSize="small">
-                                  <Image src="https://media.licdn.com/media/AAIA_wDGAAAAAQAAAAAAAA2TAAAAJDUxNmIxZjYzLWI5ZjQtNDg4NS05NTkwLWY2YmYzYjZmZjhhZQ.jpg"
-                                      fit="contain" />
-                                    <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--margin-small grommetux-box--wrap grommetux-box--width-medium grommetux-box--size grommetux-background-color-index-light-1 grommetux-background-color-index--light"
-                                      ariaLabel="Card"
-                                      role="group"
-                                      tabIndex={0}>
-                                            <Label size="medium"
-                                              margin="none"
-                                              uppercase={true}>
-                                              <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
-                                            </Label>
-                                            <Heading tag="h3">
-                                              <a href="https://www.linkedin.com/in/jkang1220/" target="_blank" style={{ color: "#000" }} >Jimmy Kang</a>
-                                            </Heading>
-                                      </div>                                      
-                                  </Card>
-                                  <Card size="small" colorIndex="light-1" margin="small"
-                                  contentPad="none"
-                                  direction="column"
-                                  headingStrong={true}
-                                  margin="small"
-                                  textSize="small">
-                                  <Image src="https://media.licdn.com/media/AAMAAQDuAAgAAQAAAAAAAA__AAAAJDc2N2Y3YmEyLTdkZDQtNGFhYi05OTVjLTM5ZmNhYWQ1OTU0Nw.bin"
-                                      fit="contain" />
-                                    <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--margin-small grommetux-box--wrap grommetux-box--width-medium grommetux-box--size grommetux-background-color-index-light-1 grommetux-background-color-index--light"
-                                      ariaLabel="Card"
-                                      role="group"
-                                      tabIndex={0}>
-                                            <Label size="medium"
-                                              margin="none"
-                                              uppercase={true}>
-                                              <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
-                                            </Label>
-                                            <Heading tag="h3">
-                                              <a href="https://www.linkedin.com/in/logan-mcbride/" target="_blank" style={{ color: "#000" }} >Logan McBride</a>
-                                            </Heading>
-                                      </div>                                      
-                                  </Card>
-                            </div>
+            <Box full="horizontal" align="center" >
+              <span>
+                <Card colorIndex="light-1" style={{ display: "inline-block"}} size={{ width: "small" }} margin="medium"
+                  contentPad="small"
+                  direction="column"
+                  headingStrong={true}
+                  textSize="small"
+                  label="Product Owner"
+                  heading={
+                    <Heading tag="h3">
+                      <a href="http://linkedin.com/in/gustafbrostedt/" target="_blank" style={{ color: "#000" }} >
+                        <li style={{ listStyleType: "none" }} >
+                          Gustaf Brostedt
+                        </li>
+                      </a>
+                    </Heading>
+                  }
+                  thumbnail="https://media.licdn.com/media/AAEAAQAAAAAAAAacAAAAJGNjYWY1NWExLTlmYzgtNGE5Ni05NjczLWZlYTQ0NTQ4ZmE0Yw.jpg"
+                  link={
+                    <a href="http://linkedin.com/in/gustafbrostedt/" target="_blank" style={{ color: "#000" }} >Linkedin</a>
+                  } >
+                </Card>
+                  <Card colorIndex="light-1" style={{ display: "inline-block"}} size={{ width: "small" }} margin="medium"
+                  contentPad="small"
+                  direction="column"
+                  headingStrong={true}
+                  textSize="small"
+                  label="Developer"
+                  heading={
+                    <Heading tag="h3">
+                      <a href="http://www.linkedin.com/in/afriedman1991/" target="_blank" style={{ color: "#000" }} >
+                        <li style={{ listStyleType: "none" }} >
+                          Alex
+                        </li>
+                        <li style={{ listStyleType: "none" }} >
+                          Friedman
+                        </li>
+                      </a>
+                    </Heading>
+                  }
+                  thumbnail="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAMAAQDuAAgAAQAAAAAAABG_AAAAJGE2MWZmM2RjLWU1NDgtNDFlYi05MjdhLWUxNzRjZTM4Y2UyYQ.bin"
+                  link={
+                    <a href="http://www.linkedin.com/in/afriedman1991/" target="_blank" style={{ color: "#000" }} >Linkedin</a>
+                  } >
+                </Card>
+                <Card colorIndex="light-1" style={{ display: "inline-block"}} size={{ width: "small" }} margin="medium"
+                  contentPad="small"
+                  direction="column"
+                  headingStrong={true}
+                  textSize="small"
+                  label="Developer"
+                  heading={
+                    <Heading tag="h3" >
+                      <a href="http://www.linkedin.com" target="_blank" style={{ color: "#000" }} >
+                        <li style={{ listStyleType: "none" }} >
+                          Andrew
+                        </li>
+                        <li style={{ listStyleType: "none" }} >
+                          Lichtenstein
+                        </li>
+                      </a>
+                    </Heading>
+                  }
+                  thumbnail="https://media.licdn.com/media/AAEAAQAAAAAAAAdoAAAAJDU1ZjhiZmUxLTFjMDQtNGYyZS05Y2E1LTY3YzIzYWM4NDc1ZQ.jpg"
+                  link={
+                    <a href="https://www.linkedin.com/in/jkang1220/" target="_blank" style={{ color: "#000" }} >Linkedin</a>
+                  } >
+                </Card>
+                <Card colorIndex="light-1" style={{ display: "inline-block"}} size={{ width: "small" }} margin="medium"
+                  contentPad="small"
+                  direction="column"
+                  headingStrong={true}
+                  label="Developer"
+                  heading={
+                    <Heading tag="h3">
+                      <a href="https://www.linkedin.com/in/jkang1220/" target="_blank" style={{ color: "#000" }} >
+                        <li style={{ listStyleType: "none" }} >
+                          Jimmy
+                        </li>
+                        <li style={{ listStyleType: "none" }} >
+                          Kang
+                        </li>
+                      </a>
+                    </Heading>
+                  }
+                  thumbnail="https://media.licdn.com/media/AAIA_wDGAAAAAQAAAAAAAA2TAAAAJDUxNmIxZjYzLWI5ZjQtNDg4NS05NTkwLWY2YmYzYjZmZjhhZQ.jpg"
+                  link={
+                    <a href="https://www.linkedin.com/in/jkang1220/" target="_blank" style={{ color: "#000" }} >Linkedin</a>
+                  }
+                  textSize="small" >
+                </Card>
+                <Card colorIndex="light-1" style={{ display: "inline-block"}} size={{ width: "small" }} margin="medium"
+                  contentPad="small"
+                  direction="column"
+                  headingStrong={true}
+                  textSize="small"
+                  heading={
+                    <Heading tag="h3" pad="small" >
+                      <a href="https://www.linkedin.com/in/logan-mcbride/" target="_blank" style={{ color: "#000" }} >
+                        <li style={{ listStyleType: "none" }} >
+                          Logan
+                        </li>
+                        <li style={{ listStyleType: "none" }} >
+                          McBride
+                        </li>
+                      </a>
+                    </Heading>
+                  }
+                  label="Developer"
+                  thumbnail="https://media.licdn.com/media/AAMAAQDuAAgAAQAAAAAAAA__AAAAJDc2N2Y3YmEyLTdkZDQtNGFhYi05OTVjLTM5ZmNhYWQ1OTU0Nw.bin"
+                  link={
+                    <a href="https://www.linkedin.com/in/logan-mcbride/" target="_blank" style={{ color: "#000" }} >Linkedin</a>
+                  } >
+                </Card>
+              </span>
             </Box>
+          </Box>
           <Footer style={{background: "#000"}}
             justify='between'
             size='medium'
