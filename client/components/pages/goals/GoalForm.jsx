@@ -171,87 +171,103 @@ class GoalForm extends React.Component {
         monthlyAmount = '~$' + monthlyAmount + ' per month'
       }
       return (
-        <Layer 
-          overlayClose={true}
-          flush={false}
-          closer={true}
-          onClose={()=> {this.setState({formActive: false})}}
-        >
-          <Form pad='medium' onSubmit={this.handleSubmit}>
-            <Label>Description</Label>
-            <FormField>
-              <TextInput 
-                placeHolder='Description'
-                value = {this.state.descriptionField}
-                onDOMChange={this.handleDescriptionField}
+        <div>
+
+          <Button 
+            label='Add Goal'
+            primary={true}
+            style={{
+              backgroundColor: '#49516f',
+              color: 'white',
+              width: '130px',
+              fontSize: '20px',
+              padding: '6px 12px',
+              border: 'none',
+              marginLeft: '16px'
+            }}
+          />
+          <Layer 
+            overlayClose={true}
+            flush={false}
+            closer={true}
+            onClose={()=> {this.setState({formActive: false})}}
+          >
+            <Form pad='medium' onSubmit={this.handleSubmit}>
+              <Label>Description</Label>
+              <FormField>
+                <TextInput 
+                  placeHolder='Description'
+                  value = {this.state.descriptionField}
+                  onDOMChange={this.handleDescriptionField}
+                />
+              </FormField>
+              <Label>Amount</Label>
+              <FormField label={monthlyAmount}>
+                <NumberInput
+                  placeHolder='Amount'
+                  min={0}
+                  value = {this.state.amountField}
+                  onChange={this.handleAmountField}
+                />
+              </FormField>
+              <Label>Budget or Savings Goal?</Label>
+              <FormField>
+                <Select
+                  placeHolder='Type'
+                  inline={false}
+                  multiple={false}
+                  onSearch={false}
+                  options={['Savings', 'Budget']}
+                  value={this.state.typeField}
+                  onChange={(e)=> {this.handleTypeField(e)}}
+                />
+              </FormField>
+              <Label>Monthly or Finish by Date?</Label>
+              <FormField>
+                <Select
+                  placeHolder='Frequency'
+                  inline={false}
+                  multiple={false}
+                  onSearch={false}
+                  options={['Repeat Monthly', 'Finish by Date']}
+                  value={this.state.freqField}
+                  onChange={(e)=> {this.handleFreqField(e)}}
+                />
+              </FormField>
+              {dateField}
+              <Label>Accounts</Label>
+              <FormField>
+                <Select 
+                  placeHolder='All Accounts'
+                  inline={false}
+                  multiple={false}
+                  onSearch={false}
+                  options={this.props.accounts}
+                  value={this.state.accountField}
+                  onChange={(e)=> {this.handleAccountField(e)}}
+                />
+              </FormField>
+              <Label>Categories</Label>
+              <FormField>
+                <Select 
+                  placeHolder='All Categories'
+                  inline={false}
+                  multiple={false}
+                  onSearch={false}
+                  options={this.props.categories}
+                  value={this.state.categoryField}
+                  onChange={(e)=> {this.handleCategoryField(e)}}
+                />
+              </FormField>
+              <br/>
+              <Button 
+                label='Submit'
+                type='submit'
+                primary={true}
               />
-            </FormField>
-            <Label>Amount</Label>
-            <FormField label={monthlyAmount}>
-              <NumberInput
-                placeHolder='Amount'
-                min={0}
-                value = {this.state.amountField}
-                onChange={this.handleAmountField}
-              />
-            </FormField>
-            <Label>Budget or Savings Goal?</Label>
-            <FormField>
-              <Select
-                placeHolder='Type'
-                inline={false}
-                multiple={false}
-                onSearch={false}
-                options={['Savings', 'Budget']}
-                value={this.state.typeField}
-                onChange={(e)=> {this.handleTypeField(e)}}
-              />
-            </FormField>
-            <Label>Monthly or Finish by Date?</Label>
-            <FormField>
-              <Select
-                placeHolder='Frequency'
-                inline={false}
-                multiple={false}
-                onSearch={false}
-                options={['Repeat Monthly', 'Finish by Date']}
-                value={this.state.freqField}
-                onChange={(e)=> {this.handleFreqField(e)}}
-              />
-            </FormField>
-            {dateField}
-            <Label>Accounts</Label>
-            <FormField>
-              <Select 
-                placeHolder='All Accounts'
-                inline={false}
-                multiple={false}
-                onSearch={false}
-                options={this.props.accounts}
-                value={this.state.accountField}
-                onChange={(e)=> {this.handleAccountField(e)}}
-              />
-            </FormField>
-            <Label>Categories</Label>
-            <FormField>
-              <Select 
-                placeHolder='All Categories'
-                inline={false}
-                multiple={false}
-                onSearch={false}
-                options={this.props.categories}
-                value={this.state.categoryField}
-                onChange={(e)=> {this.handleCategoryField(e)}}
-              />
-            </FormField>
-            <br/>
-            <Button 
-              label='Submit'
-              type='submit'
-              primary={true}
-            />
-          </Form>
-        </Layer>
+            </Form>
+          </Layer>
+        </div>
       )
     } else {
       return (
@@ -266,6 +282,7 @@ class GoalForm extends React.Component {
             fontSize: '20px',
             padding: '6px 12px',
             border: 'none',
+            marginLeft: '16px'
           }}
         />
       )
