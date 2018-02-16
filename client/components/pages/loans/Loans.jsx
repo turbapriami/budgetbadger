@@ -51,14 +51,12 @@ class Loans extends React.Component {
     var payments = [];
     var outstanding = [];
     var interest = [];
-    var dates =[];
 
     amort.forEach((payment) => {
       principal.push(payment.principalBalanceRounded);
       payments.push(payment.payment);
       outstanding.push((this.state.principal - payment.principalBalanceRounded).toFixed(2));
       interest.push(payment.interestPayment);
-      dates.push()
     })
 
     var totalinterest = interest.reduce((a, b) => { return a + b });
@@ -96,7 +94,7 @@ class Loans extends React.Component {
       }
     });
 
-    currLoan.datesArr = moment(currLoan.inception_date).twix(currLoan.end_date, {allDay: true}).toArray('months').map((date) => { return date.format('L') });
+    currLoan.datesArr = moment(currLoan.inception_date, "MM-DD-YYYY").twix(currLoan.end_date, {allDay: true}).toArray('months').map((date) => { return date.format('L') });
     
     this.setState({
       name: currLoan.name,
@@ -113,7 +111,7 @@ class Loans extends React.Component {
   componentWillMount(){
     this.handleAmort();
     this.setState({
-      chartDates: moment('1/31/2017').twix('1/01/2037', {allDay: true}).toArray('months').map((date) => { return date.format('L') })
+      chartDates: moment('1/31/2017', 'MM-DD-YYYY').twix('1/01/2037', {allDay: true}).toArray('months').map((date) => { return date.format('L') })
     })
   };
 
@@ -129,7 +127,8 @@ class Loans extends React.Component {
         <Hero background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}
           fit='cover'
           full={true} />}
-          backgroundColorIndex='dark'>
+          backgroundColorIndex='dark'
+          size='small'>
           <Box direction='row'
             justify='center'
             align='center'>

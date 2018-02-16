@@ -30,6 +30,7 @@ class LoansOnDashboard extends React.Component {
     if(input.loans){
       let debtSum = 0;
       let intSum = 0;
+      let payment = 0;
       let counter = 0;
       input.loans.map((loan) => {
         debtSum += loan.amount;

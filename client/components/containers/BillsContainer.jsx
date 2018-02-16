@@ -1,4 +1,4 @@
-import { Columns, Box, Section, Heading, Paragraph } from 'grommet';
+import { Columns, Box, Section, Heading, Paragraph, Hero, Image } from 'grommet';
 import React, { Component } from 'react';
 import styles from '../../../public/main/jStyles';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
@@ -78,7 +78,27 @@ class BillsContainer extends Component {
 
   render() {
     return (
-      <div>
+      <div>          
+        <Hero background={<Image src={'https://c.s-microsoft.com/en-us/CMSImages/O16_Hero_O365University_1920x660.jpg?version=67f004eb-398a-f533-4a8c-146ba63d7b16'}
+          fit='cover'
+          full={true}/>}
+          backgroundColorIndex='dark'
+          size='small'>
+          <Box direction='row'
+            justify='center'
+            align='center'>
+            <Box basis='1/2'
+              align='end'
+              pad='medium' />
+            <Box basis='1/2'
+              align='start'
+              pad='medium'>
+              <Heading margin='none' style={{fontSize: "55px"}} >
+                Bills
+              </Heading>
+            </Box>
+          </Box>
+        </Hero>
         <BillsSummary
           overdueBills={this.state.overdueBills}
           billsDueThisMonth={this.state.billsDueThisMonth}

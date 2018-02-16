@@ -67,7 +67,6 @@ class DashBoard extends React.Component {
     // } else {
     //   totalBalance = <Spinner />
     // }
-    console.log('fucking props',this.props)
     return(
       <div>
         <Tiles 
