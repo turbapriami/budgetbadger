@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import Navigation from '../pages/transactions/Navigation.jsx';
-import Search from '../pages/transactions/Search.jsx'
-import PieChart from '../pages/transactions/PieChart.jsx'
-import SearchFilter from '../pages/transactions/SearchFilters.jsx'
-import { Box, Split, Menu, Anchor, Actions } from 'grommet'
-import Spinner from '../pages/Spinner.jsx';
-import sortingFuncs from '../pages/transactions/sortingFunctions.jsx'
-import { graphql, compose, withApollo } from 'react-apollo'
 import ActionsIcon from 'grommet/components/icons/base/Actions';
 import { TRANS_ACC_QUERY, CREATE_TRANSACTION, NEW_BANK_QUERY, UPDATE_TRANSACTIONS, GET_USER_BALANCES } from '../../queries.js';
-import NewTransaction from '../pages/transactions/NewTransaction.jsx'
-import HistoricalChartContainer from '../pages/transactions/Chart/HistoricalChartContainer.jsx'
-import TransactionSummary from '../pages/transactions/TransactionSummary.jsx'
+import HistoricalChartContainer from '../pages/transactions/Chart/HistoricalChartContainer.jsx';
+import TransactionSummary from '../pages/transactions/TransactionSummary.jsx';
+import Search from '../pages/transactions/Search.jsx';
+import PieChart from '../pages/transactions/PieChart.jsx';
+import SearchFilter from '../pages/transactions/SearchFilters.jsx';
+import { Box, Split, Hero, Image, Heading, Menu, Anchor, Actions } from 'grommet';
+import Spinner from '../pages/Spinner.jsx';
+import sortingFuncs from '../pages/transactions/sortingFunctions.jsx';
+import { graphql, compose, withApollo } from 'react-apollo';
+import NewTransaction from '../pages/transactions/NewTransaction.jsx';
+import SummaryChartContainer from '../pages/transactions/Chart/TransactionsSummary.jsx';
 import Modal from 'react-responsive-modal';
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 const withTransactionsAndAccounts = graphql(TRANS_ACC_QUERY, {
   options: (props) => ({
@@ -244,6 +245,26 @@ class TransactionContainer extends Component {
     if (this.props.data.getAccounts) {
       return (
         <div style={{padding: '5px'}}>
+          <Hero background={<Image src={'https://1dib1q3k1s3e11a5av3bhlnb-wpengine.netdna-ssl.com/wp-content/uploads/2017/08/NYC-aerial-view.jpg'}
+            fit='cover'
+            full={true} />}
+            backgroundColorIndex='dark'
+            size='small'>
+            <Box direction='row'
+              justify='center'
+              align='center'>
+              <Box basis='1/2'
+                align='end'
+                pad='medium' />
+              <Box basis='1/2'
+                align='start'
+                pad='medium'>
+                <Heading margin='none' style={{fontSize: "55px"}} >
+                  Transactions
+                </Heading>
+              </Box>
+            </Box>
+          </Hero>
           <HistoricalChartContainer
             balances={this.props.data.getUser[0].accounts}
             accounts={this.props.data.getAccounts}

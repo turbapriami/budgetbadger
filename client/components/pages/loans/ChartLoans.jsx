@@ -1,41 +1,13 @@
 import React, { Component } from 'react';
 import { Hero, Box, Heading, Image, Footer, Title, Paragraph, Anchor, Menu, Section, Headline, Legend, NumberInput, Columns, Value, CurrencyIcon, LinkUpIcon, Split, Layer, Form, Header, FormFields, EditIcon, Button, FormField, TextInput, DateTime } from 'grommet';
 import Chart, { Axis, Grid, Area, Bar, Base, Layers, Line, Marker, MarkerLabel, HotSpots } from 'grommet/components/chart/Chart';
-import c3 from 'c3';
-import 'c3/c3.css';
 
 
 class LoanChart extends React.Component {
   constructor(props){
     super(props)
-    // this.advChart = this.advChart.bind(this);
   }
   
-
-
-  // advChart(){
-  //   var chart = c3.generate({
-  //     bindto: '#chart',
-  //     data: {
-  //       x: 'x',
-  //       columns: [
-  //         ['x', ...this.state.dates],
-  //         ['Total Paid', ...this.props.chartOutstanding],
-  //           ['Balance Outstanding', ...this.props.chartPrincipal]
-  //       ]
-  //     },
-  //     axis: {
-  //       x: {
-  //         type: 'timeseries'
-  //       },
-  //     },
-  //   })
-  // };
-
-  // componentDidMount(){
-  //   this.advChart();
-  // };
-
   render(){
     return(
       <Chart style={{fontSize: "20px"}} full={true}>

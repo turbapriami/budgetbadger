@@ -9,13 +9,6 @@ import AdvancedChart from './AdvancedChart.jsx';
 import moment from 'moment';
 import twix from 'twix';
 
-// console.log(amortizationSchedule(50000, 5, 10))
-
-const precisionRound = (number, precision) => {
-  var factor = Math.pow(10, precision);
-  return Math.round(number * factor) / factor;
-};
-
 const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -36,7 +29,7 @@ class Loans extends React.Component {
       totalPayment: 0,
       name: '',
       modalToggle: false,
-      id: 1,
+      id: window.localStorage.getItem('user_id'),
       chartToggle: false,
     }
     this.handleChange = this.handleChange.bind(this);
@@ -58,14 +51,12 @@ class Loans extends React.Component {
     var payments = [];
     var outstanding = [];
     var interest = [];
-    var dates =[];
 
     amort.forEach((payment) => {
       principal.push(payment.principalBalanceRounded);
       payments.push(payment.payment);
-      outstanding.push(this.state.principal - payment.principalBalanceRounded);
+      outstanding.push((this.state.principal - payment.principalBalanceRounded).toFixed(2));
       interest.push(payment.interestPayment);
-      dates.push()
     })
 
     var totalinterest = interest.reduce((a, b) => { return a + b });
@@ -74,9 +65,9 @@ class Loans extends React.Component {
     this.setState({
       chartPrincipal: principal,
       chartOutstanding: outstanding,
-      payLevel: payments[0],
-      totalInterestPaid: precisionRound(totalinterest, 2),
-      totalPayment: precisionRound(totalPayment, 2)
+      payLevel: payments[0].toFixed(2),
+      totalInterestPaid: totalinterest.toFixed(2),
+      totalPayment: totalPayment.toFixed(2),
     })
   };
 
@@ -96,14 +87,14 @@ class Loans extends React.Component {
   };
 
   handleLoan(e){
-    e.preventDefault();
     var currLoan = {};
     this.props.loans.forEach((loan) => {
       if(loan.id === parseInt(e.target.name)) {
         currLoan = loan;
       }
     });
-    currLoan.datesArr = moment(currLoan.inception_date).twix(currLoan.end_date, {allDay: true}).toArray('months').map((date) => { return date.format('L') });
+
+    currLoan.datesArr = moment(currLoan.inception_date, "MM-DD-YYYY").twix(currLoan.end_date, {allDay: true}).toArray('months').map((date) => { return date.format('L') });
     
     this.setState({
       name: currLoan.name,
@@ -119,10 +110,9 @@ class Loans extends React.Component {
 
   componentWillMount(){
     this.handleAmort();
-  };
-
-  componentWillReceiveProps(nextProps){
-    this.handleLoan();
+    this.setState({
+      chartDates: moment('1/31/2017', 'MM-DD-YYYY').twix('1/01/2037', {allDay: true}).toArray('months').map((date) => { return date.format('L') })
+    })
   };
 
   handleModal(){
@@ -132,13 +122,13 @@ class Loans extends React.Component {
   };
 
   render(){
-    console.log("State of the Jewnion", this.state);
     return(
       <div>
         <Hero background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}
           fit='cover'
           full={true} />}
-          backgroundColorIndex='dark'>
+          backgroundColorIndex='dark'
+          size='small'>
           <Box direction='row'
             justify='center'
             align='center'>
@@ -197,11 +187,15 @@ class Loans extends React.Component {
               <Button icon={<AddIcon />}
                 onClick={this.handleModal}
                 href='#' 
-                align='right'/>
+                align='right' 
+                label='Add Loans'
+                plain={true}/>
               <Button icon={<LineChartIcon />}
                 onClick={this.toggleChart}
                 href='#' 
-                align='right'/>
+                align='right'
+                label='Advanced Chart'
+                plain={true}/>
                 </Box>
                 { this.state.modalToggle && 
                   <AddLoanForm handleModal={this.handleModal} 
