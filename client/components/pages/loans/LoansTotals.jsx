@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Box, Headline, Value, CurrencyIcon } from 'grommet';
+import { Box, Headline, Value, CurrencyIcon, Button, AddIcon } from 'grommet';
+import AddLoanForm from './AddLoanForm.jsx';
 
 const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -12,8 +13,17 @@ class LoansOnDashboard extends React.Component {
     this.state = {
       TotalLoanDebt: 0,
       AvgIntRate: 0,
+      modalToggle: false,
+      id: window.localStorage.getItem('user_id'),
     }
     this.handleTotals = this.handleTotals.bind(this);
+    this.handleModal = this.handleModal.bind(this);
+  }
+
+  handleModal(){
+    this.setState({
+      modalToggle: !this.state.modalToggle,
+    })
   }
 
   handleTotals(input){
@@ -57,10 +67,21 @@ class LoansOnDashboard extends React.Component {
             label='Total Loan Debt'
             units='$' />
             <p />
-          <Value value={this.state.AvgIntRate}
+          <Value value={this.state.AvgIntRate.toFixed(2)}
             icon={<CurrencyIcon />}
             label='Avg Interest Rate'
             units='%' />
+          <p />
+          <Button icon={<AddIcon />}
+            onClick={this.handleModal}
+            href='#' 
+            align='right' 
+            label='Add Loans'
+            plain={true}/>
+          { this.state.modalToggle && 
+            <AddLoanForm handleModal={this.handleModal} 
+              id={this.state.id}/>
+          }
         </Box>
       </div>
     )

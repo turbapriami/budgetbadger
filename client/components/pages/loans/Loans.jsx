@@ -9,13 +9,6 @@ import AdvancedChart from './AdvancedChart.jsx';
 import moment from 'moment';
 import twix from 'twix';
 
-// console.log(amortizationSchedule(50000, 5, 10))
-
-const precisionRound = (number, precision) => {
-  var factor = Math.pow(10, precision);
-  return Math.round(number * factor) / factor;
-};
-
 const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -36,7 +29,7 @@ class Loans extends React.Component {
       totalPayment: 0,
       name: '',
       modalToggle: false,
-      id: 1,
+      id: window.localStorage.getItem('user_id'),
       chartToggle: false,
     }
     this.handleChange = this.handleChange.bind(this);
@@ -63,7 +56,7 @@ class Loans extends React.Component {
     amort.forEach((payment) => {
       principal.push(payment.principalBalanceRounded);
       payments.push(payment.payment);
-      outstanding.push(this.state.principal - payment.principalBalanceRounded);
+      outstanding.push((this.state.principal - payment.principalBalanceRounded).toFixed(2));
       interest.push(payment.interestPayment);
       dates.push()
     })
@@ -74,9 +67,9 @@ class Loans extends React.Component {
     this.setState({
       chartPrincipal: principal,
       chartOutstanding: outstanding,
-      payLevel: payments[0],
-      totalInterestPaid: precisionRound(totalinterest, 2),
-      totalPayment: precisionRound(totalPayment, 2)
+      payLevel: payments[0].toFixed(2),
+      totalInterestPaid: totalinterest.toFixed(2),
+      totalPayment: totalPayment.toFixed(2),
     })
   };
 
@@ -96,7 +89,6 @@ class Loans extends React.Component {
   };
 
   handleLoan(e){
-    // e.preventDefault();
     var currLoan = {};
     this.props.loans.forEach((loan) => {
       if(loan.id === parseInt(e.target.name)) {
@@ -120,15 +112,10 @@ class Loans extends React.Component {
 
   componentWillMount(){
     this.handleAmort();
+    this.setState({
+      chartDates: moment('1/31/2017').twix('1/01/2037', {allDay: true}).toArray('months').map((date) => { return date.format('L') })
+    })
   };
-
-  // componentWillReceiveProps(nextProps){
-  //   console.log("THIS PROPS ",this.props);
-  //   console.log("NeXT PROPS ",nextProps);
-  //   if (this.props){
-  //     this.handleLoan(nextProps);
-  //   }
-  // };
 
   handleModal(){
     this.setState({
@@ -137,7 +124,6 @@ class Loans extends React.Component {
   };
 
   render(){
-    console.log("State of the Jewnion", this.state);
     return(
       <div>
         <Hero background={<Image src={'https://www.collegemagazine.com/wp-content/uploads/2015/03/UW-Quad.jpg'}
