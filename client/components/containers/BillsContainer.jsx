@@ -103,7 +103,9 @@ class BillsContainer extends Component {
   render() {
     return (
       <div>          
-        <Hero background={<Image src={'https://c.s-microsoft.com/en-us/CMSImages/O16_Hero_O365University_1920x660.jpg?version=67f004eb-398a-f533-4a8c-146ba63d7b16'}
+        <Hero 
+          style = {{marginTop: "-12px", marginBottom: "12px"}}
+          background={<Image src={'https://c.s-microsoft.com/en-us/CMSImages/O16_Hero_O365University_1920x660.jpg?version=67f004eb-398a-f533-4a8c-146ba63d7b16'}
           fit='cover'
           full={true}/>}
           backgroundColorIndex='dark'

@@ -69,7 +69,9 @@ class GoalsContainer extends React.Component {
     }
     return(
       <div>
-        <Hero background={<Image src={'https://www.goalcast.com/wp-content/uploads/2017/08/racing-through-life.jpg'}
+        <Hero 
+          style = {{marginTop: "-12px", marginBottom: "12px"}}
+          background={<Image src={'https://www.goalcast.com/wp-content/uploads/2017/08/racing-through-life.jpg'}
           fit='cover'
           full={true}
           height='50%'
