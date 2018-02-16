@@ -1,11 +1,11 @@
 const sgMail = require('@sendgrid/mail');
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+// const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 const sendEmail = (userName, userEmail, userHash) => {
-  console.log('USER HASHHHH!!!!', userHash);
+  console.log('SENDGRID_API_KEY', process.env.SENDGRID_API_KEY);
   let passwordRecoveryLink = `<a href="localhost:1337/passwordresetpage/${userHash}">reset your password here</a>`
   console.log('PASSWORD RECOVERY LINK!!!!!', passwordRecoveryLink);
   const msg = {
