@@ -40,11 +40,10 @@ class LoansOnDashboard extends React.Component {
 
   render(){
     return(
-      <div>
+      <div style={{width: "100%"}}>
         <Box align='center'
           justify='center'
           pad='large'
-          margin='large'
           colorIndex='light-2'>
           <Headline margin='none' align='center' style={{fontSize: "25px"}} >
             Loans
