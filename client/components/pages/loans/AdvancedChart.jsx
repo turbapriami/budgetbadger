@@ -1,77 +1,102 @@
 import React, { Component } from 'react';
-import Chart from 'chart.js';
 import { Line } from 'react-chartjs-2';
-var ctx = 'myChart';
 
 class AdvancedChart extends React.Component {
   constructor(props){
     super(props)
-    this.state = {
-      items: []
-    }
-    this.myChart = this.myChart.bind(this);
   }
 
-  myChart(){
-    var chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-          labels: [...this.props.chartDates],
-          datasets: [{
-              label: 'Amount Outstanding',
-              data: [...this.props.chartPrincipal],
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-              ],
-              borderWidth: 1
-          }, {
-            label: 'Total Paid',
-              data: [...this.props.chartOutstanding],
-              backgroundColor: [
-                  'rgba(54, 162, 235, 0.2)',
-              ],
-              borderColor: [
-                  'rgba(54, 162, 235, 1)',
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0,
-                      max: this.props.principal,
-                      beginAtZero:true,
-                  }
-              }]
-          }
-      }
-    })
-  }; 
   
-
-  // console.log('this is motherfucking props', props)
-  componentDidMount(){
-    this.myChart();
-  }
-
-  shouldComponentUpdate({ name }){
-    if(name !== this.props.name){
-      this.myChart();
-    }
-  }
-
   render(){
+    const chartData = {
+      labels: [...this.props.chartDates],
+      datasets: [{
+          label: 'Amount Outstanding',
+          data: [...this.props.chartPrincipal],
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+          ],
+          borderColor: [
+              'rgba(255,99,132,1)',
+          ],
+          borderWidth: 1
+      }, {
+        label: 'Total Paid',
+          data: [...this.props.chartOutstanding],
+          backgroundColor: [
+              'rgba(54, 162, 235, 0.2)',
+          ],
+          borderColor: [
+              'rgba(54, 162, 235, 1)',
+          ],
+          borderWidth: 1
+      }]
+  };
+    const options = {
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Transaction Summary'
+      },
+      tooltips: {
+        mode: 'label'
+      },
+      hover: {
+        mode: 'dataset'
+      },
+      scales: {
+        xAxes: [
+          {
+            display: true,
+            scaleLabel: {
+              show: true,
+              labelString: 'Month'
+            }
+          }
+        ],
+        yAxes: [
+          {
+            id: 'y-axis-0',
+            display: true,
+            scaleLabel: {
+              show: true,
+              labelString: 'Value'
+            },
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: this.props.principal
+            }
+          }
+        ]
+      },
+      annotation: {
+        events: ['mouseover'],
+        annotations: [{
+          type: 'box',
+          yScaleID: 'y-axis-0',
+          yMin: 0,
+          yMax: 50000,
+          // borderColor: 'blue',
+          backgroundColor: "rgba(238, 119, 119, 0.54)",
+        },
+        {
+          type: 'line',
+          mode: 'horizontal',
+          value: 25000,
+          borderDash: [2,2],
+          borderColor: 'red',
+          scaleID: 'y-axis-0',
+        },
+        ]
+      }
+    };
     return(
       <div>
-        <canvas id="myChart" width={1200} height={500}></canvas>
+        <Line data={chartData} width="1200" height="500" options={options}/>
       </div>
     )
   }
 }
 
 module.exports = AdvancedChart;
+
