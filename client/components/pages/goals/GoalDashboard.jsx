@@ -44,7 +44,6 @@ const GoalDashboard = (props) => {
       <Tiles
         fill={true}
         flush={false}
-        selectable={true}
       >
         {goalsTiles}
       </Tiles>

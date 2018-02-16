@@ -3,7 +3,7 @@ import {Tiles, Tile, Box, Split} from 'grommet';
 import TransactionList from '../pages/transactions/TransactionList.jsx';
 import BillsDueTable from '../pages/bills/BillsDueTable.jsx';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
-import AccountsTotals from '../pages/accounts/AccountsTotals.jsx'
+import AccountDashboard from '../pages/accounts/AccountDashboard.jsx'
 import LoansOnDashboard from '../pages/loans/LoansTotals.jsx';
 import BillsOnDashboard from '../pages/bills/BillsOnDashboard.jsx';
 import GoalDashboard from '../pages/goals/GoalDashboard.jsx';
@@ -56,7 +56,7 @@ class DashBoard extends React.Component {
     }
 
     if (this.props.data.getAccounts) {
-      var totalBalance = <AccountsTotals accounts={this.props.data.getAccounts} />
+      var totalBalance = <AccountDashboard accounts={this.props.data.getAccounts} />
     } else {
       var totalBalance = <Spinner />
     }
@@ -64,7 +64,7 @@ class DashBoard extends React.Component {
 
     return(
       <div>
-        <Split separator={true} showOnResponsive='both' flex='right' >
+        <Split showOnResponsive='both' flex='right' >
           <Box style={{width: "30vw"}}>
             <Tiles flush={false}
             fill={true}>
