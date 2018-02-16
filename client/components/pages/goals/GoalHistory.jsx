@@ -4,6 +4,10 @@ import Layer from 'grommet/components/Layer'
 
 const GoalHistory = (props) => {
   if (props.goalProgress && props.chartActive) {
+    let endDate = ''
+    if (props.goal.end_date) {
+      endDate = props.goal.end_date.toString().slice(0, 10)
+    }
     return (
       <Layer 
         overlayClose={true}
@@ -11,7 +15,8 @@ const GoalHistory = (props) => {
         closer={true}
         onClose={props.hideChart}
       >
-        <Chart>
+        <p>{props.goal.description}</p>
+        <Chart style={{padding: "16px"}}>
           <Axis  
             count={5}
             labels={[{"index": 2, "label": props.goal.amount / 2}, {"index": 4, "label": props.goal.amount}]}
@@ -35,7 +40,7 @@ const GoalHistory = (props) => {
             </Layers>
             <Axis 
               count={2}
-              labels={[{"index": 0, "label": props.goal.start_date}, {"index": 1, "label": props.goal.end_date}]} 
+              labels={[{"index": 0, "label": props.goal.start_date.toString().slice(0, 10)}, {"index": 1, "label": endDate}]} 
             />
           </Chart>
         </Chart>
