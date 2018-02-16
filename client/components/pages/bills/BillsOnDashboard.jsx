@@ -22,7 +22,7 @@ class BillsOnDashBoard extends Component {
   render() {
     return (
       <div>
-        <Box width="large" style={{ margin: '0 5%' }}>
+        <Box style={{ margin: '0 5%', width: "65vw" }}>
         <Heading strong={true}
           tag='h2'
           style={{width: '360px'}}>

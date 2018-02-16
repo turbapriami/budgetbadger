@@ -69,6 +69,7 @@ const DASH_QUERY = gql`
       account {
         type
       }
+      category
     }
     getAccounts(user_id: $user_id) {
       type
@@ -82,6 +83,28 @@ const DASH_QUERY = gql`
       interest_rate
       inception_date
       end_date
+    }
+    getGoals(user_id: $user_id) {
+      id
+      description
+      amount
+      is_budget
+      start_date
+      end_date
+      goal_progress {
+        amount
+        date
+      }
+      goal_categories {
+        name
+      }
+      goal_accounts {
+        account {
+          bank_name
+          type
+          current_balance
+        }
+      }
     }
     getBillPaymentHistory(user_id: $user_id) {
       id
