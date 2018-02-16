@@ -30,7 +30,7 @@ class AddBillCategoryForm extends React.Component {
       .CREATE_BILL_CATEGORY({
         variables: {
           name: this.state.billCategoryDescription,
-          user_id: 1,
+          user_id: this.state.user_id,
         },
       })
       .then(({ data }) => {

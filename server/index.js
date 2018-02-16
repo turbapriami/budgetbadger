@@ -40,19 +40,8 @@ const getToken = async (req) => {
   req.next()
 }
 
-// const checkDirectory = (req, res, next) => {
-//   if (req.originalUrl.slice(1, 18) == 'PasswordResetPage' && req.method === 'GET') {
-//     console.log('SUCCESSSSSSSS')
-
-//   }
-//   console.log('123', req.params)
-//   console.log('456', req.originalUrl.slice(1, 19))
-//   console.log('EIHAIDIOUASUDJUIDHAUIAHDIAD', req.baseUrl)
-//   next()
-// }
-
 const chooseDirectory = (req, res) => {
-  if (req.user || req.originalUrl.slice(1, 18) == 'PasswordResetPage' || req.originalUrl.slice(1, 13) == 'SplashSignIn') {
+  if (req.user) {
     req.next()
   } else {
     res.redirect('/about')
@@ -96,7 +85,6 @@ const resetCheck = (req, res) => {
   }
 }
 
-
 app.use(morgan('dev'))
 app.use(/\/((?!graphql).)*/, bodyParser.urlencoded({ extended: true }));
 app.use(/\/((?!graphql).)*/, bodyParser.json());
@@ -136,10 +124,8 @@ app.use(chooseDirectory)
 
 app.use(express.static(path.join(__dirname, '../public/main')));
 
-// app.get('*', res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'))
-
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/splash', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../public/main', 'index.html'));
 })
 
 app.listen(port, (err) => {

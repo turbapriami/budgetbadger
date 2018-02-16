@@ -1,4 +1,4 @@
-import { Columns, Box, Section, Heading, Paragraph } from 'grommet';
+import { Columns, Box, Section, Heading, Paragraph, Hero, Image } from 'grommet';
 import React, { Component } from 'react';
 import styles from '../../../public/main/jStyles';
 import BillsSummary from '../pages/bills/BillsSummary.jsx';
@@ -14,7 +14,7 @@ class BillsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      billsDueThisMonth: [],
+      billsDue: [],
       overdueBills: [],
       paidBills: [],
       unpaidBills: [],
@@ -33,7 +33,7 @@ class BillsContainer extends Component {
       var unpaidBills = nextProps.data.getBillPaymentHistory
         .filter(bill => !bill.paid && bill.bills[0].bill_status);
 
-      var billsDueThisMonth = nextProps.data.getBillPaymentHistory
+      var billsDue = nextProps.data.getBillPaymentHistory
         .filter(bill => !bill.paid && bill.bills[0].bill_status && (new Date(bill.due_date).getMonth() === currentDate.getMonth()));
 
       var overdueBills = nextProps.data.getBillPaymentHistory
@@ -58,7 +58,7 @@ class BillsContainer extends Component {
       },0);
 
       this.setState({
-        billsDueThisMonth,
+        billsDue,
         overdueBills,
         unpaidBills,
         paidBills,
@@ -102,10 +102,32 @@ class BillsContainer extends Component {
 
   render() {
     return (
-      <div>
+      <div>          
+        <Hero 
+          style = {{marginTop: "-12px", marginBottom: "12px"}}
+          background={<Image src={'https://c.s-microsoft.com/en-us/CMSImages/O16_Hero_O365University_1920x660.jpg?version=67f004eb-398a-f533-4a8c-146ba63d7b16'}
+          fit='cover'
+          full={true}/>}
+          backgroundColorIndex='dark'
+          size='small'>
+          <Box direction='row'
+            justify='center'
+            align='center'>
+            <Box basis='1/2'
+              align='end'
+              pad='medium' />
+            <Box basis='1/2'
+              align='start'
+              pad='medium'>
+              <Heading margin='none' style={{fontSize: "55px"}} >
+                Bills
+              </Heading>
+            </Box>
+          </Box>
+        </Hero>
         <BillsSummary
           overdueBills={this.state.overdueBills}
-          billsDueThisMonth={this.state.billsDueThisMonth}
+          billsDue={this.state.unpaidBills}
           creditAvailable = {this.state.creditAvailable}
           cashAvailable = {this.state.cashAvailable}
         />
@@ -125,26 +147,6 @@ class BillsContainer extends Component {
     );
   }
 }
-
-// const withBills = graphql(BILL_PAYMENT_HISTORY_QUERY, {
-//   options: props => ({
-//     variables: {
-//       user_id: window.localStorage.getItem('user_id'),
-//     },
-//     name: 'AllUserBills',
-//   }),
-// });
-// const withAccountsQuery = graphql(ACCOUNTS_QUERY, {
-//   options: (props) => ({
-//     variables: {
-//       user_id: window.localStorage.getItem('user_id')
-//     },
-//     name: 'Accounts Data'
-//   })
-// })
-
-// export default compose(withApollo, withBills)(BillsContainer);
-
 
 export default compose(
   graphql(BILL_PAYMENT_HISTORY_QUERY, {

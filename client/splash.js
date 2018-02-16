@@ -12,7 +12,6 @@ import { ApolloProvider } from 'react-apollo';
 import PasswordRecoveryModal from './components/pages/PasswordReset/PasswordRecoveryModal.jsx';
 import PasswordResetPage from './components/pages/PasswordReset/PasswordResetPage.jsx';
 
-
 const httpLink = new HttpLink();
 
 const client = new ApolloClient({

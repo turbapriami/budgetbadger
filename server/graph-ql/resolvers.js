@@ -4,6 +4,7 @@ const plaid = require('../plaid.js')
 const sendgrid = require('../sendgrid.js');
 const moment = require('moment')
 const Promise = require('bluebird');
+const bcrypt = require('bcrypt');
 const knex = require('../database/index.js').knex;
 
 module.exports = {
@@ -318,11 +319,11 @@ module.exports = {
     loginUser: async (parent, { email, password }, { models, APP_SECRET }) => {
       const user = await new models.User({ email }).fetch();
       if (!user) {
-        throw new Error('Unable to match the provided credentials');
+        throw new Error('Unable to match the email');
       }
       const match = await user.comparePassword(password);
       if (!match) {
-        throw new Error('Unable to match the provided credentials');
+        throw new Error('Unable to match the password');
       }
       const token = jwt.sign({ user: _.pick(user.attributes, ['id', 'email'])}, APP_SECRET, {
         expiresIn: 360*60*60
@@ -342,14 +343,21 @@ module.exports = {
     },
 
     updateUser: async (parent, args, {models, knex}) => {
-      const { email } = args;
-      const user = await new models.User({email}).fetch();
+      const { id } = args;
+      const user = await new models.User({id}).fetch();
+      const { email } = user;
+
       for(let field in user.attributes) {
+        console.log("ARGS[FIELD]", args[field], field);
+        console.log("USER ATTRIBUTES AND FIELD", user.attributes[field], field);
         if (args[field]) {
           user.attributes[field] = args[field]
         }
       }
+      console.log("args:", args);
+      console.log('USER.ATTRIBUTES:', user.attributes);
       let updated = await new models.User(user.attributes).save();
+      console.log("UPDATED:", updated);
       return updated.attributes
     },
 
@@ -440,7 +448,6 @@ module.exports = {
           return item;
         }
       }).join('');
-      console.log("USER.ATTRIBUTES", user.attributes, token);
       user.attributes['token'] = token;
       let updated = await new models.User(user.attributes).save();
       knex('users').where(args).then((data) => {
@@ -448,28 +455,50 @@ module.exports = {
       })
     },
     updatePassword: async (parent, args, { models, knex }) => {
-      console.log('MADE IT TO UPDATE PASSWORD');
       const { email } = args;
       const { password } = args;
       const user = await new models.User({email}).fetch();
-      user.attributes['token'] = null;
-      user.attributes['password'] = password;
-      user.hashPassword();
-      let updated = await new models.User(user.attributes).save();
+      let hasher = Promise.promisify(bcrypt.hash);
+      hasher(password, 10).bind(this)
+           .then(async hash => {
+              user.attributes['token'] = null;
+              user.attributes['password'] = hash;
+              let updated = await new models.User(user.attributes).save();
+           })
+           .catch(err => console.log(err));
+
     },
     deleteLoan: (parent, args, { knex }) => knex('loans').where(args).del(),
 
     createGoal: async (parent, args, { models}) => {
-      return await new models.Goal(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalProgress: async (parent, args, { models}) => {
-      return await new models.GoalProgress(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalCategory: async (parent, args, { models}) => {
-      return await new models.GoalCategory(args).save(null, {method: 'insert'}).attributes;
-    },
-    createGoalAccount: async (parent, args, { models}) => {
-      return await new models.GoalAccount(args).save(null, {method: 'insert'}).attributes;
+      let goalProperties = {
+        user_id: args.user_id,
+        description: args.description,
+        amount: args.amount,
+        is_budget: args.is_budget,
+        start_date: args.start_date
+      }
+      if (args.end_date) {
+        goalProperties.end_date = args.end_date
+      }
+      let newGoal = await new models.Goal(goalProperties).save(null, {method: 'insert'});
+      Promise.all(
+        args.categories.map(async category => {     
+          return await new models.GoalCategory({
+            goal_id: newGoal.attributes.id,
+            name: category
+          }).save(null, {method: 'insert'});
+        })
+      )
+      Promise.all(
+        args.accounts.map(async account => {     
+          return await new models.GoalAccount({
+            goal_id: newGoal.attributes.id,
+            account_id: account
+          }).save(null, {method: 'insert'});
+        })
+      )
+      return newGoal
     }
   }
 }

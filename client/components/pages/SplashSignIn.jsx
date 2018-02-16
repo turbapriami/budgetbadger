@@ -15,7 +15,8 @@ class SplashSignIn extends Component {
       password: '',
       layerActive: false
     }
-    this._confirm = this._confirm.bind(this)
+    this._confirm = this._confirm.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   async _confirm() {
@@ -40,6 +41,12 @@ class SplashSignIn extends Component {
     }
   }
 
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this._confirm();
+    }
+  }
+
   render() {
     return (
       <Box align="center" focusable={true}>
@@ -50,9 +57,17 @@ class SplashSignIn extends Component {
             <Box pad={{ vertical: "small", width: "100%" }} >
               <FormFields style={{ width: "100%" }} >
                   <Label>Email</Label>
-                  <TextInput onDOMChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
+                  <TextInput  onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        this._confirm();
+                      }
+                    }} onDOMChange={e => this.setState({ user_email: e.target.value })} style={{ width: "100%" }} name="userEmail" />
                   <Label>Password</Label>
-                  <PasswordInput onChange={e => this.setState({ password: e.target.value })} style={{ width: "100%" }} />
+                  <PasswordInput  onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        this._confirm();
+                      }
+                    }} onChange={e => this.setState({ password: e.target.value })} style={{ width: "100%" }} />
               </FormFields>
             </Box>
             <CheckBox label="Remember me" pad="medium" />
@@ -66,9 +81,7 @@ class SplashSignIn extends Component {
           <Router>
             <Paragraph align="center" size="small" margin="small" >
               New to Budget Badger?
-              <Link to={'/SplashSignUp'}>
-                <a style={{ color: " #0000EE" }} class="grommetux-anchor"> Create an account.</a>
-              </Link>
+              <a href="/signup" style={{ color: " #0000EE" }}  class="grommetux-anchor"> Create an account.</a>
             </Paragraph>
           </Router>
         </Card>

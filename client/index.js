@@ -12,14 +12,6 @@ import Cookies from 'universal-cookie';
 
 const httpLink = new HttpLink({ withCredentials: true, credentials: 'same-origin' });
 
-
-// const middlewareLink = setContext(() => ({
-//   headers: { 
-//     authorization: localStorage.getItem('token') || null,
-//   }
-// }));
-// const link = middlewareLink.concat(httpLink);
-
 const client = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache()

@@ -5,7 +5,7 @@ import Tile from 'grommet/components/Tile';
 import Card from 'grommet/components/Card';
 import Meter from 'grommet/components/Meter'
 
-const Goals = (props) => {
+const GoalDashboard = (props) => {
   if (props.goals) {
     let goalsTiles = null
     if (props.goals.length > 0) {
@@ -44,8 +44,6 @@ const Goals = (props) => {
       <Tiles
         fill={true}
         flush={false}
-        selectable={true}
-        onSelect={props.handleClick}
       >
         {goalsTiles}
       </Tiles>
@@ -55,4 +53,4 @@ const Goals = (props) => {
   }
 }
 
-export default Goals
+export default GoalDashboard

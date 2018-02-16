@@ -53,6 +53,7 @@ const submitToMain = async () => {
 }
 
 module.exports = {
+  fetchTransactions,
   parseTransactions,
   submitToMain
 }

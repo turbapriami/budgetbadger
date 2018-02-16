@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Layer from 'grommet/components/Layer';
+import { Layer, Box, Heading } from 'grommet';
 import HistoricalChart from './SummaryChart.jsx'
 import {
   filterTransactionsByValue,
@@ -143,9 +143,10 @@ class HistoricalChartContainer extends Component {
       <Layer
         closer={true}
         overlayClose={true}
-        padding="small"
         flush={true}
         onClose={this.props.handleSummaryChart}>
+        <Box pad="medium">
+        <Heading tag="h3" align="center" strong={true}> Historical Transactions </Heading>
         <HistoricalChart 
           annotations={this.state.annotations}
           toggleGoal={this.toggleGoal}
@@ -159,6 +160,7 @@ class HistoricalChartContainer extends Component {
           displayTotal={this.state.displayTotal}
           filter={this.state.filter}
           handleChartClick={this.handleChartClick}/>
+        </Box>
       </Layer> :
       null
     )

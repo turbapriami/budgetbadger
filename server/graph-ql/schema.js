@@ -131,13 +131,11 @@ module.exports = `
   type Goal {
     id: Int!
     user_id: Int!
-    account_id: String
     description: String!
-    goal_category_id: Int!
     amount: String!
     start_date: Date!
     is_budget: Boolean!
-    end_date: Date!
+    end_date: Date
     goal_progress: [GoalProgress!]
     goal_categories: [GoalCategory!]
     goal_accounts: [GoalAccount!]
@@ -216,8 +214,9 @@ module.exports = `
     deleteUser(email: String!): Int!
     loginUser(email: String!, password: String!): [String!]
     addBank(id: String!, access_token: String!, user_id: Int!, last_updated: String): Bank
-    updateUser(    
-      email: String!
+    updateUser(
+      id: Int!
+      email: String
       first_name: String
       last_name: String
       city: String
@@ -250,12 +249,9 @@ module.exports = `
     createBankAccount(user_id: Int!, public_key: String!): String!
     getUpdatedTransactions(user_id: Int!): [Transaction!]
     getPasswordRecoveryEmail(email: String!) : [User!]
-    createGoal(user_id: Int!, description: String!, amount: String!, start_date: Date!, end_date: Date!, is_budget: Boolean!): Goal!
-    createGoalProgress(goal_id: Int!, amount: String!, date: Date!): GoalProgress!
-    createGoalCategory(goal_id: Int!, name: String!): GoalCategory!
-    createGoalAccount(goal_id: Int!, account_id: String!): GoalAccount!
     updatePassword(
       email: String!
       password: String!): [String!]
+    createGoal(user_id: Int!, description: String!, amount: String!, start_date: Date!, end_date: Date, is_budget: Boolean!, accounts:[String], categories: [String]): Goal
   }
   `

@@ -1,10 +1,10 @@
 const knex = require('knex')({
   client: 'pg',
   connection: {
-     user: process.env.DB_USER,
-     password: process.env.DB_PASSWORD,
-     host: process.env.DB_HOST,
-     port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     database: 'bbadger',
     charset: 'utf8',
   }
@@ -16,7 +16,6 @@ knex.schema.hasTable('users').then(exists => {
       table.increments('id').primary();
       table.string('email');
       table.string('password');
-      table.string('token');
       table.string('first_name');
       table.string('last_name');
       table.string('street');
@@ -24,7 +23,6 @@ knex.schema.hasTable('users').then(exists => {
       table.string('state');
       table.string('phone');
       table.string('school');
-      table.string('date');
     }).then(() => console.log('created table users'))
   }
 })
@@ -196,7 +194,7 @@ knex.schema.hasTable('goal_progress').then(exists => {
       table.increments('id').primary();
       table.integer('goal_id').references('goals.id');
       table.string('amount');
-      table.string('date');
+      table.date('date');
     }).then(() => console.log('created table goal_progress'))
   }
 })

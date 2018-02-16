@@ -8,18 +8,14 @@ class HistoricalChart extends Component {
     super()
   }
 
-  componentWillReceiveProps() {
-
-  }
-
   render() {
     const { min, max, center } = this.props.annotations
     const options = {
       responsive: true,
-      title: {
-        display: true,
-        text: 'Transaction Summary'
-      },
+      // title: {
+      //   display: true,
+      //   text: 'Transaction Summary'
+      // },
       tooltips: {
         mode: 'label'
       },
@@ -59,7 +55,7 @@ class HistoricalChart extends Component {
           yMin: min,
           yMax: max,
           // borderColor: 'blue',
-          backgroundColor: "rgba(238, 119, 119, 0.54)",
+          backgroundColor: ["rgba(238, 119, 119, 0.54)","rgb(248, 207, 73)","rgb(117, 183, 169)"],
           // label: {    
           // enabled: false,
           // content: 'Test label'},
@@ -89,8 +85,8 @@ class HistoricalChart extends Component {
           <Line 
             data={this.props.chartData} 
             options={options} 
-            width="600" 
-            height="500" 
+            width="500" 
+            height="400" 
             getElementAtEvent={(element) => this.props.handleChartClick(element)}/>
         </div>
         <CheckBox label='Toggle Total'

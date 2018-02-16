@@ -23,12 +23,13 @@ class BillsDueTableItem extends Component {
   }
 
   onMarkPaidClick(bill) {
+    console.log('bill marked paid', bill);
     let currentDate = new Date();
     this.props
       .UPDATE_BILL_PAYMENT_HISTORY({
         variables: {
           id: bill.id,
-          amount_paid: bill.bills[0].amount.toFixed(2),
+          amount_paid: bill.amount_due.toFixed(2),
           paid_date: currentDate,
           paid: true,
         },
@@ -86,7 +87,7 @@ class BillsDueTableItem extends Component {
           {moment(this.props.bill.due_date).format('MMMM D, YYYY')}
         </td>
         <td>
-          ${this.props.bill.bills[0].amount.toFixed(2)}
+          ${this.props.bill.amount_due.toFixed(2)}
         </td>
         <td>
           <Menu

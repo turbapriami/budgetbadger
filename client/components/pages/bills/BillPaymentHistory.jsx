@@ -12,7 +12,7 @@ class BillPaymentHistory extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedBill.bills) {
+    if (nextProps.selectedBill.bills && nextProps.UserBillPaymentHistory) {
       var selectedBillId = nextProps.selectedBill.bills[0].id;
       var historyForBill = nextProps.UserBillPaymentHistory
         .filter(
