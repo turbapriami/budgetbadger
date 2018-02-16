@@ -56,7 +56,7 @@ const Splash = ({ match, location, history }) => {
                                               uppercase={true}>
                                               <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Product Owner</label>
                                             </Label>
-                                            <Heading tag="h2">
+                                            <Heading tag="h3">
                                               <a href="http://linkedin.com/in/gustafbrostedt/" target="_blank" style={{ color: "#000" }} >Gustaf Brostedt</a>
                                             </Heading>
                                       </div>
@@ -78,7 +78,7 @@ const Splash = ({ match, location, history }) => {
                                               uppercase={true}>
                                               <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
                                             </Label>
-                                            <Heading tag="h2">
+                                            <Heading tag="h3">
                                               <a href="http://www.linkedin.com/in/afriedman1991/" target="_blank" style={{ color: "#000" }} >Alex Friedman</a>
                                             </Heading>
                                       </div>
@@ -100,7 +100,7 @@ const Splash = ({ match, location, history }) => {
                                               uppercase={true}>
                                               <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
                                             </Label>
-                                            <Heading tag="h2">
+                                            <Heading tag="h3">
                                               <a href="http://www.linkedin.com" target="_blank" style={{ color: "#000" }} >Andrew Lichtenstein</a>
                                             </Heading>
                                       </div>                                      
@@ -122,7 +122,7 @@ const Splash = ({ match, location, history }) => {
                                               uppercase={true}>
                                               <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
                                             </Label>
-                                            <Heading tag="h2">
+                                            <Heading tag="h3">
                                               <a href="https://www.linkedin.com/in/jkang1220/" target="_blank" style={{ color: "#000" }} >Jimmy Kang</a>
                                             </Heading>
                                       </div>                                      
@@ -132,23 +132,21 @@ const Splash = ({ match, location, history }) => {
                                   direction="column"
                                   headingStrong={true}
                                   margin="small"
-                                  textSize="small"> 
-                                   <Image src="https://media.licdn.com/media/AAMAAQDuAAgAAQAAAAAAAA__AAAAJDc2N2Y3YmEyLTdkZDQtNGFhYi05OTVjLTM5ZmNhYWQ1OTU0Nw.bin"
+                                  textSize="small">
+                                  <Image src="https://media.licdn.com/media/AAMAAQDuAAgAAQAAAAAAAA__AAAAJDc2N2Y3YmEyLTdkZDQtNGFhYi05OTVjLTM5ZmNhYWQ1OTU0Nw.bin"
                                       fit="contain" />
                                     <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-none grommetux-box--margin-small grommetux-box--wrap grommetux-box--width-medium grommetux-box--size grommetux-background-color-index-light-1 grommetux-background-color-index--light"
                                       ariaLabel="Card"
-                                      role="group">    
-                                          <div className="grommetux-box grommetux-box--direction-column grommetux-box--responsive grommetux-box--pad-medium grommetux-card__content">
+                                      role="group"
+                                      tabIndex={0}>
                                             <Label size="medium"
                                               margin="none"
                                               uppercase={true}>
-                                              Developer
-                                              <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium"></label>
+                                              <label className="grommetux-label grommetux-label--uppercase grommetux-label--margin-none grommetux-label--medium">Developer</label>
                                             </Label>
-                                            <Heading tag="h2" pad="small" >
+                                            <Heading tag="h3">
                                               <a href="https://www.linkedin.com/in/logan-mcbride/" target="_blank" style={{ color: "#000" }} >Logan McBride</a>
                                             </Heading>
-                                          </div>                                        
                                       </div>                                      
                                   </Card>
                             </div>
