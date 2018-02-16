@@ -94,21 +94,20 @@ class TransactionSummary extends Component {
       flush={true}
       onClose={this.props.handleSummary}
       >
+      <Heading tag="h3" align="center" strong={true}> Transaction Summary </Heading>
       <Box
         direction='row'
         justify="center"
         align='center'
         wrap={true}
         reverse={false}
-        pad='medium'
+        pad='small'
         margin='small'>
         <Box 
             direction='row'
             justify='center'
             align='center'
-            wrap={true}
-            pad='medium'
-            margin='small'>
+            wrap={true}>
           <TransactionPie 
             data={[this.state.allTime, this.state.annual]} 
             labels={['Annual Total', 'Annual: ' + this.props.summaryTransaction.name]}/>
@@ -126,9 +125,9 @@ class TransactionSummary extends Component {
             size='large' 
             align='center' 
             justify='center'>
-          <Headline margin='none' align='center' style={{fontSize: "25px"}} >
-             Spending Summary:<strong> {this.state.selected} </strong>
-          </Headline>
+          <Heading margin='none' tag="h3" align='center'>
+             <strong> {this.state.selected} </strong>
+          </Heading>
           </Box>
           <Box 
             direction='row'
@@ -139,6 +138,7 @@ class TransactionSummary extends Component {
             colorIndex='light-2'
             margin='small'>
           <Value 
+            size="small"
             value={this.state.monthly}
             icon={<CurrencyIcon />}
             label='Last 30 days'
@@ -154,6 +154,7 @@ class TransactionSummary extends Component {
             colorIndex='light-2'
             margin='small'>
           <Value 
+            size="small"
             value={this.state.biAnnual}
             icon={<CurrencyIcon />}
             label='Last 6 months'
@@ -169,6 +170,7 @@ class TransactionSummary extends Component {
             colorIndex='light-2'
             margin='small'>
           <Value 
+            size="small"
             value={this.state.annual}
             icon={<CurrencyIcon />}
             label='Last 12 Months'
