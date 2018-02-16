@@ -6,6 +6,7 @@ import BillsSummary from '../pages/bills/BillsSummary.jsx';
 import AccountsTotals from '../pages/accounts/AccountsTotals.jsx'
 import LoansOnDashboard from '../pages/loans/LoansTotals.jsx';
 import BillsOnDashboard from '../pages/bills/BillsOnDashboard.jsx';
+import GoalDashboard from '../pages/goals/GoalDashboard.jsx';
 import Spinner from '../pages/Spinner.jsx'
 import Loans from './LoansContainer.jsx'
 import { graphql, compose, withApollo } from 'react-apollo'
@@ -74,6 +75,9 @@ class DashBoard extends React.Component {
           </Tile>
           <Tile>
             <LoansOnDashboard loans={this.props.data.getLoans} />
+          </Tile>
+          <Tile>
+            <GoalDashboard goals={this.props.data.getGoals}/>
           </Tile>
         </Tiles>
       </div>
