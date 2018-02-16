@@ -23,7 +23,7 @@ const Splash = ({ match, location, history }) => {
           <Section>
             <Box align="center" pad="none">
               <Box align="center" pad="large" textAlign="center" align="center" size={{ width: {max: "xxlarge"}}}>
-                <h1 class="grommetux-heading grommetux-heading--strong grommetux-heading--margin-none">Our services can make managing your money a breeze.</h1>
+                <h1 class="grommetux-heading grommetux-heading grommetux-heading--margin-none">Our services can make managing your money a breeze.</h1>
                 <p class="grommetux-paragraph grommetux-paragraph--xlarge grommetux-paragraph--width-large">We provide state of the art loan management, budgeting, money tracking, and alerts.</p>
               </Box>
             </Box>
