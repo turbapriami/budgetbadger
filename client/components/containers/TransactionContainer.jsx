@@ -343,5 +343,4 @@ class TransactionContainer extends Component {
     }
   }
 }
-
 export default compose(withApollo, graphql(CREATE_TRANSACTION, {name: 'createNewTransaction'}), withTransactionsAndAccounts)(TransactionContainer);
