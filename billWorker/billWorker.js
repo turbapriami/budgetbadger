@@ -106,19 +106,20 @@ const createBillOccurence = async () => {
 	});
 };
 
-const fetchUnpaidBillsDueNextWeek = async () => {
+const fetchUnpaidBillsDueNextWeek = async (user_id) => {
 	let currentDate = moment().startOf('day');
-	return knex
+	return await knex
 		.table('bills')
 		.innerJoin('bill_payment_history','bills.id','=','bill_payment_history.bill_id')
 		.where({
 			'bills.bill_status': true,
 			'bills.alert': true,
 			'bill_payment_history.paid': false,
+			'bills.user_id': user_id
 		})
 		.andWhere('bill_payment_history.due_date', '>=', currentDate)
 		.andWhere('bill_payment_history.due_date','<=', moment(currentDate).add(1, 'weeks'))
-		.then(res => {
+		.then(async res => {
 			var unpaidBillsData = res.map(bill => {
 				return {
 					"Description": bill.description,
@@ -126,25 +127,24 @@ const fetchUnpaidBillsDueNextWeek = async () => {
 					"Due Date":bill.due_date
 				}
 			});
-			console.log('unpaidBillsData', unpaidBillsData);
-						//WRITE LOGIC TO SEND THE EMAIL
-			return res
+			return unpaidBillsData;
 		})
 		.catch(err => {
 			console.log('Error fetching unpaid bills', err);
-			return res
+			return err
 		});
 };
 
-const fetchOverdueBills = async () => {
+const fetchOverdueBills = async (user_id) => {
 	let currentDate = moment().startOf('day');
-	return knex
+	return await knex
 		.table('bills')
 		.innerJoin('bill_payment_history','bills.id','=','bill_payment_history.bill_id')
 		.where({
 			'bills.bill_status': true,
 			'bills.alert': true,
 			'bill_payment_history.paid': false,
+			'bills.user_id': user_id
 		})
 		.andWhere('bill_payment_history.due_date', '<', currentDate)
 		.then(res => {
@@ -155,15 +155,28 @@ const fetchOverdueBills = async () => {
 					"Due Date":bill.due_date
 				}
 			});
-			console.log('overdueBillsData', overdueBillsData);
-						//WRITE LOGIC TO SEND THE EMAIL
-			return res
+			return overdueBillsData;
 		})
 		.catch(err => {
 			console.log('Error fetching overdue bills ', err);
 			return err;
 		});
 };
+
+const fetchAllUsers = async () => {
+	return knex.table('users').where({}).then( res => {
+			var usersData = res.map(user => {
+				return {
+					"user_id": user.id,
+					"email": user.email, 
+					"first_name": user.first_name, 
+					"last_name": user.last_name
+				}
+		});
+		return usersData;
+	})
+}
+
 
 module.exports = {
 	fetchExpiredBills,
@@ -172,4 +185,5 @@ module.exports = {
 	createBillOccurence,
 	fetchUnpaidBillsDueNextWeek,
 	fetchOverdueBills,
+	fetchAllUsers
 };
